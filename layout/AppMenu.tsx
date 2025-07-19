@@ -20,6 +20,9 @@ const AppMenu = () => {
             items: [
                 { label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users' },
                 { label: 'Styles', icon: 'pi pi-fw pi-check-square', to: '/pages/management/styles' },
+                { label: 'Departments', icon: 'pi pi-fw pi-check-square', to: '/pages/management/departments' },
+                { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/pages/management/operators' },
+                { label: 'Production Process', icon: 'pi pi-fw pi-check-square', to: '/pages/management/process' },
                 { label: 'Reports', icon: 'pi pi-fw pi-bookmark', to: '/uikit/floatlabel' },
             ]
         }
