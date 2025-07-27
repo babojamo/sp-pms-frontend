@@ -6,13 +6,16 @@ import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
 import { useRouter } from 'next/navigation';
 import FormUser from '@/app/components/users/FormUser';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
 
 const CreateUserPage = () => {
 
   const router = useRouter();
 
-  const styleOptions: SelectItem[] = [
-    { label: 'Type 1', value: 'type-1' }
+  const userTypes: SelectItem[] = [
+    { label: 'Operator', value: 'operator' },
+    { label: 'Administrator', value: 'administrator' },
+    { label: 'Administrator', value: 'manager' },
   ];
 
   return (
@@ -30,7 +33,15 @@ const CreateUserPage = () => {
           <div className='grid'>
             <div className='col-12'>
               <div className='p-fluid'>
-                <FormUser styleOptions={styleOptions} />
+                <FormUser userTypes={userTypes} >
+                  <FormAction
+                    actionCancel={() => router.push(ROUTES.USERS.INDEX)}
+                    actions={[
+                      FormActions.CANCEL,
+                      FormActions.SAVE
+                    ]} />
+                </FormUser>
+
               </div>
             </div>
           </div>

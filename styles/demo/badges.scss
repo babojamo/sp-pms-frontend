@@ -1,4 +1,5 @@
 .customer-badge,
+.user-badge,
 .product-badge,
 .order-badge {
     border-radius: var(--border-radius);
@@ -23,6 +24,18 @@
     &.status-lowstock {
         background: #FEEDAF;
         color: #8A5340;
+    }
+}
+
+.user-badge {
+    &.status-active {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.status-disabled {
+        background: #FFCDD2;
+        color: #C63737;
     }
 }
 

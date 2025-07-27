@@ -1,10 +1,8 @@
 import { Calendar } from 'primereact/calendar';
-import { SelectItem } from 'primereact/selectitem';
 import { classNames } from 'primereact/utils';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-interface FormCalendarProps {
-  value?: any;
+interface FormCalendarProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   isError?: boolean;
   errorMessage?: string;
@@ -13,21 +11,21 @@ interface FormCalendarProps {
   className?: string;
 }
 
-const FormCalendar = ({ label = 'Label', value, isError, onChange, errorMessage, className }: FormCalendarProps) => {
-  return (
+const FormCalendar = forwardRef<HTMLInputElement, FormCalendarProps>(
+  ({ label = 'Label', isError, onChange, errorMessage, className }, ref) => (
     <>
       <div className="field">
         <label htmlFor="name">{label}</label>
         <Calendar
+          inputRef={ref}
           className={classNames(className, {
             'p-invalid': isError
           }, 'w-full')}
-          value={value}
+
           onChange={onChange} />
         {isError && <small className="p-invalid">{errorMessage}</small>}
       </div>
     </>
-  );
-};
+  ));
 
 export default FormCalendar;

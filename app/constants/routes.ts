@@ -7,10 +7,8 @@ export const ROUTES = {
   DEPARTMENT_EDIT: '/pages/management/departments/edit',
 
   USERS: {
-        INDEX: '/pages/administration/users',
-
+    INDEX: '/pages/administration/users',
     CREATE: '/pages/administration/users/create',
     EDIT: '/pages/administration/users/edit',
-
   }
 }

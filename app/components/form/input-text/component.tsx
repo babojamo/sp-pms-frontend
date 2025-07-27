@@ -1,8 +1,8 @@
 import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-interface FormInputTextProps {
+interface FormInputTextProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value?: any;
   label?: string;
   isError?: boolean;
@@ -10,15 +10,16 @@ interface FormInputTextProps {
   autoFocus?: boolean;
   required?: boolean;
   onChange?: React.ChangeEventHandler
-}
+};
 
-const FormInputText = ({ label = 'Label', value, isError, required, autoFocus, onChange, errorMessage }: FormInputTextProps) => {
-  return (
+const FormInputText = forwardRef<HTMLInputElement, FormInputTextProps>(
+  ({ label = 'Label', value, isError, required, autoFocus, onChange, errorMessage, ...rest }, ref) => (
     <>
       <div className="field">
         <label htmlFor="name">{label}</label>
         <InputText
-          id="name"
+          ref={ref}
+          {...rest}
           value={value}
           onChange={onChange}
           required={required}
@@ -30,7 +31,6 @@ const FormInputText = ({ label = 'Label', value, isError, required, autoFocus, o
         {isError && <small className="p-invalid">{errorMessage}</small>}
       </div>
     </>
-  );
-};
+  ));
 
 export default FormInputText;
