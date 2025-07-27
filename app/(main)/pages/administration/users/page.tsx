@@ -19,8 +19,19 @@ import { classNames } from 'primereact/utils';
 import React, { useEffect, useState } from 'react';
 import type { Demo } from '@/types';
 import PageCard from '@/app/components/page-card/component';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/app/constants/routes';
+import Modal from '@/app/components/modal/component';
+
+
+interface UserPageState {
+  deleteModalShow?: boolean;
+}
 
 const UsersPage = () => {
+
+  const [pageState, setPageState] = useState<UserPageState>({});
+
   const [customers1, setCustomers1] = useState<Demo.Customer[]>([]);
   const [customers2, setCustomers2] = useState<Demo.Customer[]>([]);
   const [customers3, setCustomers3] = useState<Demo.Customer[]>([]);
@@ -260,113 +271,41 @@ const UsersPage = () => {
     return <TriStateCheckbox value={options.value} onChange={(e) => options.filterCallback(e.value)} />;
   };
 
-  const toggleAll = () => {
-    if (allExpanded) collapseAll();
-    else expandAll();
-  };
 
-  const expandAll = () => {
-    let _expandedRows = {} as { [key: string]: boolean };
-    products.forEach((p) => (_expandedRows[`${p.id}`] = true));
-
-    setExpandedRows(_expandedRows);
-    setAllExpanded(true);
-  };
-
-  const collapseAll = () => {
-    setExpandedRows([]);
-    setAllExpanded(false);
-  };
-
-  const amountBodyTemplate = (rowData: Demo.Customer) => {
-    return formatCurrency(rowData.amount as number);
-  };
-
-  const statusOrderBodyTemplate = (rowData: Demo.Customer) => {
-    return <span className={`order-badge order-${rowData.status?.toLowerCase()}`}>{rowData.status}</span>;
-  };
-
-  const searchBodyTemplate = () => {
-    return <Button icon="pi pi-search" />;
-  };
-
-  const imageBodyTemplate = (rowData: Demo.Product) => {
-    return <img src={`/demo/images/product/${rowData.image}`} onError={(e) => ((e.target as HTMLImageElement).src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png')} alt={rowData.image} className="shadow-2" width={100} />;
-  };
-
-  const priceBodyTemplate = (rowData: Demo.Product) => {
-    return formatCurrency(rowData.price as number);
-  };
-
-  const ratingBodyTemplate = (rowData: Demo.Product) => {
-    return <Rating value={rowData.rating} readOnly cancel={false} />;
-  };
-
-  const statusBodyTemplate2 = (rowData: Demo.Product) => {
-    return <span className={`product-badge status-${rowData.inventoryStatus?.toLowerCase()}`}>{rowData.inventoryStatus}</span>;
-  };
-
-  const rowExpansionTemplate = (data: Demo.Product) => {
-    return (
-      <div className="orders-subtable">
-        <h5>Orders for {data.name}</h5>
-        <DataTable value={data.orders} responsiveLayout="scroll">
-          <Column field="id" header="Id" sortable></Column>
-          <Column field="customer" header="Customer" sortable></Column>
-          <Column field="date" header="Date" sortable></Column>
-          <Column field="amount" header="Amount" body={amountBodyTemplate} sortable></Column>
-          <Column field="status" header="Status" body={statusOrderBodyTemplate} sortable></Column>
-          <Column headerStyle={{ width: '4rem' }} body={searchBodyTemplate}></Column>
-        </DataTable>
-      </div>
-    );
-  };
-
-  const header = <Button icon={allExpanded ? 'pi pi-minus' : 'pi pi-plus'} label={allExpanded ? 'Collapse All' : 'Expand All'} onClick={toggleAll} className="w-11rem" />;
-
-  const headerTemplate = (data: Demo.Customer) => {
-    return (
-      <React.Fragment>
-        <img alt={data.representative.name} src={`/demo/images/avatar/${data.representative.image}`} width="32" style={{ verticalAlign: 'middle' }} />
-        <span className="font-bold ml-2">{data.representative.name}</span>
-      </React.Fragment>
-    );
-  };
-
-  const footerTemplate = (data: Demo.Customer) => {
-    return (
-      <React.Fragment>
-        <td colSpan={4} style={{ textAlign: 'right' }} className="text-bold pr-6">
-          Total Customers
-        </td>
-        <td>{calculateCustomerTotal(data.representative.name)}</td>
-      </React.Fragment>
-    );
-  };
-
-  const calculateCustomerTotal = (name: string) => {
-    let total = 0;
-
-    if (customers3) {
-      for (let customer of customers3) {
-        if (customer.representative.name === name) {
-          total++;
-        }
-      }
-    }
-
-    return total;
-  };
+  const router = useRouter();
 
   const header1 = renderHeader1();
 
   const toolbars = () => {
     return (
       <>
-        <Button label="New" icon="pi pi-plus" style={{ marginRight: '.5em' }} />
+        <Button label="New" onClick={() => router.push(ROUTES.USERS.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
       </>
     );
   };
+
+
+  const onActionEditClick = (id: string | number) => {
+    router.push(`${ROUTES.USERS.EDIT}/${id}`);
+  }
+
+
+  const onActionDeleteClick = () => {
+    setPageState({
+      ...pageState,
+      deleteModalShow: true
+    })
+  }
+
+  const actionBodyTemplate = (rowData: Demo.Product) => {
+    return (
+      <>
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} rounded severity="warning" className="mr-2" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
+      </>
+    );
+  };
+
 
   return (
     <div className="grid">
@@ -387,24 +326,25 @@ const UsersPage = () => {
             emptyMessage="No customers found."
             header={header1}
           >
+
+            <Column field="name" header="ID" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-            <Column header="Country" filterField="country.name" style={{ minWidth: '12rem' }} body={countryBodyTemplate} filter filterPlaceholder="Search by country" filterClear={filterClearTemplate} filterApply={filterApplyTemplate} />
-            <Column
-              header="Agent"
-              filterField="representative"
-              showFilterMatchModes={false}
-              filterMenuStyle={{ width: '14rem' }}
-              style={{ minWidth: '14rem' }}
-              body={representativeBodyTemplate}
-              filter
-              filterElement={representativeFilterTemplate}
-            />
-            <Column header="Date" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
-            <Column header="Balance" filterField="balance" dataType="numeric" style={{ minWidth: '10rem' }} body={balanceBodyTemplate} filter filterElement={balanceFilterTemplate} />
+            <Column field="name" header="Username" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+            <Column field="name" header="Type" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+            <Column header="Create By" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
             <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusFilterTemplate} />
-            <Column field="activity" header="Activity" showFilterMatchModes={false} style={{ minWidth: '12rem' }} body={activityBodyTemplate} filter filterElement={activityFilterTemplate} />
-            <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: '8rem' }} body={verifiedBodyTemplate} filter filterElement={verifiedFilterTemplate} />
+            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+
           </DataTable>
+
+          <Modal
+            title='Delete Record'
+            visible={pageState.deleteModalShow}
+            onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
+            confirmSeverity='danger'
+          >
+            <p>Are you sure you want to delete the record?</p>
+          </Modal>
         </PageCard>
       </div>
     </div>

@@ -25,13 +25,13 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import Modal from '@/app/components/modal/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
 
-interface StylePageState {
+interface UserPageState {
   deleteModalShow?: boolean;
 }
 
 const UsersPage = () => {
 
-  const [pageState, setPageState] = useState<StylePageState>({});
+  const [pageState, setPageState] = useState<UserPageState>({});
 
   const [customers1, setCustomers1] = useState<Demo.Customer[]>([]);
   const [customers2, setCustomers2] = useState<Demo.Customer[]>([]);
@@ -67,7 +67,6 @@ const UsersPage = () => {
           <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
         </div>
         <div className='flex gap-2 ml-auto'>
-          <FormDropdown placeholder='Filter Buyer' />
           <div>
             <span className="p-input-icon-left">
               <i className="pi pi-search" />
@@ -90,7 +89,7 @@ const UsersPage = () => {
       setCustomers2(getCustomers(data));
       setLoading2(false);
     });
-    
+
     CustomerService.getCustomersMedium().then((data) => setCustomers3(data));
     ProductService.getProductsWithOrdersSmall().then((data) => setProducts(data));
 
@@ -102,21 +101,6 @@ const UsersPage = () => {
     return [...(data || [])].map((d) => {
       d.date = new Date(d.date);
       return d;
-    });
-  };
-
-  const formatDate = (value: Date) => {
-    return value.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const formatCurrency = (value: number) => {
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD'
     });
   };
 
@@ -150,39 +134,6 @@ const UsersPage = () => {
     setGlobalFilterValue1('');
   };
 
-  const countryBodyTemplate = (rowData: Demo.Customer) => {
-    return (
-      <React.Fragment>
-        <img alt="flag" src={`/demo/images/flag/flag_placeholder.png`} className={`flag flag-${rowData.country.code}`} width={30} />
-        <span style={{ marginLeft: '.5em', verticalAlign: 'middle' }}>{rowData.country.name}</span>
-      </React.Fragment>
-    );
-  };
-
-  const filterClearTemplate = (options: ColumnFilterClearTemplateOptions) => {
-    return <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} severity="secondary"></Button>;
-  };
-
-  const filterApplyTemplate = (options: ColumnFilterApplyTemplateOptions) => {
-    return <Button type="button" icon="pi pi-check" onClick={options.filterApplyCallback} severity="success"></Button>;
-  };
-
-  const dateBodyTemplate = (rowData: Demo.Customer) => {
-    return formatDate(rowData.date);
-  };
-
-  const dateFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
-    return <Calendar value={options.value} onChange={(e) => options.filterCallback(e.value, options.index)} dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" mask="99/99/9999" />;
-  };
-
-  const balanceBodyTemplate = (rowData: Demo.Customer) => {
-    return formatCurrency(rowData.balance as number);
-  };
-
-  const balanceFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
-    return <InputNumber value={options.value} onChange={(e) => options.filterCallback(e.value, options.index)} mode="currency" currency="USD" locale="en-US" />;
-  };
-
   const statusBodyTemplate = (rowData: Demo.Customer) => {
     return <span className={`customer-badge status-${rowData.status}`}>{rowData.status}</span>;
   };
@@ -195,28 +146,9 @@ const UsersPage = () => {
     return <span className={`customer-badge status-${option}`}>{option}</span>;
   };
 
-  const toggleAll = () => {
-    if (allExpanded) collapseAll();
-    else expandAll();
-  };
-
-  const expandAll = () => {
-    let _expandedRows = {} as { [key: string]: boolean };
-    products.forEach((p) => (_expandedRows[`${p.id}`] = true));
-
-    setExpandedRows(_expandedRows);
-    setAllExpanded(true);
-  };
-
-  const collapseAll = () => {
-    setExpandedRows([]);
-    setAllExpanded(false);
-  };
-
   const onActionEditClick = (id: string | number) => {
-    router.push(`${ROUTES.STYLES_EDIT}/${id}`);
+    router.push(`${ROUTES.DEPARTMENT_EDIT}/${id}`);
   }
-
 
   const onActionDeleteClick = () => {
     setPageState({
@@ -239,10 +171,10 @@ const UsersPage = () => {
   return (
     <div className="grid">
       <div className="col-12">
-        <PageCard title='Production Style Management'
+        <PageCard title='Department Management'
           toolbar={
             <PageAction
-              actionAdd={() => router.push(ROUTES.STYLES_CREATE)}
+              actionAdd={() => router.push(ROUTES.DEPARTMENT_CREATE)}
               actions={[PageActions.ADD]}
             />
           }
@@ -261,14 +193,11 @@ const UsersPage = () => {
             emptyMessage="No customers found."
             header={header1}
           >
-            <Column field="name" header="Control#" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-            <Column header="Style#" filterField="country.name" style={{ minWidth: '12rem' }} body={countryBodyTemplate} filter filterPlaceholder="Search by country" filterClear={filterClearTemplate} filterApply={filterApplyTemplate} />
-            <Column header="Buyer" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
-            <Column header="Pleats" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
-            <Column header="Japan Date" filterField="balance" dataType="numeric" style={{ minWidth: '10rem' }} body={balanceBodyTemplate} filter filterElement={balanceFilterTemplate} />
-            <Column field="cebu_date" header="Cebu Date" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusFilterTemplate} />
+            <Column field="name" header="Id" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+            <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+            <Column field="cebu_date" header="Created By" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusFilterTemplate} />
+            <Column field="cebu_date" header="Created Date" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusFilterTemplate} />
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
-
           </DataTable>
           <Modal
             title='Delete Record'
