@@ -18,8 +18,8 @@ const AppMenu = () => {
         {
             label: 'Operations',
             items: [
-                { label: 'Style Flow', icon: 'pi pi-fw pi-id-card', to: '/pages/operations/style-flow' },
-                { label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users' }
+                { label: 'Operators Process', icon: 'pi pi-fw pi-id-card', to: '/pages/operations/sewing-line-operations' },
+                { label: 'Style Flow', icon: 'pi pi-fw pi-id-card', to: '/pages/operations/style-flow', disabled: true }
             ]
         },
         {
@@ -34,7 +34,7 @@ const AppMenu = () => {
         },
         {
             label: 'Reports',
-            items: [{ label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users' }]
+            items: [{ label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users', disabled: true }]
         },
         {
             label: 'Administrator',
