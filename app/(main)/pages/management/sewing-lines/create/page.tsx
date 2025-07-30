@@ -1,24 +1,25 @@
 'use client';
 import React from 'react';
 import PageCard from '@/app/components/page-card/component';
-import { SelectItem } from 'primereact/selectitem';
-import FormStyle from '@/app/components/style/FormStyle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
+import { useRouter } from 'next/navigation';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
+import FormSewingLine from '@/app/components/operators/FormOperator';
 
-const CreateStylePage = () => {
+const CreateSewingLinePage = () => {
     const router = useRouter();
 
-    const styleOptions: SelectItem[] = [{ label: 'Type 1', value: 'type-1' }];
     return (
         <div className="grid">
             <div className="col-6">
-                <PageCard title="Create Style" toolbar={<PageAction actionBack={() => router.push(ROUTES.DEPARTMENT_INDEX)} actions={[PageActions.BACK]} />}>
+                <PageCard title="Create Sewing Line" toolbar={<PageAction actionBack={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[PageActions.BACK]} />}>
                     <div className="grid">
                         <div className="col-12">
                             <div className="p-fluid">
-                                <FormStyle styleOptions={styleOptions} />
+                                <FormSewingLine>
+                                    <FormAction actionCancel={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                                </FormSewingLine>
                             </div>
                         </div>
                     </div>
@@ -28,4 +29,4 @@ const CreateStylePage = () => {
     );
 };
 
-export default CreateStylePage;
+export default CreateSewingLinePage;

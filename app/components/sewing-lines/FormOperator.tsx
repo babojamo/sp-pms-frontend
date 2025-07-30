@@ -1,14 +1,17 @@
 'use client';
 
 import FormInputText from '../form/input-text/component';
+import { OperatorForm } from '@/app/types/operator';
 import { useEffect } from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SewingLineForm } from '@/app/types/sewing-line';
+import { SelectItem } from 'primereact/selectitem';
+import FormDropdown from '../form/dropdown/component';
 
-interface FormSewingLineProps {
-    value?: SewingLineForm;
+interface FormOperatorProps {
+    value?: OperatorForm;
+    lines: SelectItem[];
     onSubmit?: any;
     children?: any;
 }
@@ -18,7 +21,7 @@ const schema = yup.object().shape({
     line_id: yup.string().required('Line is required')
 });
 
-const FormSewingLine = ({ value, onSubmit, children }: FormSewingLineProps) => {
+const FormOperator = ({ value, onSubmit, children, lines }: FormOperatorProps) => {
     const {
         handleSubmit,
         formState: { errors, isSubmitting },
@@ -40,9 +43,10 @@ const FormSewingLine = ({ value, onSubmit, children }: FormSewingLineProps) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <FormInputText {...register('name')} label="Employee Name" errorMessage={errors.name?.message} isError={errors.name ? true : false} />
+            <FormDropdown {...register('line_id')} label="Sewing Line" errorMessage={errors.line_id?.message} isError={errors.line_id ? true : false} options={lines} />
             {children}
         </form>
     );
 };
 
-export default FormSewingLine;
+export default FormOperator;

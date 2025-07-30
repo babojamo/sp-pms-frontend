@@ -19,5 +19,10 @@ export const ROUTES = {
         INDEX: '/pages/management/operators',
         CREATE: '/pages/management/operators/create',
         EDIT: '/pages/management/operators/edit'
+    },
+    SEWING_LINES: {
+        INDEX: '/pages/management/sewing-lines',
+        CREATE: '/pages/management/sewing-lines/create',
+        EDIT: '/pages/management/sewing-lines/edit'
     }
 };

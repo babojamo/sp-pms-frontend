@@ -1,152 +1,107 @@
 'use client';
-import { CustomerService } from '../../../../../demo/service/CustomerService';
-import { ProductService } from '../../../../../demo/service/ProductService';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
+
 import { Button } from 'primereact/button';
-import { Calendar } from 'primereact/calendar';
-import { Column, ColumnFilterApplyTemplateOptions, ColumnFilterClearTemplateOptions, ColumnFilterElementTemplateOptions } from 'primereact/column';
-import { DataTable, DataTableExpandedRows, DataTableFilterMeta } from 'primereact/datatable';
-import { Dropdown } from 'primereact/dropdown';
-import { InputNumber } from 'primereact/inputnumber';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import { MultiSelect } from 'primereact/multiselect';
-import { ProgressBar } from 'primereact/progressbar';
-import { Rating } from 'primereact/rating';
-import { Slider } from 'primereact/slider';
-import { ToggleButton } from 'primereact/togglebutton';
-import { TriStateCheckbox } from 'primereact/tristatecheckbox';
-import { classNames } from 'primereact/utils';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Demo } from '@/types';
 import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
 import Modal from '@/app/components/modal/component';
-import FormDropdown from '@/app/components/form/dropdown/component';
-import { Menu } from 'primereact/menu';
+import { SewingLine } from '@/app/types/sewing-line';
+import { SewingLineService } from '@/app/services/SewingLineService';
 
-interface UserPageState {
+interface SewingLinePageState {
     deleteModalShow?: boolean;
 }
 
-const UsersPage = () => {
-    const [pageState, setPageState] = useState<UserPageState>({});
+interface SearchFilter {
+    keyword?: string;
+}
 
-    const [customers1, setCustomers1] = useState<Demo.Customer[]>([]);
-    const [customers2, setCustomers2] = useState<Demo.Customer[]>([]);
-    const [customers3, setCustomers3] = useState<Demo.Customer[]>([]);
-    const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
-    const [loading1, setLoading1] = useState(true);
-    const [loading2, setLoading2] = useState(true);
-    const [products, setProducts] = useState<Demo.Product[]>([]);
-    const [globalFilterValue1, setGlobalFilterValue1] = useState('');
-    const [expandedRows, setExpandedRows] = useState<any[] | DataTableExpandedRows>([]);
-    const [allExpanded, setAllExpanded] = useState(false);
+const SewingLinesPage = () => {
+    const [pageState, setPageState] = useState<SewingLinePageState>({});
+    const [sewingLines, setSewingLines] = useState<SewingLine[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState<SearchFilter>({});
+
     const router = useRouter();
 
-    const statuses = ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'];
-
     const clearFilter1 = () => {
-        initFilters1();
+        setFilter({
+            keyword: ''
+        });
+        fetchSewingLines();
     };
 
-    const onGlobalFilterChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        let _filters1 = { ...filters1 };
-        (_filters1['global'] as any).value = value;
-
-        setFilters1(_filters1);
-        setGlobalFilterValue1(value);
+        setFilter({
+            ...filter,
+            keyword: value
+        });
+        fetchSewingLines();
     };
 
-    const renderHeader1 = () => {
+    const renderHeader = () => {
         return (
-            <div className="flex justify-content-start items-center">
-                <div>
-                    <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
-                </div>
-                <div className="flex gap-2 ml-auto">
-                    <div>
-                        <span className="p-input-icon-left">
-                            <i className="pi pi-search" />
-                            <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Keyword Search" />
-                        </span>
-                    </div>
-                </div>
+            <div className="flex justify-content-between">
+                <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText value={filter.keyword} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
+                </span>
             </div>
         );
     };
 
     useEffect(() => {
-        setLoading2(true);
-
-        CustomerService.getCustomersLarge().then((data) => {
-            setCustomers1(getCustomers(data));
-            setLoading1(false);
-        });
-        CustomerService.getCustomersLarge().then((data) => {
-            setCustomers2(getCustomers(data));
-            setLoading2(false);
-        });
-
-        CustomerService.getCustomersMedium().then((data) => setCustomers3(data));
-        ProductService.getProductsWithOrdersSmall().then((data) => setProducts(data));
-
-        initFilters1();
+        fetchSewingLines();
     }, []);
 
-    const getCustomers = (data: Demo.Customer[]) => {
+    const fetchSewingLines = () => {
+        console.log('Apply filters: ', filter);
+        setLoading(true);
+        SewingLineService.getSewingLines().then((data) => {
+            setSewingLines(getSewingLines(data));
+            setLoading(false);
+        });
+    };
+
+    const getSewingLines = (data: SewingLine[]) => {
         return [...(data || [])].map((d) => {
-            d.date = new Date(d.date);
             return d;
         });
     };
 
-    const initFilters1 = () => {
-        setFilters1({
-            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            name: {
-                operator: FilterOperator.AND,
-                constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-            },
-            'country.name': {
-                operator: FilterOperator.AND,
-                constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-            },
-            representative: { value: null, matchMode: FilterMatchMode.IN },
-            date: {
-                operator: FilterOperator.AND,
-                constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
-            },
-            balance: {
-                operator: FilterOperator.AND,
-                constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
-            },
-            status: {
-                operator: FilterOperator.OR,
-                constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
-            },
-            activity: { value: null, matchMode: FilterMatchMode.BETWEEN },
-            verified: { value: null, matchMode: FilterMatchMode.EQUALS }
+    const formatDate = (value: Date) => {
+        return value.toLocaleDateString('en-US', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
         });
-        setGlobalFilterValue1('');
+    };
+
+    const dateBodyTemplate = (rowData: SewingLine) => {
+        return formatDate(new Date(rowData.created_at));
     };
 
     const statusBodyTemplate = (rowData: Demo.Customer) => {
-        return <span className={`customer-badge status-${rowData.status}`}>{rowData.status}</span>;
+        return <span className={`sewingLine-badge status-${rowData.status}`}>{rowData.status}</span>;
     };
 
-    const statusFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
-        return <Dropdown value={options.value} options={statuses} onChange={(e) => options.filterCallback(e.value, options.index)} itemTemplate={statusItemTemplate} placeholder="Select a Status" className="p-column-filter" showClear />;
-    };
-
-    const statusItemTemplate = (option: any) => {
-        return <span className={`customer-badge status-${option}`}>{option}</span>;
+    const toolbars = () => {
+        return (
+            <>
+                <Button label="New" onClick={() => router.push(ROUTES.SEWING_LINES.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
+            </>
+        );
     };
 
     const onActionEditClick = (id: string | number) => {
-        router.push(`${ROUTES.DEPARTMENT_EDIT}/${id}`);
+        router.push(`${ROUTES.SEWING_LINES.EDIT}/${id}`);
     };
 
     const onActionDeleteClick = () => {
@@ -156,63 +111,37 @@ const UsersPage = () => {
         });
     };
 
-    const menuLeft = useRef(null);
-    const items = [
-        {
-            label: 'Operations',
-            items: [
-                {
-                    label: 'Operators',
-                    icon: 'pi pi-refresh'
-                },
-                {
-                    label: 'Live Tracking',
-                    icon: 'pi pi-eye'
-                },
-                {
-                    label: 'Export Ouput',
-                    icon: 'pi pi-upload'
-                }
-            ]
-        }
-    ];
-
-    const actionBodyTemplate = (rowData: Demo.Product) => {
+    const actionBodyTemplate = (rowData: SewingLine) => {
         return (
-            <div className="flex gap-2">
-                <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} rounded severity="warning" />
+            <>
+                <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} rounded severity="warning" className="mr-2" />
                 <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
-                <Button label="More" icon="pi pi-align-left" onClick={(event) => menuLeft?.current?.toggle(event)} aria-controls="popup_menu_left" aria-haspopup />
-                <Menu model={items} popup ref={menuLeft} id="popup_menu_left" />
-            </div>
+            </>
         );
     };
-
-    const header1 = renderHeader1();
 
     return (
         <div className="grid">
             <div className="col-12">
-                <PageCard title="Sewing Lines" toolbar={<PageAction actionAdd={() => router.push(ROUTES.DEPARTMENT_CREATE)} actions={[PageActions.ADD]} />}>
+                <PageCard title="Sewing Lines Management" toolbar={toolbars()}>
                     <DataTable
-                        value={customers1}
+                        value={sewingLines}
                         paginator
                         className="p-datatable-gridlines"
                         showGridlines
                         rows={10}
                         dataKey="id"
-                        filters={filters1}
                         filterDisplay="menu"
-                        loading={loading1}
+                        loading={loading}
                         responsiveLayout="scroll"
                         emptyMessage="No customers found."
-                        header={header1}
+                        header={renderHeader()}
                     >
-                        <Column field="name" header="Line#" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                        <Column field="name" header="Operators" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                        <Column field="name" header="In-Production" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                        <Column field="cebu_date" header="Created By" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusFilterTemplate} />
-                        <Column field="cebu_date" header="Created Date" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusFilterTemplate} />
+                        <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
+                        <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
+                        <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
+                        <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
+                        <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
                         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                     </DataTable>
                     <Modal title="Delete Record" visible={pageState.deleteModalShow} onHide={() => setPageState({ ...pageState, deleteModalShow: false })} confirmSeverity="danger">
@@ -224,4 +153,4 @@ const UsersPage = () => {
     );
 };
 
-export default UsersPage;
+export default SewingLinesPage;
