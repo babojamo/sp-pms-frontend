@@ -5,7 +5,7 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
-import FormSewingLine from '@/app/components/operators/FormOperator';
+import FormSewingLine from '@/app/components/sewing-lines/FormSewingLine';
 
 const CreateSewingLinePage = () => {
     const router = useRouter();

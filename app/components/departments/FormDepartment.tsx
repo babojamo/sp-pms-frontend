@@ -6,22 +6,18 @@ import { useEffect } from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SelectItem } from 'primereact/selectitem';
-import FormDropdown from '../form/dropdown/component';
 
-interface FormOperatorProps {
+interface FormDepartmentProps {
     value?: OperatorForm;
-    lines: SelectItem[];
     onSubmit?: any;
     children?: any;
 }
 
 const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
-    line_id: yup.string().required('Line is required')
+    name: yup.string().required('Name is required')
 });
 
-const FormOperator = ({ value, onSubmit, children, lines }: FormOperatorProps) => {
+const FormDepartment = ({ value, onSubmit, children }: FormDepartmentProps) => {
     const {
         handleSubmit,
         formState: { errors, isSubmitting },
@@ -43,10 +39,9 @@ const FormOperator = ({ value, onSubmit, children, lines }: FormOperatorProps) =
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <FormInputText {...register('name')} label="Employee Name" errorMessage={errors.name?.message} isError={errors.name ? true : false} />
-            <FormDropdown {...register('line_id')} label="Sewing Line" errorMessage={errors.line_id?.message} isError={errors.line_id ? true : false} options={lines} />
             {children}
         </form>
     );
 };
 
-export default FormOperator;
+export default FormDepartment;

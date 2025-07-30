@@ -1,26 +1,43 @@
 'use client';
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
-import { SelectItem } from 'primereact/selectitem';
-import FormStyle from '@/app/components/style/FormStyle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
+import { useRouter } from 'next/navigation';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
+import { SelectItem } from 'primereact/selectitem';
+import { DepartmentForm } from '@/app/types/department';
+import { DepartmentService } from '@/app/services/DepartmentService';
+import FormDepartment from '@/app/components/departments/FormDepartment';
 
-const EditStylePage = () => {
+interface EditDepartmentPageProps {
+    params?: { id: any };
+}
+
+const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
     const router = useRouter();
+    const [department, setDepartment] = useState<DepartmentForm | undefined>();
 
-    const styleOptions: SelectItem[] = [{ label: 'Type 1', value: 'type-1' }];
+    useEffect(() => {
+        if (params?.id) {
+            getDepartment();
+        }
+    }, [params]);
+
+    const getDepartment = async () => {
+        setDepartment((await DepartmentService.getDepartment(params?.id)) as DepartmentForm);
+    };
 
     return (
         <div className="grid">
             <div className="col-6">
-                <PageCard title="Edit Style" toolbar={<PageAction actionBack={() => router.push(ROUTES.DEPARTMENT_INDEX)} actions={[PageActions.BACK]} />}>
+                <PageCard title="Edit Department" toolbar={<PageAction actionBack={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[PageActions.BACK]} />}>
                     <div className="grid">
                         <div className="col-12">
                             <div className="p-fluid">
-                                <FormStyle styleOptions={styleOptions} />
+                                <FormDepartment value={department} onSubmit={() => {}}>
+                                    <FormAction actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                                </FormDepartment>
                             </div>
                         </div>
                     </div>
@@ -30,4 +47,4 @@ const EditStylePage = () => {
     );
 };
 
-export default EditStylePage;
+export default EditDepartmentPage;

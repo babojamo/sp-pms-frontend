@@ -8,7 +8,7 @@ import FormAction, { FormActions } from '@/app/components/form-action/component'
 import { SelectItem } from 'primereact/selectitem';
 import { SewingLineForm } from '@/app/types/sewing-line';
 import { SewingLineService } from '@/app/services/SewingLineService';
-import FormSewingLine from '@/app/components/operators/FormOperator';
+import FormSewingLine from '@/app/components/sewing-lines/FormSewingLine';
 
 interface EditSewingLinePageProps {
     params?: { id: any };

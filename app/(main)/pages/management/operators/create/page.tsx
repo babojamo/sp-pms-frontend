@@ -5,8 +5,8 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
-import FormOperator from '@/app/components/operators/FormOperator';
 import { SelectItem } from 'primereact/selectitem';
+import FormOperator from '@/app/components/operators/FormOperator';
 
 const CreateOperatorPage = () => {
     const router = useRouter();

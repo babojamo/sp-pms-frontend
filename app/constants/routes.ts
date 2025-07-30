@@ -24,5 +24,10 @@ export const ROUTES = {
         INDEX: '/pages/management/sewing-lines',
         CREATE: '/pages/management/sewing-lines/create',
         EDIT: '/pages/management/sewing-lines/edit'
+    },
+    DEPARTMENTS: {
+        INDEX: '/pages/management/departments',
+        CREATE: '/pages/management/departments/create',
+        EDIT: '/pages/management/departments/edit'
     }
 };

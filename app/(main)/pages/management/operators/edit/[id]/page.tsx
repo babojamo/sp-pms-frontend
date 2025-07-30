@@ -6,9 +6,9 @@ import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
 import { OperatorForm } from '@/app/types/operator';
-import FormOperator from '@/app/components/operators/FormOperator';
 import { OperatorService } from '@/app/services/OperatorService';
 import { SelectItem } from 'primereact/selectitem';
+import FormOperator from '@/app/components/operators/FormOperator';
 
 interface EditOperatorPageProps {
     params?: { id: any };
