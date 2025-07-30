@@ -16,6 +16,7 @@
     "@types/react-dom": "18.2.5",
     "@xyflow/react": "^12.8.2",
     "chart.js": "4.2.1",
+    "jsbarcode": "^3.12.1",
     "next": "13.4.8",
     "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",

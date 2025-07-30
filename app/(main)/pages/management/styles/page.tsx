@@ -9,13 +9,6 @@ import { DataTable, DataTableExpandedRows, DataTableFilterMeta } from 'primereac
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { MultiSelect } from 'primereact/multiselect';
-import { ProgressBar } from 'primereact/progressbar';
-import { Rating } from 'primereact/rating';
-import { Slider } from 'primereact/slider';
-import { ToggleButton } from 'primereact/togglebutton';
-import { TriStateCheckbox } from 'primereact/tristatecheckbox';
-import { classNames } from 'primereact/utils';
 import React, { useEffect, useState } from 'react';
 import type { Demo } from '@/types';
 import PageCard from '@/app/components/page-card/component';
@@ -24,18 +17,22 @@ import { ROUTES } from '@/app/constants/routes';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import Modal from '@/app/components/modal/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
+import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
+import { Style } from '@/app/types/styles';
+import { StyleService } from '@/app/services/StyleService';
 
 interface StylePageState {
   deleteModalShow?: boolean;
+  showSinglePrintBarcode?: boolean;
 }
 
-const UsersPage = () => {
+const StylesPage = () => {
 
   const [pageState, setPageState] = useState<StylePageState>({});
+  const [selectedStyle, setSelectedStyle] = useState<Style | undefined>(undefined);
 
-  const [customers1, setCustomers1] = useState<Demo.Customer[]>([]);
-  const [customers2, setCustomers2] = useState<Demo.Customer[]>([]);
-  const [customers3, setCustomers3] = useState<Demo.Customer[]>([]);
+  const [styles, setStyles] = useState<Style[]>([]);
+
   const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
@@ -81,26 +78,16 @@ const UsersPage = () => {
 
   useEffect(() => {
     setLoading2(true);
-
-    CustomerService.getCustomersLarge().then((data) => {
-      setCustomers1(getCustomers(data));
+    StyleService.getStyles().then((data) => {
+      setStyles(getStyles(data));
       setLoading1(false);
     });
-    CustomerService.getCustomersLarge().then((data) => {
-      setCustomers2(getCustomers(data));
-      setLoading2(false);
-    });
-    
-    CustomerService.getCustomersMedium().then((data) => setCustomers3(data));
-    ProductService.getProductsWithOrdersSmall().then((data) => setProducts(data));
-
     initFilters1();
   }, []);
 
 
-  const getCustomers = (data: Demo.Customer[]) => {
+  const getStyles = (data: Style[]) => {
     return [...(data || [])].map((d) => {
-      d.date = new Date(d.date);
       return d;
     });
   };
@@ -150,14 +137,6 @@ const UsersPage = () => {
     setGlobalFilterValue1('');
   };
 
-  const countryBodyTemplate = (rowData: Demo.Customer) => {
-    return (
-      <React.Fragment>
-        <img alt="flag" src={`/demo/images/flag/flag_placeholder.png`} className={`flag flag-${rowData.country.code}`} width={30} />
-        <span style={{ marginLeft: '.5em', verticalAlign: 'middle' }}>{rowData.country.name}</span>
-      </React.Fragment>
-    );
-  };
 
   const filterClearTemplate = (options: ColumnFilterClearTemplateOptions) => {
     return <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} severity="secondary"></Button>;
@@ -225,12 +204,21 @@ const UsersPage = () => {
     })
   }
 
-  const actionBodyTemplate = (rowData: Demo.Product) => {
+  const onSinglePrintBarcodeClick = (data: Style) => {
+    setSelectedStyle(data);
+    setPageState({
+      ...pageState,
+      showSinglePrintBarcode: true
+    })
+  }
+
+  const actionBodyTemplate = (rowData: Style) => {
     return (
-      <>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} rounded severity="warning" className="mr-2" />
+      <div className='flex gap-2'>
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} rounded severity="warning"/>
+        <Button icon="pi pi-print" onClick={() => onSinglePrintBarcodeClick(rowData)} rounded severity="help"/>
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
-      </>
+      </div>
     );
   };
 
@@ -243,12 +231,17 @@ const UsersPage = () => {
           toolbar={
             <PageAction
               actionAdd={() => router.push(ROUTES.STYLES_CREATE)}
-              actions={[PageActions.ADD]}
-            />
+              actions={[
+                PageActions.ADD,
+                PageActions.UPLAOD
+              ]}
+            >
+              <Button onClick={() => { }} severity='help' label="Print Barcodes" icon="pi pi-print" style={{ marginRight: '.5em' }} />
+            </PageAction>
           }
         >
           <DataTable
-            value={customers1}
+            value={styles}
             paginator
             className="p-datatable-gridlines"
             showGridlines
@@ -257,18 +250,17 @@ const UsersPage = () => {
             filters={filters1}
             filterDisplay="menu"
             loading={loading1}
-            responsiveLayout="scroll"
             emptyMessage="No customers found."
             header={header1}
           >
-            <Column field="name" header="Control#" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-            <Column header="Style#" filterField="country.name" style={{ minWidth: '12rem' }} body={countryBodyTemplate} filter filterPlaceholder="Search by country" filterClear={filterClearTemplate} filterApply={filterApplyTemplate} />
-            <Column header="Buyer" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
-            <Column header="Pleats" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
-            <Column header="Japan Date" filterField="balance" dataType="numeric" style={{ minWidth: '10rem' }} body={balanceBodyTemplate} filter filterElement={balanceFilterTemplate} />
-            <Column field="cebu_date" header="Cebu Date" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusFilterTemplate} />
+            <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
+            <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
+            <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
+            <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
+            <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
+            <Column header="Japan Date" field="ship_date_from_japan" />
+            <Column field="ship_date_from_cebu" header="Cebu Date" />
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
-
           </DataTable>
           <Modal
             title='Delete Record'
@@ -278,10 +270,11 @@ const UsersPage = () => {
           >
             <p>Are you sure you want to delete the record?</p>
           </Modal>
+          <SinglePrintBarcode style={selectedStyle} onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })} visible={pageState.showSinglePrintBarcode} />
         </PageCard>
       </div>
     </div>
   );
 };
 
-export default UsersPage;
+export default StylesPage;

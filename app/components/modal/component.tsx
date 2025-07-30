@@ -9,18 +9,21 @@ interface ModalProps {
     title?: string;
     confirmSeverity?: 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'help' | undefined;
     cancelSeverity?: 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'help' | undefined;
+    hideActions?: boolean;
 }
 
-const Modal = ({ visible, onHide, onConfirm, children, title, confirmSeverity = 'success', cancelSeverity = 'secondary' }: ModalProps) => {
+const Modal = ({ visible, onHide, onConfirm, children, title, confirmSeverity = 'success', cancelSeverity = 'secondary', hideActions = false }: ModalProps) => {
     return (
         <Dialog header={title} visible={visible} style={{ width: '40vw' }} onHide={onHide}>
             {children}
-            <div className="flex">
-                <div className="ml-auto">
-                    <Button onClick={onConfirm} icon="pi pi-check" severity={confirmSeverity} label="Confirm" className="mr-2" />
-                    <Button onClick={onHide} icon="pi pi-times" severity={cancelSeverity} label="Cancel" />
+            {!hideActions && (
+                <div className="flex">
+                    <div className="ml-auto">
+                        <Button onClick={onConfirm} icon="pi pi-check" severity={confirmSeverity} label="Confirm" className="mr-2" />
+                        <Button onClick={onHide} icon="pi pi-times" severity={cancelSeverity} label="Cancel" />
+                    </div>
                 </div>
-            </div>
+            )}
         </Dialog>
     );
 };
