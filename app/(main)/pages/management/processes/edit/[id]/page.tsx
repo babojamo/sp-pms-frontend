@@ -1,28 +1,40 @@
 'use client';
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
-import { SelectItem } from 'primereact/selectitem';
-import FormStyle from '@/app/components/style/FormStyle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
+import { useRouter } from 'next/navigation';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
+import { ProcessService } from '@/app/services/ProcessService';
+import { ProcessForm } from '@/app/types/process';
+import FormProcess from '@/app/components/processes/FormProcess';
 
-const EditStylePage = () => {
+interface EditProcessPageProps {
+  params?: { id: any },
+}
+
+const EditProcessPage = ({ params }: EditProcessPageProps) => {
   const router = useRouter();
+  const [process, setProcess] = useState<ProcessForm | undefined>();
 
-  const styleOptions: SelectItem[] = [
-    { label: 'Type 1', value: 'type-1' }
-  ];
+  useEffect(() => {
+    if (params?.id) {
+      getProcess();
+    }
+  }, [params])
+
+  const getProcess = async () => {
+    setProcess(await ProcessService.getProcess(params?.id) as ProcessForm);
+  };
 
   return (
     <div className="grid">
       <div className="col-6">
         <PageCard
-          title='Edit Style'
+          title='Edit Process'
           toolbar={
             <PageAction
-              actionBack={() => router.push(ROUTES.DEPARTMENT_INDEX)}
+              actionBack={() => router.push(ROUTES.PROCESS.INDEX)}
               actions={[PageActions.BACK]}
             />
           }
@@ -30,7 +42,14 @@ const EditStylePage = () => {
           <div className='grid'>
             <div className='col-12'>
               <div className='p-fluid'>
-                <FormStyle styleOptions={styleOptions} />
+                <FormProcess value={process} onSubmit={() => { }}>
+                  <FormAction
+                    actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
+                    actions={[
+                      FormActions.CANCEL,
+                      FormActions.UPDATE
+                    ]} />
+                </FormProcess>
               </div>
             </div>
           </div>
@@ -40,4 +59,4 @@ const EditStylePage = () => {
   );
 };
 
-export default EditStylePage;
+export default EditProcessPage;
