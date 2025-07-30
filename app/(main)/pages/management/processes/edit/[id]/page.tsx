@@ -10,53 +10,40 @@ import { ProcessForm } from '@/app/types/process';
 import FormProcess from '@/app/components/processes/FormProcess';
 
 interface EditProcessPageProps {
-  params?: { id: any },
+    params?: { id: any };
 }
 
 const EditProcessPage = ({ params }: EditProcessPageProps) => {
-  const router = useRouter();
-  const [process, setProcess] = useState<ProcessForm | undefined>();
+    const router = useRouter();
+    const [process, setProcess] = useState<ProcessForm | undefined>();
 
-  useEffect(() => {
-    if (params?.id) {
-      getProcess();
-    }
-  }, [params])
+    useEffect(() => {
+        if (params?.id) {
+            getProcess();
+        }
+    }, [params]);
 
-  const getProcess = async () => {
-    setProcess(await ProcessService.getProcess(params?.id) as ProcessForm);
-  };
+    const getProcess = async () => {
+        setProcess((await ProcessService.getProcess(params?.id)) as ProcessForm);
+    };
 
-  return (
-    <div className="grid">
-      <div className="col-6">
-        <PageCard
-          title='Edit Process'
-          toolbar={
-            <PageAction
-              actionBack={() => router.push(ROUTES.PROCESS.INDEX)}
-              actions={[PageActions.BACK]}
-            />
-          }
-        >
-          <div className='grid'>
-            <div className='col-12'>
-              <div className='p-fluid'>
-                <FormProcess value={process} onSubmit={() => { }}>
-                  <FormAction
-                    actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
-                    actions={[
-                      FormActions.CANCEL,
-                      FormActions.UPDATE
-                    ]} />
-                </FormProcess>
-              </div>
+    return (
+        <div className="grid">
+            <div className="col-6">
+                <PageCard title="Edit Process" toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS.INDEX)} actions={[PageActions.BACK]} />}>
+                    <div className="grid">
+                        <div className="col-12">
+                            <div className="p-fluid">
+                                <FormProcess value={process} onSubmit={() => {}}>
+                                    <FormAction actionCancel={() => router.push(ROUTES.PROCESS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                                </FormProcess>
+                            </div>
+                        </div>
+                    </div>
+                </PageCard>
             </div>
-          </div>
-        </PageCard>
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default EditProcessPage;

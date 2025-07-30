@@ -11,59 +11,46 @@ import { OperatorService } from '@/app/services/OperatorService';
 import { SelectItem } from 'primereact/selectitem';
 
 interface EditOperatorPageProps {
-  params?: { id: any },
+    params?: { id: any };
 }
 
 const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
-  const router = useRouter();
-  const [operator, setOperator] = useState<OperatorForm | undefined>();
+    const router = useRouter();
+    const [operator, setOperator] = useState<OperatorForm | undefined>();
 
-  const lines: SelectItem[] = [
-    { label: 'Line 1', value: '1' },
-    { label: 'Line 3', value: '2' },
-    { label: 'Line 4', value: '3' },
-  ];
+    const lines: SelectItem[] = [
+        { label: 'Line 1', value: '1' },
+        { label: 'Line 3', value: '2' },
+        { label: 'Line 4', value: '3' }
+    ];
 
-  useEffect(() => {
-    if (params?.id) {
-      getOperator();
-    }
-  }, [params])
+    useEffect(() => {
+        if (params?.id) {
+            getOperator();
+        }
+    }, [params]);
 
-  const getOperator = async () => {
-    setOperator(await OperatorService.getOperator(params?.id) as OperatorForm);
-  };
+    const getOperator = async () => {
+        setOperator((await OperatorService.getOperator(params?.id)) as OperatorForm);
+    };
 
-  return (
-    <div className="grid">
-      <div className="col-6">
-        <PageCard
-          title='Edit Operator'
-          toolbar={
-            <PageAction
-              actionBack={() => router.push(ROUTES.OPERATORS.INDEX)}
-              actions={[PageActions.BACK]}
-            />
-          }
-        >
-          <div className='grid'>
-            <div className='col-12'>
-              <div className='p-fluid'>
-                <FormOperator lines={lines} value={operator} onSubmit={() => { }}>
-                  <FormAction
-                    actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)}
-                    actions={[
-                      FormActions.CANCEL,
-                      FormActions.UPDATE
-                    ]} />
-                </FormOperator>
-              </div>
+    return (
+        <div className="grid">
+            <div className="col-6">
+                <PageCard title="Edit Operator" toolbar={<PageAction actionBack={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[PageActions.BACK]} />}>
+                    <div className="grid">
+                        <div className="col-12">
+                            <div className="p-fluid">
+                                <FormOperator lines={lines} value={operator} onSubmit={() => {}}>
+                                    <FormAction actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                                </FormOperator>
+                            </div>
+                        </div>
+                    </div>
+                </PageCard>
             </div>
-          </div>
-        </PageCard>
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default EditOperatorPage;

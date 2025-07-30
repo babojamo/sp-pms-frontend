@@ -19,7 +19,7 @@ const AppMenu = () => {
             label: 'Operations',
             items: [
                 { label: 'Style Flow', icon: 'pi pi-fw pi-id-card', to: '/pages/operations/style-flow' },
-                { label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users' },
+                { label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users' }
             ]
         },
         {
@@ -29,21 +29,16 @@ const AppMenu = () => {
                 { label: 'Departments', icon: 'pi pi-fw pi-check-square', to: '/pages/management/departments' },
                 { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/pages/management/operators' },
                 { label: 'Sewing Lines', icon: 'pi pi-fw pi-check-square', to: '/pages/management/sewing-lines' },
-                { label: 'Production Process', icon: 'pi pi-fw pi-check-square', to: '/pages/management/processes' },
-            ]
-        },
-         {
-            label: 'Reports',
-            items: [
-                { label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users' },
+                { label: 'Production Process', icon: 'pi pi-fw pi-check-square', to: '/pages/management/processes' }
             ]
         },
         {
+            label: 'Reports',
+            items: [{ label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users' }]
+        },
+        {
             label: 'Administrator',
-            items: [
-                { label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/pages/administration/users' },
-            ]
-
+            items: [{ label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/pages/administration/users' }]
         }
     ];
 

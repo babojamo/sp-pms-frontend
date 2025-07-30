@@ -8,40 +8,25 @@ import FormAction, { FormActions } from '@/app/components/form-action/component'
 import FormProcess from '@/app/components/processes/FormProcess';
 
 const CreateProcessPage = () => {
+    const router = useRouter();
 
-  const router = useRouter();
-
-  return (
-    <div className="grid">
-      <div className="col-6">
-        <PageCard
-          title='Create Process'
-          toolbar={
-            <PageAction
-              actionBack={() => router.push(ROUTES.PROCESS.INDEX)}
-              actions={[PageActions.BACK]}
-            />
-          }
-        >
-          <div className='grid'>
-            <div className='col-12'>
-              <div className='p-fluid'>
-                <FormProcess>
-                  <FormAction
-                    actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
-                    actions={[
-                      FormActions.CANCEL,
-                      FormActions.SAVE
-                    ]} />
-                </FormProcess>
-
-              </div>
+    return (
+        <div className="grid">
+            <div className="col-6">
+                <PageCard title="Create Process" toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS.INDEX)} actions={[PageActions.BACK]} />}>
+                    <div className="grid">
+                        <div className="col-12">
+                            <div className="p-fluid">
+                                <FormProcess>
+                                    <FormAction actionCancel={() => router.push(ROUTES.PROCESS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                                </FormProcess>
+                            </div>
+                        </div>
+                    </div>
+                </PageCard>
             </div>
-          </div>
-        </PageCard>
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default CreateProcessPage;

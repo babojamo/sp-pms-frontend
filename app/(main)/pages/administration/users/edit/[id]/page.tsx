@@ -11,58 +11,45 @@ import { UserService } from '@/app/services/UserService';
 import { UserForm } from '@/app/types/users';
 
 interface EditUserPageProps {
-  params?: { id: any },
+    params?: { id: any };
 }
 
 const EditUserPage = ({ params }: EditUserPageProps) => {
-  const router = useRouter();
-  const [user, setUser] = useState<UserForm | undefined>();
+    const router = useRouter();
+    const [user, setUser] = useState<UserForm | undefined>();
 
-  const userTypes: SelectItem[] = [
-    { label: 'Operator', value: 'operator' },
-    { label: 'Administrator', value: 'administrator' },
-    { label: 'Administrator', value: 'manager' },
-  ];
-  useEffect(() => {
-    if (params?.id) {
-      getUser();
-    }
-  }, [params])
+    const userTypes: SelectItem[] = [
+        { label: 'Operator', value: 'operator' },
+        { label: 'Administrator', value: 'administrator' },
+        { label: 'Administrator', value: 'manager' }
+    ];
+    useEffect(() => {
+        if (params?.id) {
+            getUser();
+        }
+    }, [params]);
 
-  const getUser = async () => {
-    setUser(await UserService.getUser(params?.id) as UserForm);
-  };
+    const getUser = async () => {
+        setUser((await UserService.getUser(params?.id)) as UserForm);
+    };
 
-  return (
-    <div className="grid">
-      <div className="col-6">
-        <PageCard
-          title='Edit User'
-          toolbar={
-            <PageAction
-              actionBack={() => router.push(ROUTES.USERS.INDEX)}
-              actions={[PageActions.BACK]}
-            />
-          }
-        >
-          <div className='grid'>
-            <div className='col-12'>
-              <div className='p-fluid'>
-                <FormUser value={user} userTypes={userTypes} onSubmit={() => { }}>
-                  <FormAction
-                    actionCancel={() => router.push(ROUTES.USERS.INDEX)}
-                    actions={[
-                      FormActions.CANCEL,
-                      FormActions.UPDATE
-                    ]} />
-                </FormUser>
-              </div>
+    return (
+        <div className="grid">
+            <div className="col-6">
+                <PageCard title="Edit User" toolbar={<PageAction actionBack={() => router.push(ROUTES.USERS.INDEX)} actions={[PageActions.BACK]} />}>
+                    <div className="grid">
+                        <div className="col-12">
+                            <div className="p-fluid">
+                                <FormUser value={user} userTypes={userTypes} onSubmit={() => {}}>
+                                    <FormAction actionCancel={() => router.push(ROUTES.USERS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                                </FormUser>
+                            </div>
+                        </div>
+                    </div>
+                </PageCard>
             </div>
-          </div>
-        </PageCard>
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default EditUserPage;

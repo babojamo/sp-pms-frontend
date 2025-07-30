@@ -9,44 +9,30 @@ import FormOperator from '@/app/components/operators/FormOperator';
 import { SelectItem } from 'primereact/selectitem';
 
 const CreateOperatorPage = () => {
+    const router = useRouter();
+    const lines: SelectItem[] = [
+        { label: 'Line 1', value: '1' },
+        { label: 'Line 3', value: '2' },
+        { label: 'Line 4', value: '3' }
+    ];
 
-  const router = useRouter();
-  const lines: SelectItem[] = [
-    { label: 'Line 1', value: '1' },
-    { label: 'Line 3', value: '2' },
-    { label: 'Line 4', value: '3' },
-  ];
-
-  return (
-    <div className="grid">
-      <div className="col-6">
-        <PageCard
-          title='Create Operator'
-          toolbar={
-            <PageAction
-              actionBack={() => router.push(ROUTES.OPERATORS.INDEX)}
-              actions={[PageActions.BACK]}
-            />
-          }
-        >
-          <div className='grid'>
-            <div className='col-12'>
-              <div className='p-fluid'>
-                <FormOperator lines={lines}>
-                  <FormAction
-                    actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)}
-                    actions={[
-                      FormActions.CANCEL,
-                      FormActions.SAVE
-                    ]} />
-                </FormOperator>
-              </div>
+    return (
+        <div className="grid">
+            <div className="col-6">
+                <PageCard title="Create Operator" toolbar={<PageAction actionBack={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[PageActions.BACK]} />}>
+                    <div className="grid">
+                        <div className="col-12">
+                            <div className="p-fluid">
+                                <FormOperator lines={lines}>
+                                    <FormAction actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                                </FormOperator>
+                            </div>
+                        </div>
+                    </div>
+                </PageCard>
             </div>
-          </div>
-        </PageCard>
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default CreateOperatorPage;
