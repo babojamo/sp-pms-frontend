@@ -11,46 +11,46 @@ import { SewingLineService } from '@/app/services/SewingLineService';
 import FormSewingLine from '@/app/components/sewing-lines/FormSewingLine';
 
 interface EditSewingLinePageProps {
-    params?: { id: any };
+  params?: { id: any };
 }
 
 const EditSewingLinePage = ({ params }: EditSewingLinePageProps) => {
-    const router = useRouter();
-    const [sewingLine, setSewingLine] = useState<SewingLineForm | undefined>();
+  const router = useRouter();
+  const [sewingLine, setSewingLine] = useState<SewingLineForm | undefined>();
 
-    const lines: SelectItem[] = [
-        { label: 'Line 1', value: '1' },
-        { label: 'Line 3', value: '2' },
-        { label: 'Line 4', value: '3' }
-    ];
+  const lines: SelectItem[] = [
+    { label: 'Line 1', value: '1' },
+    { label: 'Line 3', value: '2' },
+    { label: 'Line 4', value: '3' }
+  ];
 
-    useEffect(() => {
-        if (params?.id) {
-            getSewingLine();
-        }
-    }, [params]);
+  useEffect(() => {
+    if (params?.id) {
+      getSewingLine();
+    }
+  }, [params]);
 
-    const getSewingLine = async () => {
-        setSewingLine((await SewingLineService.getSewingLine(params?.id)) as SewingLineForm);
-    };
+  const getSewingLine = async () => {
+    setSewingLine((await SewingLineService.getSewingLine(params?.id)) as SewingLineForm);
+  };
 
-    return (
-        <div className="grid">
-            <div className="col-6">
-                <PageCard title="Edit Sewing Line" toolbar={<PageAction actionBack={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[PageActions.BACK]} />}>
-                    <div className="grid">
-                        <div className="col-12">
-                            <div className="p-fluid">
-                                <FormSewingLine value={sewingLine} onSubmit={() => {}}>
-                                    <FormAction actionCancel={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
-                                </FormSewingLine>
-                            </div>
-                        </div>
-                    </div>
-                </PageCard>
+  return (
+    <div className="grid">
+      <div className="col-6">
+        <PageCard title="Edit Sewing Line" toolbar={<PageAction actionBack={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[PageActions.BACK]} />}>
+          <div className="grid">
+            <div className="col-12">
+              <div className="p-fluid">
+                <FormSewingLine value={sewingLine} onSubmit={() => {}}>
+                  <FormAction actionCancel={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                </FormSewingLine>
+              </div>
             </div>
-        </div>
-    );
+          </div>
+        </PageCard>
+      </div>
+    </div>
+  );
 };
 
 export default EditSewingLinePage;

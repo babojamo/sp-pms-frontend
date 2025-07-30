@@ -11,40 +11,40 @@ import { DepartmentService } from '@/app/services/DepartmentService';
 import FormDepartment from '@/app/components/departments/FormDepartment';
 
 interface EditDepartmentPageProps {
-    params?: { id: any };
+  params?: { id: any };
 }
 
 const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
-    const router = useRouter();
-    const [department, setDepartment] = useState<DepartmentForm | undefined>();
+  const router = useRouter();
+  const [department, setDepartment] = useState<DepartmentForm | undefined>();
 
-    useEffect(() => {
-        if (params?.id) {
-            getDepartment();
-        }
-    }, [params]);
+  useEffect(() => {
+    if (params?.id) {
+      getDepartment();
+    }
+  }, [params]);
 
-    const getDepartment = async () => {
-        setDepartment((await DepartmentService.getDepartment(params?.id)) as DepartmentForm);
-    };
+  const getDepartment = async () => {
+    setDepartment((await DepartmentService.getDepartment(params?.id)) as DepartmentForm);
+  };
 
-    return (
-        <div className="grid">
-            <div className="col-6">
-                <PageCard title="Edit Department" toolbar={<PageAction actionBack={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[PageActions.BACK]} />}>
-                    <div className="grid">
-                        <div className="col-12">
-                            <div className="p-fluid">
-                                <FormDepartment value={department} onSubmit={() => {}}>
-                                    <FormAction actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
-                                </FormDepartment>
-                            </div>
-                        </div>
-                    </div>
-                </PageCard>
+  return (
+    <div className="grid">
+      <div className="col-6">
+        <PageCard title="Edit Department" toolbar={<PageAction actionBack={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[PageActions.BACK]} />}>
+          <div className="grid">
+            <div className="col-12">
+              <div className="p-fluid">
+                <FormDepartment value={department} onSubmit={() => {}}>
+                  <FormAction actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                </FormDepartment>
+              </div>
             </div>
-        </div>
-    );
+          </div>
+        </PageCard>
+      </div>
+    </div>
+  );
 };
 
 export default EditDepartmentPage;

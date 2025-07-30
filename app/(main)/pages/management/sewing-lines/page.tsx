@@ -14,143 +14,131 @@ import { SewingLine } from '@/app/types/sewing-line';
 import { SewingLineService } from '@/app/services/SewingLineService';
 
 interface SewingLinePageState {
-    deleteModalShow?: boolean;
+  deleteModalShow?: boolean;
 }
 
 interface SearchFilter {
-    keyword?: string;
+  keyword?: string;
 }
 
 const SewingLinesPage = () => {
-    const [pageState, setPageState] = useState<SewingLinePageState>({});
-    const [sewingLines, setSewingLines] = useState<SewingLine[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState<SearchFilter>({});
+  const [pageState, setPageState] = useState<SewingLinePageState>({});
+  const [sewingLines, setSewingLines] = useState<SewingLine[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<SearchFilter>({});
 
-    const router = useRouter();
+  const router = useRouter();
 
-    const clearFilter1 = () => {
-        setFilter({
-            keyword: ''
-        });
-        fetchSewingLines();
-    };
+  const clearFilter1 = () => {
+    setFilter({
+      keyword: ''
+    });
+    fetchSewingLines();
+  };
 
-    const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setFilter({
-            ...filter,
-            keyword: value
-        });
-        fetchSewingLines();
-    };
+  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFilter({
+      ...filter,
+      keyword: value
+    });
+    fetchSewingLines();
+  };
 
-    const renderHeader = () => {
-        return (
-            <div className="flex justify-content-between">
-                <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
-                <span className="p-input-icon-left">
-                    <i className="pi pi-search" />
-                    <InputText value={filter.keyword} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
-                </span>
-            </div>
-        );
-    };
-
-    useEffect(() => {
-        fetchSewingLines();
-    }, []);
-
-    const fetchSewingLines = () => {
-        console.log('Apply filters: ', filter);
-        setLoading(true);
-        SewingLineService.getSewingLines().then((data) => {
-            setSewingLines(getSewingLines(data));
-            setLoading(false);
-        });
-    };
-
-    const getSewingLines = (data: SewingLine[]) => {
-        return [...(data || [])].map((d) => {
-            return d;
-        });
-    };
-
-    const formatDate = (value: Date) => {
-        return value.toLocaleDateString('en-US', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-    };
-
-    const dateBodyTemplate = (rowData: SewingLine) => {
-        return formatDate(new Date(rowData.created_at));
-    };
-
-    const statusBodyTemplate = (rowData: Demo.Customer) => {
-        return <span className={`sewingLine-badge status-${rowData.status}`}>{rowData.status}</span>;
-    };
-
-    const toolbars = () => {
-        return (
-            <>
-                <Button label="New" onClick={() => router.push(ROUTES.SEWING_LINES.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
-            </>
-        );
-    };
-
-    const onActionEditClick = (id: string | number) => {
-        router.push(`${ROUTES.SEWING_LINES.EDIT}/${id}`);
-    };
-
-    const onActionDeleteClick = () => {
-        setPageState({
-            ...pageState,
-            deleteModalShow: true
-        });
-    };
-
-    const actionBodyTemplate = (rowData: SewingLine) => {
-        return (
-            <>
-                <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} rounded severity="warning" className="mr-2" />
-                <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
-            </>
-        );
-    };
-
+  const renderHeader = () => {
     return (
-        <div className="grid">
-            <div className="col-12">
-                <PageCard title="Sewing Lines Management" toolbar={toolbars()}>
-                    <DataTable
-                        value={sewingLines}
-                        paginator
-                        className="p-datatable-gridlines"
-                        showGridlines
-                        rows={10}
-                        dataKey="id"
-                        filterDisplay="menu"
-                        loading={loading}
-                        responsiveLayout="scroll"
-                        emptyMessage="No customers found."
-                        header={renderHeader()}
-                    >
-                        <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
-                        <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-                        <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
-                        <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-                        <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
-                        <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
-                    </DataTable>
-                    <Modal title="Delete Record" visible={pageState.deleteModalShow} onHide={() => setPageState({ ...pageState, deleteModalShow: false })} confirmSeverity="danger">
-                        <p>Are you sure you want to delete the record?</p>
-                    </Modal>
-                </PageCard>
-            </div>
-        </div>
+      <div className="flex justify-content-between">
+        <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText value={filter.keyword} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
+        </span>
+      </div>
     );
+  };
+
+  useEffect(() => {
+    fetchSewingLines();
+  }, []);
+
+  const fetchSewingLines = () => {
+    console.log('Apply filters: ', filter);
+    setLoading(true);
+    SewingLineService.getSewingLines().then((data) => {
+      setSewingLines(getSewingLines(data));
+      setLoading(false);
+    });
+  };
+
+  const getSewingLines = (data: SewingLine[]) => {
+    return [...(data || [])].map((d) => {
+      return d;
+    });
+  };
+
+  const formatDate = (value: Date) => {
+    return value.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const dateBodyTemplate = (rowData: SewingLine) => {
+    return formatDate(new Date(rowData.created_at));
+  };
+
+  const statusBodyTemplate = (rowData: Demo.Customer) => {
+    return <span className={`sewingLine-badge status-${rowData.status}`}>{rowData.status}</span>;
+  };
+
+  const toolbars = () => {
+    return (
+      <>
+        <Button label="New" onClick={() => router.push(ROUTES.SEWING_LINES.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
+      </>
+    );
+  };
+
+  const onActionEditClick = (id: string | number) => {
+    router.push(`${ROUTES.SEWING_LINES.EDIT}/${id}`);
+  };
+
+  const onActionDeleteClick = () => {
+    setPageState({
+      ...pageState,
+      deleteModalShow: true
+    });
+  };
+
+  const actionBodyTemplate = (rowData: SewingLine) => {
+    return (
+      <>
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} rounded severity="warning" className="mr-2" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
+      </>
+    );
+  };
+
+  return (
+    <div className="grid">
+      <div className="col-12">
+        <PageCard title="Sewing Lines Management" toolbar={toolbars()}>
+          <DataTable value={sewingLines} paginator className="p-datatable-gridlines" showGridlines rows={10} dataKey="id" filterDisplay="menu" loading={loading} responsiveLayout="scroll" emptyMessage="No customers found." header={renderHeader()}>
+            <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
+            <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
+            <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
+            <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
+            <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
+            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+          </DataTable>
+          <Modal title="Delete Record" visible={pageState.deleteModalShow} onHide={() => setPageState({ ...pageState, deleteModalShow: false })} confirmSeverity="danger">
+            <p>Are you sure you want to delete the record?</p>
+          </Modal>
+        </PageCard>
+      </div>
+    </div>
+  );
 };
 
 export default SewingLinesPage;
