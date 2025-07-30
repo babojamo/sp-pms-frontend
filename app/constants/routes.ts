@@ -14,5 +14,10 @@ export const ROUTES = {
     INDEX: '/pages/management/processes',
     CREATE: '/pages/management/processes/create',
     EDIT: '/pages/management/processes/edit',
+  },
+  OPERATORS: {
+    INDEX: '/pages/management/operators',
+    CREATE: '/pages/management/operators/create',
+    EDIT: '/pages/management/operators/edit',
   }
 }

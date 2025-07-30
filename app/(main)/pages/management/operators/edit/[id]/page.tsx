@@ -1,28 +1,47 @@
 'use client';
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
-import { SelectItem } from 'primereact/selectitem';
-import FormStyle from '@/app/components/style/FormStyle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
+import { useRouter } from 'next/navigation';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
+import { OperatorForm } from '@/app/types/operator';
+import FormOperator from '@/app/components/operators/FormOperator';
+import { OperatorService } from '@/app/services/OperatorService';
+import { SelectItem } from 'primereact/selectitem';
 
-const EditStylePage = () => {
+interface EditOperatorPageProps {
+  params?: { id: any },
+}
+
+const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
   const router = useRouter();
+  const [operator, setOperator] = useState<OperatorForm | undefined>();
 
-  const styleOptions: SelectItem[] = [
-    { label: 'Type 1', value: 'type-1' }
+  const lines: SelectItem[] = [
+    { label: 'Line 1', value: '1' },
+    { label: 'Line 3', value: '2' },
+    { label: 'Line 4', value: '3' },
   ];
+
+  useEffect(() => {
+    if (params?.id) {
+      getOperator();
+    }
+  }, [params])
+
+  const getOperator = async () => {
+    setOperator(await OperatorService.getOperator(params?.id) as OperatorForm);
+  };
 
   return (
     <div className="grid">
       <div className="col-6">
         <PageCard
-          title='Edit Style'
+          title='Edit Operator'
           toolbar={
             <PageAction
-              actionBack={() => router.push(ROUTES.DEPARTMENT_INDEX)}
+              actionBack={() => router.push(ROUTES.OPERATORS.INDEX)}
               actions={[PageActions.BACK]}
             />
           }
@@ -30,7 +49,14 @@ const EditStylePage = () => {
           <div className='grid'>
             <div className='col-12'>
               <div className='p-fluid'>
-                <FormStyle styleOptions={styleOptions} />
+                <FormOperator lines={lines} value={operator} onSubmit={() => { }}>
+                  <FormAction
+                    actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)}
+                    actions={[
+                      FormActions.CANCEL,
+                      FormActions.UPDATE
+                    ]} />
+                </FormOperator>
               </div>
             </div>
           </div>
@@ -40,4 +66,4 @@ const EditStylePage = () => {
   );
 };
 
-export default EditStylePage;
+export default EditOperatorPage;

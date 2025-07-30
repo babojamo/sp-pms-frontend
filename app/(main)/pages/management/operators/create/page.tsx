@@ -1,26 +1,30 @@
 'use client';
 import React from 'react';
 import PageCard from '@/app/components/page-card/component';
-import { SelectItem } from 'primereact/selectitem';
-import FormStyle from '@/app/components/style/FormStyle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
+import { useRouter } from 'next/navigation';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
+import FormOperator from '@/app/components/operators/FormOperator';
+import { SelectItem } from 'primereact/selectitem';
 
-const CreateStylePage = () => {
+const CreateOperatorPage = () => {
+
   const router = useRouter();
-
-  const styleOptions: SelectItem[] = [
-    { label: 'Type 1', value: 'type-1' }
+  const lines: SelectItem[] = [
+    { label: 'Line 1', value: '1' },
+    { label: 'Line 3', value: '2' },
+    { label: 'Line 4', value: '3' },
   ];
+
   return (
     <div className="grid">
       <div className="col-6">
         <PageCard
-          title='Create Style'
+          title='Create Operator'
           toolbar={
             <PageAction
-              actionBack={() => router.push(ROUTES.DEPARTMENT_INDEX)}
+              actionBack={() => router.push(ROUTES.OPERATORS.INDEX)}
               actions={[PageActions.BACK]}
             />
           }
@@ -28,7 +32,14 @@ const CreateStylePage = () => {
           <div className='grid'>
             <div className='col-12'>
               <div className='p-fluid'>
-                <FormStyle styleOptions={styleOptions} />
+                <FormOperator lines={lines}>
+                  <FormAction
+                    actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)}
+                    actions={[
+                      FormActions.CANCEL,
+                      FormActions.SAVE
+                    ]} />
+                </FormOperator>
               </div>
             </div>
           </div>
@@ -38,4 +49,4 @@ const CreateStylePage = () => {
   );
 };
 
-export default CreateStylePage;
+export default CreateOperatorPage;
