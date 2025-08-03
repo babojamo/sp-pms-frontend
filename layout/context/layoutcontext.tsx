@@ -9,7 +9,7 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     inputStyle: 'outlined',
     menuMode: 'static',
     colorScheme: 'light',
-    theme: 'lara-light-indigo',
+    theme: 'mdc-light-indigo',
     scale: 14
   });
 

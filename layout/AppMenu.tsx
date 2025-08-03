@@ -4,7 +4,6 @@ import React, { useContext } from 'react';
 import AppMenuitem from './AppMenuitem';
 import { LayoutContext } from './context/layoutcontext';
 import { MenuProvider } from './context/menucontext';
-import Link from 'next/link';
 import { AppMenuItem } from '@/types';
 
 const AppMenu = () => {
@@ -13,33 +12,34 @@ const AppMenu = () => {
   const model: AppMenuItem[] = [
     {
       label: 'Home',
-      items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
+      items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/',  disabled: true  }]
     },
     {
       label: 'Operations',
       items: [
-        { label: 'Operators Process', icon: 'pi pi-fw pi-id-card', to: '/pages/operations/sewing-line-operations' },
-        { label: 'Style Flow', icon: 'pi pi-fw pi-id-card', to: '/pages/operations/style-flow', disabled: true }
+        { label: 'Operators Process', icon: 'pi pi-fw pi-id-card', to: '/operations/sewing-line-operations' },
+        { label: 'Style Flow', icon: 'pi pi-fw pi-id-card', to: '/operations/style-flow', disabled: true }
       ]
     },
     {
       label: 'Management',
       items: [
-        { label: 'Styles', icon: 'pi pi-fw pi-check-square', to: '/pages/management/styles' },
-        { label: 'Departments', icon: 'pi pi-fw pi-check-square', to: '/pages/management/departments' },
-        { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/pages/management/operators' },
-        { label: 'Sewing Lines', icon: 'pi pi-fw pi-check-square', to: '/pages/management/sewing-lines' },
-        { label: 'Production Process', icon: 'pi pi-fw pi-check-square', to: '/pages/management/processes' },
-        { label: 'Production Devices', icon: 'pi pi-fw pi-check-square', to: '/pages/management/production-devices' }
+        { label: 'Styles', icon: 'pi pi-fw pi-check-square', to: '/management/styles' },
+        { label: 'Departments', icon: 'pi pi-fw pi-check-square', to: '/management/departments' },
+        { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/management/operators' },
+        { label: 'Sewing Lines', icon: 'pi pi-fw pi-check-square', to: '/management/sewing-lines' },
+        { label: 'Sewing Line Process', icon: 'pi pi-fw pi-check-square', to: '/management/processes' },
+        { label: 'Production Devices', icon: 'pi pi-fw pi-check-square', to: '/management/production-devices' },
+        { label: 'Shifts', icon: 'pi pi-fw pi-check-square', to: '/management/shifts' }
       ]
     },
     {
       label: 'Reports',
-      items: [{ label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/pages/management/users', disabled: true }]
+      items: [{ label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/management/users', disabled: true }]
     },
     {
       label: 'Administrator',
-      items: [{ label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/pages/administration/users' }]
+      items: [{ label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/administration/users' }]
     }
   ];
 
