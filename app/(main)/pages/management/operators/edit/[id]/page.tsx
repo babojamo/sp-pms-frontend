@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import { ROUTES } from '@/app/constants/routes';
@@ -24,15 +24,15 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
     { label: 'Line 4', value: '3' }
   ];
 
+  const getOperator = useCallback(async () => {
+    setOperator((await OperatorService.getOperator(params?.id)) as OperatorForm);
+  }, [params?.id]);
+
   useEffect(() => {
     if (params?.id) {
       getOperator();
     }
-  }, [params]);
-
-  const getOperator = async () => {
-    setOperator((await OperatorService.getOperator(params?.id)) as OperatorForm);
-  };
+  }, [params?.id, getOperator]);
 
   return (
     <div className="grid">

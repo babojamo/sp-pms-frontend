@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import { ROUTES } from '@/app/constants/routes';
@@ -17,15 +17,15 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
   const router = useRouter();
   const [process, setProcess] = useState<ProcessForm | undefined>();
 
+  const getProcess = useCallback(async () => {
+    setProcess((await ProcessService.getProcess(params?.id)) as ProcessForm);
+  }, [params?.id]);
+
   useEffect(() => {
     if (params?.id) {
       getProcess();
     }
-  }, [params]);
-
-  const getProcess = async () => {
-    setProcess((await ProcessService.getProcess(params?.id)) as ProcessForm);
-  };
+  }, [params?.id, getProcess]);
 
   return (
     <div className="grid">

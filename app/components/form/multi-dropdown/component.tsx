@@ -1,9 +1,9 @@
-import { Dropdown } from 'primereact/dropdown';
+import { MultiSelect } from 'primereact/multiselect';
 import { SelectItem } from 'primereact/selectitem';
 import { classNames } from 'primereact/utils';
 import React, { forwardRef } from 'react';
 
-interface FormDropdownProps {
+interface FormMultiDropdownProps {
   label?: string;
   isError?: boolean;
   errorMessage?: string;
@@ -11,14 +11,16 @@ interface FormDropdownProps {
   onChange?: any;
   placeholder?: any;
   className?: string;
+  filter?: any;
 }
 
-const FormDropdown = forwardRef<any, FormDropdownProps>(({ label, isError, className = 'field', placeholder, onChange, errorMessage, options, ...rest }, ref) => (
+const FormMultiDropdown = forwardRef<any, FormMultiDropdownProps>(({ label, filter, isError, className = 'field', placeholder, onChange, errorMessage, options, ...rest }, ref) => (
   <div className={className}>
     {label && <label htmlFor="name">{label}</label>}
-    <Dropdown
+    <MultiSelect
       inputRef={ref}
       {...rest}
+      filter={filter}
       onChange={onChange}
       placeholder={placeholder}
       options={options}
@@ -31,10 +33,10 @@ const FormDropdown = forwardRef<any, FormDropdownProps>(({ label, isError, class
       )}
     />
 
-    {isError && <small className="p-invalid">{errorMessage}</small>}
+    {isError && <small className="text-red-500">{errorMessage}</small>}
   </div>
 ));
 
-FormDropdown.displayName = 'FormDropdown';
+FormMultiDropdown.displayName = 'FormMultiDropdown';
 
-export default FormDropdown;
+export default FormMultiDropdown;

@@ -4,9 +4,8 @@ import React, { useEffect, useState } from 'react';
 import Modal from '@/app/components/modal/component';
 import Barcode from '@/app/components/barcode/Barcode';
 import { Style } from '@/app/types/styles';
-import { OrderList } from 'primereact/orderlist';
-import { string } from 'yup';
 import { ListBox } from 'primereact/listbox';
+import FormInputFile from '@/app/components/form/browse/component';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
@@ -23,9 +22,8 @@ interface StyleDetail {
   value: string;
 }
 
-const SinglePrintBarcode = ({ style, visible, onHide }: SinglePrintBarcodeProps) => {
+const UploadStyles = ({ style, visible, onHide }: SinglePrintBarcodeProps) => {
   const [state, setState] = useState<SinglePrintBarcodeState>({});
-
   const [details, setDetails] = useState<StyleDetail[]>([]);
 
   useEffect(() => {
@@ -35,11 +33,11 @@ const SinglePrintBarcode = ({ style, visible, onHide }: SinglePrintBarcodeProps)
   useEffect(() => {
     if (style) {
       setDetails([
-        { name: 'Style Number', value: style.style_number },
-        { name: 'Buyer', value: style.buyer_name }
-      ]);
+        { name: "Style Number", value: style.style_number },
+        { name: "Buyer", value: style.buyer_name },
+      ])
     }
-  }, [style]);
+  }, [style])
 
   const onHideModal = () => {
     setState({ ...state, show: false });
@@ -50,10 +48,7 @@ const SinglePrintBarcode = ({ style, visible, onHide }: SinglePrintBarcodeProps)
     return (
       <div className="flex flex-wrap p-2 align-items-center gap-3">
         <div className="flex-1 flex flex-column gap-2 xl:mr-8">
-          <span className="font-bold">
-            {' '}
-            <i className="pi pi-tag text-sm"></i> {item.name}
-          </span>
+          <span className="font-bold">   <i className="pi pi-tag text-sm"></i> {item.name}</span>
         </div>
         <span className="font-bold text-900">${item.value}</span>
       </div>
@@ -61,20 +56,22 @@ const SinglePrintBarcode = ({ style, visible, onHide }: SinglePrintBarcodeProps)
   };
 
   return (
-    <Modal title="Print Barcode" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
+    <Modal title="Upload Styles" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
       <div className="flex m-5">
         <div className="flex flex-column align-items-center m-auto">
-          <Barcode value={style?.style_number ?? 'NO STYLE'} />
-          <ListBox filter={false} dataKey="id" options={details} itemTemplate={itemTemplate} />
+          <p>Please choose a file and make sure you provide the suggested format.</p>
+          <FormInputFile/>
+           <p><a href="#">Click here to download</a> the suggested format.</p>
+
         </div>
       </div>
       <div className="flex">
         <div className="ml-auto">
-          <Button onClick={() => {}} icon="pi pi-print" severity="info" label="Print Barcode" className="mr-2" />
+          <Button onClick={() => { }} icon="pi pi-upload" severity="info" label="Upload" className="mr-2" />
         </div>
       </div>
     </Modal>
   );
 };
 
-export default SinglePrintBarcode;
+export default UploadStyles;

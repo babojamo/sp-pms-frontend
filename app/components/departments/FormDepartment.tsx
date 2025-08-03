@@ -34,7 +34,7 @@ const FormDepartment = ({ value, onSubmit, children }: FormDepartmentProps) => {
         name: value?.name
       });
     }
-  }, [value]);
+  }, [value, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

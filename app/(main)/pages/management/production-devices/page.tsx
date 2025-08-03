@@ -10,10 +10,11 @@ import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
 import Modal from '@/app/components/modal/component';
-import { Department } from '@/app/types/department';
-import { DepartmentService } from '@/app/services/DepartmentService';
+import { Device } from '@/app/types/device';
+import { DeviceService } from '@/app/services/DeviceService';
+import { Operator } from '@/app/types/operator';
 
-interface DepartmentPageState {
+interface DevicePageState {
   deleteModalShow?: boolean;
 }
 
@@ -21,19 +22,18 @@ interface SearchFilter {
   keyword?: string;
 }
 
-const DepartmentsPage = () => {
-  const [pageState, setPageState] = useState<DepartmentPageState>({});
-  const [departments, setDepartments] = useState<Department[]>([]);
+const DevicesPage = () => {
+  const [pageState, setPageState] = useState<DevicePageState>({});
+  const [devices, setDevices] = useState<Device[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
-
   const router = useRouter();
 
   const clearFilter1 = () => {
     setFilter({
       keyword: ''
     });
-    fetchDepartments();
+    fetchDevices();
   };
 
   const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,7 @@ const DepartmentsPage = () => {
       ...filter,
       keyword: value
     });
-    fetchDepartments();
+    fetchDevices();
   };
 
   const renderHeader = () => {
@@ -57,49 +57,29 @@ const DepartmentsPage = () => {
     );
   };
 
-  const fetchDepartments = useCallback(async () => {
+  const fetchDevices = useCallback(async () => {
     setLoading(true);
-    const data = await DepartmentService.getDepartments();
-    setDepartments(getDepartments(data));
+    const data = await DeviceService.getDevices();
+    setDevices(getDevices(data));
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchDepartments();
-  }, [fetchDepartments]);
+    fetchDevices();
+  }, [fetchDevices]);
 
-  const getDepartments = (data: Department[]) => {
+  const getDevices = (data: Device[]) => {
     return [...(data || [])].map((d) => {
       return d;
     });
   };
 
-  const formatDate = (value: Date) => {
-    return value.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const dateBodyTemplate = (rowData: Department) => {
-    return formatDate(new Date(rowData.created_at));
-  };
-
-  const statusBodyTemplate = (rowData: Demo.Customer) => {
-    return <span className={`department-badge status-${rowData.status}`}>{rowData.status}</span>;
-  };
-
   const toolbars = () => {
     return (
       <>
-        <Button label="New" onClick={() => router.push(ROUTES.DEPARTMENTS.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
+        <Button label="New" onClick={() => router.push(ROUTES.DEVICES.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
       </>
     );
-  };
-
-  const onActionEditClick = (id: string | number) => {
-    router.push(`${ROUTES.DEPARTMENTS.EDIT}/${id}`);
   };
 
   const onActionDeleteClick = () => {
@@ -109,7 +89,11 @@ const DepartmentsPage = () => {
     });
   };
 
-  const actionBodyTemplate = (rowData: Department) => {
+  const onActionEditClick = (id: string | number) => {
+    router.push(`${ROUTES.DEVICES.EDIT}/${id}`);
+  };
+
+  const actionBodyTemplate = (rowData: Device) => {
     return (
       <>
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} rounded severity="warning" className="mr-2" />
@@ -118,17 +102,29 @@ const DepartmentsPage = () => {
     );
   };
 
+  const attachedToBodyTemplate = (row: Device) => {
+    return (
+      <div className="flex flex-column">
+        {row.operators?.map((operator: Operator) => (
+          <>
+            <a href="#">{operator.name}</a>
+          </>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="grid">
       <div className="col-12">
-        <PageCard title="Departments Management" toolbar={toolbars()}>
-          <DataTable value={departments} paginator className="p-datatable-gridlines" showGridlines rows={10} dataKey="id" filterDisplay="menu" loading={loading} responsiveLayout="scroll" emptyMessage="No customers found." header={renderHeader()}>
+        <PageCard title="Devices Management" toolbar={toolbars()}>
+          <DataTable value={devices} paginator className="p-datatable-gridlines" showGridlines rows={10} dataKey="id" filterDisplay="menu" loading={loading} responsiveLayout="scroll" emptyMessage="No customers found." header={renderHeader()}>
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-            <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
-            <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-            <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
-            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+            <Column field="device_id" header="Device ID" style={{ minWidth: '12rem' }} />
+            <Column body={attachedToBodyTemplate} header="Attached To" style={{ minWidth: '12rem' }} />
+            <Column field="created_by" header="Added By" style={{ minWidth: '12rem' }} />
+            <Column body={actionBodyTemplate} headerStyle={{ width: 'auto' }}></Column>
           </DataTable>
           <Modal title="Delete Record" visible={pageState.deleteModalShow} onHide={() => setPageState({ ...pageState, deleteModalShow: false })} confirmSeverity="danger">
             <p>Are you sure you want to delete the record?</p>
@@ -139,4 +135,4 @@ const DepartmentsPage = () => {
   );
 };
 
-export default DepartmentsPage;
+export default DevicesPage;

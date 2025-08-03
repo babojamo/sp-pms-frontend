@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import { ROUTES } from '@/app/constants/routes';
@@ -18,15 +18,15 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
   const router = useRouter();
   const [department, setDepartment] = useState<DepartmentForm | undefined>();
 
+  const getDepartment = useCallback(async () => {
+    setDepartment((await DepartmentService.getDepartment(params?.id)) as DepartmentForm);
+  }, [params?.id]);
+
   useEffect(() => {
     if (params?.id) {
       getDepartment();
     }
-  }, [params]);
-
-  const getDepartment = async () => {
-    setDepartment((await DepartmentService.getDepartment(params?.id)) as DepartmentForm);
-  };
+  }, [params?.id, getDepartment]);
 
   return (
     <div className="grid">

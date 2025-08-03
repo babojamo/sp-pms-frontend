@@ -10,11 +10,12 @@ interface ModalProps {
   confirmSeverity?: 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'help' | undefined;
   cancelSeverity?: 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'help' | undefined;
   hideActions?: boolean;
+  width?: string;
 }
 
-const Modal = ({ visible, onHide, onConfirm, children, title, confirmSeverity = 'success', cancelSeverity = 'secondary', hideActions = false }: ModalProps) => {
+const Modal = ({ visible, onHide, onConfirm, children, title, confirmSeverity = 'success', width = '40vw', cancelSeverity = 'secondary', hideActions = false }: ModalProps) => {
   return (
-    <Dialog header={title} visible={visible} style={{ width: '40vw' }} onHide={onHide}>
+    <Dialog header={title} visible={visible} onHide={onHide}>
       {children}
       {!hideActions && (
         <div className="flex">

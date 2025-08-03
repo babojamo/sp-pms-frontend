@@ -29,7 +29,8 @@ const AppMenu = () => {
         { label: 'Departments', icon: 'pi pi-fw pi-check-square', to: '/pages/management/departments' },
         { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/pages/management/operators' },
         { label: 'Sewing Lines', icon: 'pi pi-fw pi-check-square', to: '/pages/management/sewing-lines' },
-        { label: 'Production Process', icon: 'pi pi-fw pi-check-square', to: '/pages/management/processes' }
+        { label: 'Production Process', icon: 'pi pi-fw pi-check-square', to: '/pages/management/processes' },
+        { label: 'Production Devices', icon: 'pi pi-fw pi-check-square', to: '/pages/management/production-devices' }
       ]
     },
     {

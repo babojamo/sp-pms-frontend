@@ -34,6 +34,7 @@ const FormOperator = ({ value, onSubmit, children, lines }: FormOperatorProps) =
 
   useEffect(() => {
     if (value) {
+      // @ts-ignore
       reset({
         name: value?.name
       });

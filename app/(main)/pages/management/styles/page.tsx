@@ -20,10 +20,14 @@ import FormDropdown from '@/app/components/form/dropdown/component';
 import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
 import { Style } from '@/app/types/styles';
 import { StyleService } from '@/app/services/StyleService';
+import UploadStyles from './components/upload-styles';
+import MultiplePrintBarcode from '@/app/components/style/MultiplePrintBarcode';
 
 interface StylePageState {
   deleteModalShow?: boolean;
   showSinglePrintBarcode?: boolean;
+  showMultiPrintBarcode?: boolean;
+  showUploading?: boolean;
 }
 
 const StylesPage = () => {
@@ -32,14 +36,12 @@ const StylesPage = () => {
   const [selectedStyle, setSelectedStyle] = useState<Style | undefined>(undefined);
 
   const [styles, setStyles] = useState<Style[]>([]);
+  const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
 
   const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
-  const [products, setProducts] = useState<Demo.Product[]>([]);
   const [globalFilterValue1, setGlobalFilterValue1] = useState('');
-  const [expandedRows, setExpandedRows] = useState<any[] | DataTableExpandedRows>([]);
-  const [allExpanded, setAllExpanded] = useState(false);
   const router = useRouter();
 
   const statuses = ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'];
@@ -137,61 +139,6 @@ const StylesPage = () => {
     setGlobalFilterValue1('');
   };
 
-
-  const filterClearTemplate = (options: ColumnFilterClearTemplateOptions) => {
-    return <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} severity="secondary"></Button>;
-  };
-
-  const filterApplyTemplate = (options: ColumnFilterApplyTemplateOptions) => {
-    return <Button type="button" icon="pi pi-check" onClick={options.filterApplyCallback} severity="success"></Button>;
-  };
-
-  const dateBodyTemplate = (rowData: Demo.Customer) => {
-    return formatDate(rowData.date);
-  };
-
-  const dateFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
-    return <Calendar value={options.value} onChange={(e) => options.filterCallback(e.value, options.index)} dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" mask="99/99/9999" />;
-  };
-
-  const balanceBodyTemplate = (rowData: Demo.Customer) => {
-    return formatCurrency(rowData.balance as number);
-  };
-
-  const balanceFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
-    return <InputNumber value={options.value} onChange={(e) => options.filterCallback(e.value, options.index)} mode="currency" currency="USD" locale="en-US" />;
-  };
-
-  const statusBodyTemplate = (rowData: Demo.Customer) => {
-    return <span className={`customer-badge status-${rowData.status}`}>{rowData.status}</span>;
-  };
-
-  const statusFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
-    return <Dropdown value={options.value} options={statuses} onChange={(e) => options.filterCallback(e.value, options.index)} itemTemplate={statusItemTemplate} placeholder="Select a Status" className="p-column-filter" showClear />;
-  };
-
-  const statusItemTemplate = (option: any) => {
-    return <span className={`customer-badge status-${option}`}>{option}</span>;
-  };
-
-  const toggleAll = () => {
-    if (allExpanded) collapseAll();
-    else expandAll();
-  };
-
-  const expandAll = () => {
-    let _expandedRows = {} as { [key: string]: boolean };
-    products.forEach((p) => (_expandedRows[`${p.id}`] = true));
-
-    setExpandedRows(_expandedRows);
-    setAllExpanded(true);
-  };
-
-  const collapseAll = () => {
-    setExpandedRows([]);
-    setAllExpanded(false);
-  };
-
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.STYLES_EDIT}/${id}`);
   }
@@ -215,12 +162,16 @@ const StylesPage = () => {
   const actionBodyTemplate = (rowData: Style) => {
     return (
       <div className='flex gap-2'>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} rounded severity="warning"/>
-        <Button icon="pi pi-print" onClick={() => onSinglePrintBarcodeClick(rowData)} rounded severity="help"/>
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} rounded severity="warning" />
+        <Button icon="pi pi-print" onClick={() => onSinglePrintBarcodeClick(rowData)} rounded severity="help" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
       </div>
     );
   };
+
+  const onStyleSelectionChange = (data: any) => {
+    setSelectedStyles(data.value)
+  }
 
   const header1 = renderHeader1();
 
@@ -231,12 +182,14 @@ const StylesPage = () => {
           toolbar={
             <PageAction
               actionAdd={() => router.push(ROUTES.STYLES_CREATE)}
+              actionUpload={() => setPageState({ ...pageState, showUploading: true })}
               actions={[
                 PageActions.ADD,
                 PageActions.UPLAOD
               ]}
+
             >
-              <Button onClick={() => { }} severity='help' label="Print Barcodes" icon="pi pi-print" style={{ marginRight: '.5em' }} />
+              <Button onClick={() => setPageState({ ...pageState, showMultiPrintBarcode: true })} severity='help' label="Print Barcodes" icon="pi pi-print" style={{ marginRight: '.5em' }} />
             </PageAction>
           }
         >
@@ -251,8 +204,15 @@ const StylesPage = () => {
             filterDisplay="menu"
             loading={loading1}
             emptyMessage="No customers found."
+            selectionMode={'checkbox'}
+            selection={selectedStyles}
+            onSelectionChange={onStyleSelectionChange}
             header={header1}
           >
+            <Column
+              selectionMode="multiple"
+              headerStyle={{ width: '3em' }}
+            />
             <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
             <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
             <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
@@ -271,6 +231,8 @@ const StylesPage = () => {
             <p>Are you sure you want to delete the record?</p>
           </Modal>
           <SinglePrintBarcode style={selectedStyle} onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })} visible={pageState.showSinglePrintBarcode} />
+          <UploadStyles onHide={() => setPageState({ ...pageState, showUploading: false })} visible={pageState.showUploading} />
+          <MultiplePrintBarcode styles={selectedStyles} onHide={() => setPageState({ ...pageState, showMultiPrintBarcode: false })} visible={pageState.showMultiPrintBarcode} />
         </PageCard>
       </div>
     </div>

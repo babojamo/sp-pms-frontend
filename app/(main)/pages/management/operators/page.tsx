@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { Demo } from '@/types';
 import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
@@ -57,18 +57,16 @@ const OperatorsPage = () => {
     );
   };
 
-  useEffect(() => {
-    fetchOperators();
+  const fetchOperators = useCallback(async () => {
+    setLoading(true);
+    const data = await OperatorService.getOperators();
+    setOperators(getOperators(data));
+    setLoading(false);
   }, []);
 
-  const fetchOperators = () => {
-    console.log('Apply filters: ', filter);
-    setLoading(true);
-    OperatorService.getOperators().then((data) => {
-      setOperators(getOperators(data));
-      setLoading(false);
-    });
-  };
+  useEffect(() => {
+    fetchOperators();
+  }, [fetchOperators]);
 
   const getOperators = (data: Operator[]) => {
     return [...(data || [])].map((d) => {

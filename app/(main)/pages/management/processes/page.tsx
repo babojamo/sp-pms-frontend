@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { Demo } from '@/types';
 import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
@@ -57,18 +57,16 @@ const ProcessesPage = () => {
     );
   };
 
-  useEffect(() => {
-    fetchProcesses();
+  const fetchProcesses = useCallback(async () => {
+    setLoading(true);
+    const data = await ProcessService.getProcesses();
+    setProcesses(getProcesses(data));
+    setLoading(false);
   }, []);
 
-  const fetchProcesses = () => {
-    console.log('Apply filters: ', filter);
-    setLoading(true);
-    ProcessService.getProcesses().then((data) => {
-      setProcesses(getProcesses(data));
-      setLoading(false);
-    });
-  };
+  useEffect(() => {
+    fetchProcesses();
+  }, [fetchProcesses]);
 
   const getProcesses = (data: Process[]) => {
     return [...(data || [])].map((d) => {

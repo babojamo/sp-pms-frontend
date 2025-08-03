@@ -39,7 +39,7 @@ const FormProcess = ({ value, onSubmit, children }: FormProcessProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormInputText {...register('name')} label="Employee Name" errorMessage={errors.name?.message} isError={errors.name ? true : false} />
+      <FormInputText placeholder="Process name" {...register('name')} label="Name" errorMessage={errors.name?.message} isError={errors.name ? true : false} />
       {children}
     </form>
   );

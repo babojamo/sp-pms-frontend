@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import { ROUTES } from '@/app/constants/routes';
@@ -24,15 +24,15 @@ const EditSewingLinePage = ({ params }: EditSewingLinePageProps) => {
     { label: 'Line 4', value: '3' }
   ];
 
+  const getSewingLine = useCallback(async () => {
+    setSewingLine((await SewingLineService.getSewingLine(params?.id)) as SewingLineForm);
+  }, [params?.id]);
+
   useEffect(() => {
     if (params?.id) {
       getSewingLine();
     }
-  }, [params]);
-
-  const getSewingLine = async () => {
-    setSewingLine((await SewingLineService.getSewingLine(params?.id)) as SewingLineForm);
-  };
+  }, [params?.id, getSewingLine]);
 
   return (
     <div className="grid">

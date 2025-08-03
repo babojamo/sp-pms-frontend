@@ -31,6 +31,7 @@ const FormSewingLine = ({ value, onSubmit, children }: FormSewingLineProps) => {
 
   useEffect(() => {
     if (value) {
+      // @ts-ignore
       reset({
         name: value?.name
       });

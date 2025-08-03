@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { Demo } from '@/types';
 import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
@@ -57,18 +57,16 @@ const SewingLinesPage = () => {
     );
   };
 
-  useEffect(() => {
-    fetchSewingLines();
+  const fetchSewingLines = useCallback(async () => {
+    setLoading(true);
+    const data = await SewingLineService.getSewingLines();
+    setSewingLines(getSewingLines(data));
+    setLoading(false);
   }, []);
 
-  const fetchSewingLines = () => {
-    console.log('Apply filters: ', filter);
-    setLoading(true);
-    SewingLineService.getSewingLines().then((data) => {
-      setSewingLines(getSewingLines(data));
-      setLoading(false);
-    });
-  };
+  useEffect(() => {
+    fetchSewingLines();
+  }, [fetchSewingLines]);
 
   const getSewingLines = (data: SewingLine[]) => {
     return [...(data || [])].map((d) => {

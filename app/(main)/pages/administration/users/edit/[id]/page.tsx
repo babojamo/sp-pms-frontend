@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import { ROUTES } from '@/app/constants/routes';
@@ -23,15 +23,17 @@ const EditUserPage = ({ params }: EditUserPageProps) => {
     { label: 'Administrator', value: 'administrator' },
     { label: 'Administrator', value: 'manager' }
   ];
+
+  const getUser = useCallback(async () => {
+    const userData = await UserService.getUser(params?.id);
+    setUser(userData as UserForm);
+  }, [params?.id]);
+
   useEffect(() => {
     if (params?.id) {
       getUser();
     }
-  }, [params]);
-
-  const getUser = async () => {
-    setUser((await UserService.getUser(params?.id)) as UserForm);
-  };
+  }, [params?.id, getUser]);
 
   return (
     <div className="grid">

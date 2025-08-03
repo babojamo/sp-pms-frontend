@@ -29,5 +29,10 @@ export const ROUTES = {
     INDEX: '/pages/management/departments',
     CREATE: '/pages/management/departments/create',
     EDIT: '/pages/management/departments/edit'
+  },
+  DEVICES: {
+    INDEX: '/pages/management/production-devices',
+    CREATE: '/pages/management/production-devices/create',
+    EDIT: '/pages/management/production-devices/edit'
   }
 };
