@@ -1,9 +1,9 @@
 export interface SewingLine {
-  id: string;
+  id?: string;
   name: string;
   created_by?: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface SewingLineForm {

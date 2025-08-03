@@ -3,7 +3,7 @@ import { Toolbar } from 'primereact/toolbar';
 import React from 'react';
 
 interface PageCardProps {
-  title?: string;
+  title?: any;
   children?: any;
   toolbar?: React.ReactNode;
 }

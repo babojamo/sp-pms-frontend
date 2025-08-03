@@ -13,9 +13,9 @@ interface ModalProps {
   width?: string;
 }
 
-const Modal = ({ visible, onHide, onConfirm, children, title, confirmSeverity = 'success', width = '40vw', cancelSeverity = 'secondary', hideActions = false }: ModalProps) => {
+const Modal = ({ visible, onHide, onConfirm, children, title, confirmSeverity = 'success', width, cancelSeverity = 'secondary', hideActions = false }: ModalProps) => {
   return (
-    <Dialog header={title} visible={visible} onHide={onHide}>
+    <Dialog header={title} visible={visible} onHide={onHide} style={{ width }}>
       {children}
       {!hideActions && (
         <div className="flex">

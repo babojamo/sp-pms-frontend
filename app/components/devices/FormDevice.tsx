@@ -18,10 +18,7 @@ interface FormDeviceProps {
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required'),
-  operator_ids: yup
-    .array()
-    .of(yup.string())
-    .min(1, 'Operators is required') // ensures at least one entry
+  operator_ids: yup.array().of(yup.string()).min(1, 'Operators is required') // ensures at least one entry
 });
 
 const FormDevice = ({ value, onSubmit, children }: FormDeviceProps) => {
@@ -58,7 +55,7 @@ const FormDevice = ({ value, onSubmit, children }: FormDeviceProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormInputText {...register('name')} label="Name" placeholder="Device name" errorMessage={errors.name?.message} isError={errors.name ? true : false} />
-      <FormMultiDropdown {...register('operator_ids')} filter placeholder='Choose Operators' errorMessage={errors.name?.message} isError={errors.name ? true : false} options={operatorOptions} />
+      <FormMultiDropdown {...register('operator_ids')} filter placeholder="Choose Operators" errorMessage={errors.name?.message} isError={errors.name ? true : false} options={operatorOptions} />
       <p>Choose to Unregisted Devices</p>
       <div className="card flex">
         <div className="flex flex-column gap-3">
