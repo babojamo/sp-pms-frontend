@@ -39,10 +39,8 @@ export const ROUTES = {
     INDEX: '/management/shifts',
     CREATE: '/management/shifts/create',
     EDIT: '/management/shifts/edit'
-  }
+  },
+  ROUTE_PATH_LOGIN: '/login'
 };
 
-export const PUBLIC_ROUTES = [
-  '/login',
-  '/kiosk'
-];
+export const PUBLIC_ROUTES = ['/login', '/kiosk'];

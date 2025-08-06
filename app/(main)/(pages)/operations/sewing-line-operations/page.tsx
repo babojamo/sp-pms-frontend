@@ -122,7 +122,6 @@ const SewingLineOperationPage = () => {
         <Column field="operator.line.name" header="Line#" />
         <Column field="process_id" header="Process" editor={(opts) => <FormDropdown className="" placeholder="Select" options={processOptions} />} />
         <Column field="target" header="Target" editor={(opts) => <FormInputText className="" placeholder="Quantity" />} />
-        <Column field="process_id" header="Shift" editor={(opts) => <FormDropdown className="" placeholder="Select" options={shiftOptions} />} />
         <Column field="target" header="Remark" editor={(opts) => <FormInputText className="" placeholder="Remarks" />} />
         <Column field="total_output" header="Total Ouput" />
         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>

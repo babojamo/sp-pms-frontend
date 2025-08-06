@@ -45,6 +45,10 @@ export interface LayoutContextProps {
   setLayoutState: Dispatch<SetStateAction<LayoutState>>;
   onMenuToggle: () => void;
   showProfileSidebar: () => void;
+  showSuccess: (detail: string) => void;
+  showWarning: (detail: string) => void;
+  showError: (detail: string) => void;
+  showApiError: (error?: AxiosError, summary: string) => void;
 }
 
 export interface MenuContextProps {

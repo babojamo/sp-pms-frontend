@@ -1,9 +1,42 @@
 'use client';
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useRef } from 'react';
 import { LayoutState, ChildContainerProps, LayoutConfig, LayoutContextProps } from '@/types';
+import { Toast, ToastMessage } from 'primereact/toast';
+import { AxiosError } from 'axios';
+import { RESPONSE_SERVICE_UNAVAILABLE } from '@/app/constants/messages';
 export const LayoutContext = createContext({} as LayoutContextProps);
 
 export const LayoutProvider = ({ children }: ChildContainerProps) => {
+  const toastRef = useRef<Toast>(null);
+
+  const show = (severity: ToastMessage['severity'], summary: string, detail: string) => {
+    toastRef.current?.show({
+      severity,
+      summary,
+      detail,
+      life: 3000
+    });
+  };
+
+  const showSuccess = (detail: string): void => {
+    show('success', 'Success', detail);
+  };
+
+  const showWarning = (detail: string): void => {
+    show('warn', 'Warning', detail);
+  };
+
+  const showError = (detail: string): void => {
+    show('error', 'Error', detail);
+  };
+
+  const showApiError = (error?: AxiosError, summary: string = 'Contact administrator') => {
+    const data: any = error?.response?.data;
+    if (error?.response?.status !== RESPONSE_SERVICE_UNAVAILABLE) {
+      show('error', summary, data?.message ?? `${error}` ?? 'Something went wrong.');
+    }
+  };
+
   const [layoutConfig, setLayoutConfig] = useState<LayoutConfig>({
     ripple: false,
     inputStyle: 'outlined',
@@ -52,8 +85,18 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     layoutState,
     setLayoutState,
     onMenuToggle,
-    showProfileSidebar
+    showProfileSidebar,
+    showSuccess,
+    showWarning,
+    showError,
+    showApiError
   };
 
-  return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>;
+  return (
+    <LayoutContext.Provider value={value}>
+      <Toast ref={toastRef} />
+
+      {children}
+    </LayoutContext.Provider>
+  );
 };

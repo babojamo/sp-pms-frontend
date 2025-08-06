@@ -1,4 +1,4 @@
-import { Shift } from "../types/shifts";
+import { Shift } from '../types/shifts';
 
 export const ShiftService = {
   getShifts() {

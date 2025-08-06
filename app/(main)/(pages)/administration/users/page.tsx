@@ -24,7 +24,7 @@ interface SearchFilter {
 const UsersPage = () => {
   const [pageState, setPageState] = useState<UserPageState>({});
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<SearchFilter>({});
 
   const router = useRouter();

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Layout from '../../layout/layout';
-import { AuthProvider } from '../hooks/useAuth';
+import { AuthProvider } from '../contexts/useAuth';
 
 interface AppLayoutProps {
   children: React.ReactNode;

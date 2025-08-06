@@ -12,6 +12,7 @@ export interface User {
   created_by?: string;
   created_at: string;
   updated_at: string;
+  refreshToken?: string;
 }
 export interface UserForm {
   id: string;

@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import AppConfig from '../../layout/AppConfig';
 import React from 'react';
+import { AuthProvider } from '../contexts/useAuth';
 
-interface SimpleLayoutProps {
+interface DefaultLayoutProps {
   children: React.ReactNode;
 }
 
@@ -11,11 +12,13 @@ export const metadata: Metadata = {
   description: 'The ultimate collection of design-agnostic, flexible and accessible React UI Components.'
 };
 
-export default function SimpleLayout({ children }: SimpleLayoutProps) {
+export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <React.Fragment>
-      {children}
-      <AppConfig simple />
-    </React.Fragment>
+    <AuthProvider>
+      <React.Fragment>
+        {children}
+        <AppConfig simple />
+      </React.Fragment>
+    </AuthProvider>
   );
 }
