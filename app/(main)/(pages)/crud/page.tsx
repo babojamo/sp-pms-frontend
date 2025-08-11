@@ -198,7 +198,13 @@ const Crud = () => {
       <React.Fragment>
         <div className="my-2">
           <Button label="New" icon="pi pi-plus" severity="success" className=" mr-2" onClick={openNew} />
-          <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !(selectedProducts as any).length} />
+          <Button
+            label="Delete"
+            icon="pi pi-trash"
+            severity="danger"
+            onClick={confirmDeleteSelected}
+            disabled={!selectedProducts || !(selectedProducts as any).length}
+          />
         </div>
       </React.Fragment>
     );
@@ -349,8 +355,18 @@ const Crud = () => {
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
           </DataTable>
 
-          <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-            {product.image && <img src={`/demo/images/product/${product.image}`} alt={product.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
+          <Dialog
+            visible={productDialog}
+            style={{ width: '450px' }}
+            header="Product Details"
+            modal
+            className="p-fluid"
+            footer={productDialogFooter}
+            onHide={hideDialog}
+          >
+            {product.image && (
+              <img src={`/demo/images/product/${product.image}`} alt={product.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />
+            )}
             <div className="field">
               <label htmlFor="name">Name</label>
               <InputText
@@ -367,26 +383,57 @@ const Crud = () => {
             </div>
             <div className="field">
               <label htmlFor="description">Description</label>
-              <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
+              <InputTextarea
+                id="description"
+                value={product.description}
+                onChange={(e) => onInputChange(e, 'description')}
+                required
+                rows={3}
+                cols={20}
+              />
             </div>
 
             <div className="field">
               <label className="mb-3">Category</label>
               <div className="formgrid grid">
                 <div className="field-radiobutton col-6">
-                  <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={product.category === 'Accessories'} />
+                  <RadioButton
+                    inputId="category1"
+                    name="category"
+                    value="Accessories"
+                    onChange={onCategoryChange}
+                    checked={product.category === 'Accessories'}
+                  />
                   <label htmlFor="category1">Accessories</label>
                 </div>
                 <div className="field-radiobutton col-6">
-                  <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={product.category === 'Clothing'} />
+                  <RadioButton
+                    inputId="category2"
+                    name="category"
+                    value="Clothing"
+                    onChange={onCategoryChange}
+                    checked={product.category === 'Clothing'}
+                  />
                   <label htmlFor="category2">Clothing</label>
                 </div>
                 <div className="field-radiobutton col-6">
-                  <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={product.category === 'Electronics'} />
+                  <RadioButton
+                    inputId="category3"
+                    name="category"
+                    value="Electronics"
+                    onChange={onCategoryChange}
+                    checked={product.category === 'Electronics'}
+                  />
                   <label htmlFor="category3">Electronics</label>
                 </div>
                 <div className="field-radiobutton col-6">
-                  <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={product.category === 'Fitness'} />
+                  <RadioButton
+                    inputId="category4"
+                    name="category"
+                    value="Fitness"
+                    onChange={onCategoryChange}
+                    checked={product.category === 'Fitness'}
+                  />
                   <label htmlFor="category4">Fitness</label>
                 </div>
               </div>
@@ -395,7 +442,14 @@ const Crud = () => {
             <div className="formgrid grid">
               <div className="field col">
                 <label htmlFor="price">Price</label>
-                <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
+                <InputNumber
+                  id="price"
+                  value={product.price}
+                  onValueChange={(e) => onInputNumberChange(e, 'price')}
+                  mode="currency"
+                  currency="USD"
+                  locale="en-US"
+                />
               </div>
               <div className="field col">
                 <label htmlFor="quantity">Quantity</label>
@@ -404,7 +458,14 @@ const Crud = () => {
             </div>
           </Dialog>
 
-          <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+          <Dialog
+            visible={deleteProductDialog}
+            style={{ width: '450px' }}
+            header="Confirm"
+            modal
+            footer={deleteProductDialogFooter}
+            onHide={hideDeleteProductDialog}
+          >
             <div className="flex align-items-center justify-content-center">
               <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
               {product && (
@@ -415,7 +476,14 @@ const Crud = () => {
             </div>
           </Dialog>
 
-          <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
+          <Dialog
+            visible={deleteProductsDialog}
+            style={{ width: '450px' }}
+            header="Confirm"
+            modal
+            footer={deleteProductsDialogFooter}
+            onHide={hideDeleteProductsDialog}
+          >
             <div className="flex align-items-center justify-content-center">
               <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
               {product && <span>Are you sure you want to delete the selected products?</span>}

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, createContext, useRef } from 'react';
+import React, { useState, createContext, useRef, useEffect } from 'react';
 import { LayoutState, ChildContainerProps, LayoutConfig, LayoutContextProps } from '@/types';
 import { Toast, ToastMessage } from 'primereact/toast';
 import { AxiosError } from 'axios';
@@ -42,9 +42,14 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     inputStyle: 'outlined',
     menuMode: 'static',
     colorScheme: 'light',
-    theme: 'mdc-light-indigo',
+    theme: 'lara-light-indigo',
     scale: 14
   });
+
+  useEffect(() => {
+    console.log(layoutConfig);
+  }),
+    [layoutConfig];
 
   const [layoutState, setLayoutState] = useState<LayoutState>({
     staticMenuDesktopInactive: false,

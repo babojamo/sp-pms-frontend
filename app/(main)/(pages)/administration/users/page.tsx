@@ -10,8 +10,8 @@ import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
 import Modal from '@/app/components/modal/component';
-import { UserService } from '@/app/services/UserService';
 import { User } from '@/app/types/users';
+import UserService from '@/app/services/UserService';
 
 interface UserPageState {
   deleteModalShow?: boolean;
@@ -58,8 +58,8 @@ const UsersPage = () => {
   };
 
   const fetchUsers = useCallback(async () => {
-    const userData = await UserService.getUsers();
-    setUsers(getUsers(userData));
+    const { data } = await UserService.getUsers();
+    setUsers(getUsers(data.data));
   }, []);
 
   useEffect(() => {
@@ -120,16 +120,33 @@ const UsersPage = () => {
     <div className="grid">
       <div className="col-12">
         <PageCard title="Users Management" toolbar={toolbars()}>
-          <DataTable value={users} paginator className="p-datatable-gridlines" showGridlines rows={10} dataKey="id" filterDisplay="menu" loading={loading} responsiveLayout="scroll" emptyMessage="No customers found." header={renderHeader()}>
+          <DataTable
+            value={users}
+            paginator
+            className="p-datatable-gridlines"
+            showGridlines
+            rows={10}
+            dataKey="id"
+            filterDisplay="menu"
+            loading={loading}
+            responsiveLayout="scroll"
+            emptyMessage="No customers found."
+            header={renderHeader()}
+          >
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
             <Column field="username" header="Username" style={{ minWidth: '12rem' }} />
-            <Column field="type" header="Type" style={{ minWidth: '12rem' }} />
+            <Column field="role" header="Role" style={{ minWidth: '10rem' }} body={(user: User) => user.role.toUpperCase()} />
             <Column header="Create By" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
             <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
           </DataTable>
-          <Modal title="Delete Record" visible={pageState.deleteModalShow} onHide={() => setPageState({ ...pageState, deleteModalShow: false })} confirmSeverity="danger">
+          <Modal
+            title="Delete Record"
+            visible={pageState.deleteModalShow}
+            onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
+            confirmSeverity="danger"
+          >
             <p>Are you sure you want to delete the record?</p>
           </Modal>
         </PageCard>

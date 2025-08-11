@@ -7,8 +7,8 @@ import FormUser from '@/app/components/users/FormUser';
 import { SelectItem } from 'primereact/selectitem';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
-import { UserService } from '@/app/services/UserService';
 import { UserForm } from '@/app/types/users';
+import UserService from '@/app/services/UserService';
 
 interface EditUserPageProps {
   params?: { id: any };

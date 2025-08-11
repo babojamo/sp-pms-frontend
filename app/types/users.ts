@@ -1,4 +1,4 @@
-export enum UserType {
+export enum UserRole {
   OPERATOR = 'operator',
   ADMIN = 'admin',
   MANAGER = 'manager'
@@ -8,18 +8,19 @@ export interface User {
   name: string;
   username: string;
   password: string;
-  type: UserType;
+  role: UserRole;
   created_by?: string;
   created_at: string;
   updated_at: string;
   refreshToken?: string;
 }
+
 export interface UserForm {
   id: string;
   name: string;
   username: string;
   password: string;
-  type: UserType;
+  type: UserRole;
   created_by?: string;
   created_at: string;
   updated_at: string;

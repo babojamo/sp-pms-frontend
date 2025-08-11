@@ -10,11 +10,11 @@ import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
 import Modal from '@/app/components/modal/component';
-import { Device } from '@/app/types/device';
-import { DeviceService } from '@/app/services/DeviceService';
 import { Operator } from '@/app/types/operator';
+import { ProcessOffset } from '@/app/types/process-offset';
+import { ProcessOffsetService } from '@/app/services/ProcessOffsetService';
 
-interface DevicePageState {
+interface ProcessOffsetPageState {
   deleteModalShow?: boolean;
 }
 
@@ -22,9 +22,9 @@ interface SearchFilter {
   keyword?: string;
 }
 
-const DevicesPage = () => {
-  const [pageState, setPageState] = useState<DevicePageState>({});
-  const [devices, setDevices] = useState<Device[]>([]);
+const ProcessOffsetsPage = () => {
+  const [pageState, setPageState] = useState<ProcessOffsetPageState>({});
+  const [processOffsets, setProcessOffsets] = useState<ProcessOffset[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
   const router = useRouter();
@@ -33,7 +33,7 @@ const DevicesPage = () => {
     setFilter({
       keyword: ''
     });
-    fetchDevices();
+    fetchProcessOffsets();
   };
 
   const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,7 @@ const DevicesPage = () => {
       ...filter,
       keyword: value
     });
-    fetchDevices();
+    fetchProcessOffsets();
   };
 
   const renderHeader = () => {
@@ -57,18 +57,18 @@ const DevicesPage = () => {
     );
   };
 
-  const fetchDevices = useCallback(async () => {
+  const fetchProcessOffsets = useCallback(async () => {
     setLoading(true);
-    const data = await DeviceService.getDevices();
-    setDevices(getDevices(data));
+    const data = await ProcessOffsetService.getProcessOffsets();
+    setProcessOffsets(getProcessOffsets(data));
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchDevices();
-  }, [fetchDevices]);
+    fetchProcessOffsets();
+  }, [fetchProcessOffsets]);
 
-  const getDevices = (data: Device[]) => {
+  const getProcessOffsets = (data: ProcessOffset[]) => {
     return [...(data || [])].map((d) => {
       return d;
     });
@@ -77,7 +77,7 @@ const DevicesPage = () => {
   const toolbars = () => {
     return (
       <>
-        <Button label="New" onClick={() => router.push(ROUTES.DEVICES.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
+        <Button label="New" onClick={() => router.push(ROUTES.PROCESS_OFFSETS.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
       </>
     );
   };
@@ -90,10 +90,10 @@ const DevicesPage = () => {
   };
 
   const onActionEditClick = (id: string | number) => {
-    router.push(`${ROUTES.DEVICES.EDIT}/${id}`);
+    router.push(`${ROUTES.PROCESS_OFFSETS.EDIT}/${id}`);
   };
 
-  const actionBodyTemplate = (rowData: Device) => {
+  const actionBodyTemplate = (rowData: ProcessOffset) => {
     return (
       <>
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} rounded severity="warning" className="mr-2" />
@@ -102,7 +102,7 @@ const DevicesPage = () => {
     );
   };
 
-  const attachedToBodyTemplate = (row: Device) => {
+  const attachedToBodyTemplate = (row: ProcessOffset) => {
     return (
       <div className="flex flex-column">
         {row.operators?.map((operator: Operator) => (
@@ -117,16 +117,33 @@ const DevicesPage = () => {
   return (
     <div className="grid">
       <div className="col-12">
-        <PageCard title="Devices Management" toolbar={toolbars()}>
-          <DataTable value={devices} paginator className="p-datatable-gridlines" showGridlines rows={10} dataKey="id" filterDisplay="menu" loading={loading} responsiveLayout="scroll" emptyMessage="No customers found." header={renderHeader()}>
+        <PageCard title="Process Offset" toolbar={toolbars()}>
+          <DataTable
+            value={processOffsets}
+            paginator
+            className="p-datatable-gridlines"
+            showGridlines
+            rows={10}
+            dataKey="id"
+            filterDisplay="menu"
+            loading={loading}
+            responsiveLayout="scroll"
+            emptyMessage="No customers found."
+            header={renderHeader()}
+          >
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-            <Column field="device_id" header="Device ID" style={{ minWidth: '12rem' }} />
+            <Column field="processOffset_id" header="ProcessOffset ID" style={{ minWidth: '12rem' }} />
             <Column body={attachedToBodyTemplate} header="Attached To" style={{ minWidth: '12rem' }} />
             <Column field="created_by" header="Added By" style={{ minWidth: '12rem' }} />
             <Column body={actionBodyTemplate} headerStyle={{ width: 'auto' }}></Column>
           </DataTable>
-          <Modal title="Delete Record" visible={pageState.deleteModalShow} onHide={() => setPageState({ ...pageState, deleteModalShow: false })} confirmSeverity="danger">
+          <Modal
+            title="Delete Record"
+            visible={pageState.deleteModalShow}
+            onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
+            confirmSeverity="danger"
+          >
             <p>Are you sure you want to delete the record?</p>
           </Modal>
         </PageCard>
@@ -135,4 +152,4 @@ const DevicesPage = () => {
   );
 };
 
-export default DevicesPage;
+export default ProcessOffsetsPage;

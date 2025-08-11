@@ -71,7 +71,15 @@ const InvalidStateDemo = () => {
           </div>
           <div className="field">
             <label htmlFor="autocomplete">AutoComplete</label>
-            <AutoComplete id="autocomplete" value={value2} onChange={(e) => setValue2(e.value)} suggestions={filteredCountries} completeMethod={searchCountry} field="name" className="p-invalid" />
+            <AutoComplete
+              id="autocomplete"
+              value={value2}
+              onChange={(e) => setValue2(e.value)}
+              suggestions={filteredCountries}
+              completeMethod={searchCountry}
+              field="name"
+              className="p-invalid"
+            />
           </div>
           <div className="field">
             <label htmlFor="calendar">Calendar</label>
@@ -102,7 +110,14 @@ const InvalidStateDemo = () => {
           </div>
           <div className="field">
             <label htmlFor="multiselect">MultiSelect</label>
-            <MultiSelect id="multiselect" options={cities} value={value9} onChange={(e) => setValue9(e.value)} optionLabel="name" className="p-invalid" />
+            <MultiSelect
+              id="multiselect"
+              options={cities}
+              value={value9}
+              onChange={(e) => setValue9(e.value)}
+              optionLabel="name"
+              className="p-invalid"
+            />
           </div>
           <div className="field">
             <label htmlFor="textarea">Textarea</label>

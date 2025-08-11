@@ -116,10 +116,19 @@ const OverlayDemo = () => {
         <div className="col-12 lg:col-6">
           <div className="card">
             <h5>Dialog</h5>
-            <Dialog header="Dialog" visible={displayBasic} style={{ width: '30vw' }} modal footer={basicDialogFooter} onHide={() => setDisplayBasic(false)}>
+            <Dialog
+              header="Dialog"
+              visible={displayBasic}
+              style={{ width: '30vw' }}
+              modal
+              footer={basicDialogFooter}
+              onHide={() => setDisplayBasic(false)}
+            >
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                culpa qui officia deserunt mollit anim id est laborum.
               </p>
             </Dialog>
             <div className="grid">
@@ -139,8 +148,23 @@ const OverlayDemo = () => {
               </div>
               <div>
                 <Button type="button" label="DataTable" onClick={toggleDataTable} outlined />
-                <OverlayPanel ref={op2} appendTo={typeof window !== 'undefined' ? document.body : null} showCloseIcon id="overlay_panel" style={{ width: '450px' }}>
-                  <DataTable value={products} selection={selectedProduct || undefined} onSelectionChange={onSelectionChange} selectionMode="single" responsiveLayout="scroll" paginator rows={5} onRowSelect={onProductSelect}>
+                <OverlayPanel
+                  ref={op2}
+                  appendTo={typeof window !== 'undefined' ? document.body : null}
+                  showCloseIcon
+                  id="overlay_panel"
+                  style={{ width: '450px' }}
+                >
+                  <DataTable
+                    value={products}
+                    selection={selectedProduct || undefined}
+                    onSelectionChange={onSelectionChange}
+                    selectionMode="single"
+                    responsiveLayout="scroll"
+                    paginator
+                    rows={5}
+                    onRowSelect={onProductSelect}
+                  >
                     <Column field="name" header="Name" sortable headerStyle={{ minWidth: '10rem' }} />
                     <Column header="Image" body={imageBodyTemplate} headerStyle={{ minWidth: '10rem' }} />
                     <Column field="price" header="Price" body={priceBodyTemplate} sortable headerStyle={{ minWidth: '8rem' }} />
@@ -155,7 +179,14 @@ const OverlayDemo = () => {
           <div className="card">
             <h5>Confirmation</h5>
             <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={() => setDisplayConfirmation(true)} />
-            <Dialog header="Confirmation" visible={displayConfirmation} onHide={() => setDisplayConfirmation(false)} style={{ width: '350px' }} modal footer={confirmationDialogFooter}>
+            <Dialog
+              header="Confirmation"
+              visible={displayConfirmation}
+              onHide={() => setDisplayConfirmation(false)}
+              style={{ width: '350px' }}
+              modal
+              footer={confirmationDialogFooter}
+            >
               <div className="flex align-items-center justify-content-center">
                 <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
                 <span>Are you sure you want to proceed?</span>

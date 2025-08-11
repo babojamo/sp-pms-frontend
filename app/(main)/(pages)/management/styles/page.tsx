@@ -161,10 +161,11 @@ const StylesPage = () => {
 
   const actionBodyTemplate = (rowData: Style) => {
     return (
-      <div className='flex gap-2'>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} rounded severity="warning" />
-        <Button icon="pi pi-print" onClick={() => onSinglePrintBarcodeClick(rowData)} rounded severity="help" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
+      <div className='flex flex-row gap-2'>
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} size='small'  title='Release Bundle'/>
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} size='small' severity="warning" />
+        <Button icon="pi pi-print" onClick={() => onSinglePrintBarcodeClick(rowData)} size='small' severity="help" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size='small' severity="danger" />
       </div>
     );
   };

@@ -30,10 +30,10 @@ export const ROUTES = {
     CREATE: '/management/departments/create',
     EDIT: '/management/departments/edit'
   },
-  DEVICES: {
-    INDEX: '/management/production-devices',
-    CREATE: '/management/production-devices/create',
-    EDIT: '/management/production-devices/edit'
+  PROCESS_OFFSETS: {
+    INDEX: '/management/process-offset',
+    CREATE: '/management/process-offset/create',
+    EDIT: '/management/process-offset/edit'
   },
   SHIFTS: {
     INDEX: '/management/shifts',

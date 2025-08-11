@@ -13,7 +13,10 @@ const CreateSewingLinePage = () => {
   return (
     <div className="grid">
       <div className="col-6">
-        <PageCard title="Create Sewing Line" toolbar={<PageAction actionBack={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[PageActions.BACK]} />}>
+        <PageCard
+          title="Create Sewing Line"
+          toolbar={<PageAction actionBack={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[PageActions.BACK]} />}
+        >
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">

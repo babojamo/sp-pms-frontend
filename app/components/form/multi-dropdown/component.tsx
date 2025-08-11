@@ -12,30 +12,34 @@ interface FormMultiDropdownProps {
   placeholder?: any;
   className?: string;
   filter?: any;
+  value?: any;
 }
 
-const FormMultiDropdown = forwardRef<any, FormMultiDropdownProps>(({ label, filter, isError, className = 'field', placeholder, onChange, errorMessage, options, ...rest }, ref) => (
-  <div className={className}>
-    {label && <label htmlFor="name">{label}</label>}
-    <MultiSelect
-      inputRef={ref}
-      {...rest}
-      filter={filter}
-      onChange={onChange}
-      placeholder={placeholder}
-      options={options}
-      optionLabel="label"
-      className={classNames(
-        {
-          'p-invalid': isError
-        },
-        'w-full'
-      )}
-    />
+const FormMultiDropdown = forwardRef<any, FormMultiDropdownProps>(
+  ({ label, filter, isError, className = 'field', placeholder, value, onChange, errorMessage, options, ...rest }, ref) => (
+    <div className={className}>
+      {label && <label htmlFor="name">{label}</label>}
+      <MultiSelect
+        inputRef={ref}
+        {...rest}
+        value={value}
+        filter={filter}
+        onChange={onChange}
+        placeholder={placeholder}
+        options={options}
+        optionLabel="label"
+        className={classNames(
+          {
+            'p-invalid': isError
+          },
+          'w-full'
+        )}
+      />
 
-    {isError && <small className="text-red-500">{errorMessage}</small>}
-  </div>
-));
+      {isError && <small className="text-red-500">{errorMessage}</small>}
+    </div>
+  )
+);
 
 FormMultiDropdown.displayName = 'FormMultiDropdown';
 

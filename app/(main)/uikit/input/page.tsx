@@ -182,7 +182,17 @@ const InputDemo: Page = () => {
           <InputTextarea placeholder="Your Message" rows={5} cols={30} />
 
           <h5>AutoComplete</h5>
-          <AutoComplete placeholder="Search" id="dd" dropdown multiple value={selectedAutoValue} onChange={(e) => setSelectedAutoValue(e.value)} suggestions={autoFilteredValue} completeMethod={searchCountry} field="name" />
+          <AutoComplete
+            placeholder="Search"
+            id="dd"
+            dropdown
+            multiple
+            value={selectedAutoValue}
+            onChange={(e) => setSelectedAutoValue(e.value)}
+            suggestions={autoFilteredValue}
+            completeMethod={searchCountry}
+            field="name"
+          />
 
           <h5>Calendar</h5>
           <Calendar showIcon showButtonBar value={calendarValue} onChange={(e) => setCalendarValue(e.value ?? null)} />
@@ -223,19 +233,37 @@ const InputDemo: Page = () => {
           <div className="grid">
             <div className="col-12 md:col-4">
               <div className="field-radiobutton">
-                <RadioButton inputId="option1" name="option" value="Chicago" checked={radioValue === 'Chicago'} onChange={(e) => setRadioValue(e.value)} />
+                <RadioButton
+                  inputId="option1"
+                  name="option"
+                  value="Chicago"
+                  checked={radioValue === 'Chicago'}
+                  onChange={(e) => setRadioValue(e.value)}
+                />
                 <label htmlFor="option1">Chicago</label>
               </div>
             </div>
             <div className="col-12 md:col-4">
               <div className="field-radiobutton">
-                <RadioButton inputId="option2" name="option" value="Los Angeles" checked={radioValue === 'Los Angeles'} onChange={(e) => setRadioValue(e.value)} />
+                <RadioButton
+                  inputId="option2"
+                  name="option"
+                  value="Los Angeles"
+                  checked={radioValue === 'Los Angeles'}
+                  onChange={(e) => setRadioValue(e.value)}
+                />
                 <label htmlFor="option2">Los Angeles</label>
               </div>
             </div>
             <div className="col-12 md:col-4">
               <div className="field-radiobutton">
-                <RadioButton inputId="option3" name="option" value="New York" checked={radioValue === 'New York'} onChange={(e) => setRadioValue(e.value)} />
+                <RadioButton
+                  inputId="option3"
+                  name="option"
+                  value="New York"
+                  checked={radioValue === 'New York'}
+                  onChange={(e) => setRadioValue(e.value)}
+                />
                 <label htmlFor="option3">New York</label>
               </div>
             </div>
@@ -245,19 +273,37 @@ const InputDemo: Page = () => {
           <div className="grid">
             <div className="col-12 md:col-4">
               <div className="field-checkbox">
-                <Checkbox inputId="checkOption1" name="option" value="Chicago" checked={checkboxValue.indexOf('Chicago') !== -1} onChange={onCheckboxChange} />
+                <Checkbox
+                  inputId="checkOption1"
+                  name="option"
+                  value="Chicago"
+                  checked={checkboxValue.indexOf('Chicago') !== -1}
+                  onChange={onCheckboxChange}
+                />
                 <label htmlFor="checkOption1">Chicago</label>
               </div>
             </div>
             <div className="col-12 md:col-4">
               <div className="field-checkbox">
-                <Checkbox inputId="checkOption2" name="option" value="Los Angeles" checked={checkboxValue.indexOf('Los Angeles') !== -1} onChange={onCheckboxChange} />
+                <Checkbox
+                  inputId="checkOption2"
+                  name="option"
+                  value="Los Angeles"
+                  checked={checkboxValue.indexOf('Los Angeles') !== -1}
+                  onChange={onCheckboxChange}
+                />
                 <label htmlFor="checkOption2">Los Angeles</label>
               </div>
             </div>
             <div className="col-12 md:col-4">
               <div className="field-checkbox">
-                <Checkbox inputId="checkOption3" name="option" value="New York" checked={checkboxValue.indexOf('New York') !== -1} onChange={onCheckboxChange} />
+                <Checkbox
+                  inputId="checkOption3"
+                  name="option"
+                  value="New York"
+                  checked={checkboxValue.indexOf('New York') !== -1}
+                  onChange={onCheckboxChange}
+                />
                 <label htmlFor="checkOption3">New York</label>
               </div>
             </div>
@@ -272,7 +318,13 @@ const InputDemo: Page = () => {
           <ListBox value={listboxValue} onChange={(e) => setListboxValue(e.value)} options={listboxValues} optionLabel="name" filter />
 
           <h5>Dropdown</h5>
-          <Dropdown value={dropdownValue} onChange={(e) => setDropdownValue(e.value)} options={dropdownValues} optionLabel="name" placeholder="Select" />
+          <Dropdown
+            value={dropdownValue}
+            onChange={(e) => setDropdownValue(e.value)}
+            options={dropdownValues}
+            optionLabel="name"
+            placeholder="Select"
+          />
 
           <h5>MultiSelect</h5>
           <MultiSelect
@@ -293,10 +345,21 @@ const InputDemo: Page = () => {
           <ToggleButton checked={toggleValue} onChange={(e) => setToggleValue(e.value)} onLabel="Yes" offLabel="No" />
 
           <h5>SelectButton</h5>
-          <SelectButton value={selectButtonValue1} onChange={(e) => setSelectButtonValue1(e.value)} options={selectButtonValues1} optionLabel="name" />
+          <SelectButton
+            value={selectButtonValue1}
+            onChange={(e) => setSelectButtonValue1(e.value)}
+            options={selectButtonValues1}
+            optionLabel="name"
+          />
 
           <h5>SelectButton - Multiple</h5>
-          <SelectButton value={selectButtonValue2} onChange={(e) => setSelectButtonValue2(e.value)} options={selectButtonValues2} optionLabel="name" multiple />
+          <SelectButton
+            value={selectButtonValue2}
+            onChange={(e) => setSelectButtonValue2(e.value)}
+            options={selectButtonValues2}
+            optionLabel="name"
+            multiple
+          />
         </div>
       </div>
 

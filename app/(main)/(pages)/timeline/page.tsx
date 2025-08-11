@@ -42,8 +42,19 @@ const TimelineDemo = () => {
   const customizedContent = (item: CustomEvent) => {
     return (
       <Card title={item.status} subTitle={item.date}>
-        {item.image && <img src={`/demo/images/product/${item.image}`} onError={(e) => (e.currentTarget.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png')} alt={item.name} width={200} className="shadow-2 mb-3" />}
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+        {item.image && (
+          <img
+            src={`/demo/images/product/${item.image}`}
+            onError={(e) => (e.currentTarget.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png')}
+            alt={item.name}
+            width={200}
+            className="shadow-2 mb-3"
+          />
+        )}
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat
+          libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+        </p>
         <Button label="Read more" text></Button>
       </Card>
     );
@@ -82,7 +93,11 @@ const TimelineDemo = () => {
         <div className="col-12 md:col-6">
           <div className="card">
             <h5>Opposite Content</h5>
-            <Timeline value={customEvents} opposite={(item) => item.status} content={(item) => <small className="p-text-secondary">{item.date}</small>} />
+            <Timeline
+              value={customEvents}
+              opposite={(item) => item.status}
+              content={(item) => <small className="p-text-secondary">{item.date}</small>}
+            />
           </div>
         </div>
 

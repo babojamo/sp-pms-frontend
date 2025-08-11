@@ -69,7 +69,14 @@ const FloatLabelDemo = () => {
         </div>
         <div className="field col-12 md:col-4">
           <span className="p-float-label">
-            <AutoComplete id="autocomplete" value={value2} onChange={(e) => setValue2(e.value)} suggestions={filteredCountries} completeMethod={searchCountry} field="name"></AutoComplete>
+            <AutoComplete
+              id="autocomplete"
+              value={value2}
+              onChange={(e) => setValue2(e.value)}
+              suggestions={filteredCountries}
+              completeMethod={searchCountry}
+              field="name"
+            ></AutoComplete>
             <label htmlFor="autocomplete">AutoComplete</label>
           </span>
         </div>

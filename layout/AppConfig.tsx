@@ -59,6 +59,17 @@ const AppConfig = (props: AppConfigProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layoutConfig.scale]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLayoutConfig((prevState: LayoutConfig) => ({
+        ...prevState,
+
+        colorScheme: 'dark',
+        theme: 'lara-dark-blue'
+      }));
+    }, 5000);
+  }, []);
+
   return (
     <>
       <button className="layout-config-button config-link" type="button" onClick={onConfigButtonClick}>
@@ -70,23 +81,59 @@ const AppConfig = (props: AppConfigProps) => {
           <>
             <h5>Scale</h5>
             <div className="flex align-items-center">
-              <Button icon="pi pi-minus" type="button" onClick={decrementScale} rounded text className="w-2rem h-2rem mr-2" disabled={layoutConfig.scale === scales[0]}></Button>
+              <Button
+                icon="pi pi-minus"
+                type="button"
+                onClick={decrementScale}
+                rounded
+                text
+                className="w-2rem h-2rem mr-2"
+                disabled={layoutConfig.scale === scales[0]}
+              ></Button>
               <div className="flex gap-2 align-items-center">
                 {scales.map((item) => {
-                  return <i className={classNames('pi pi-circle-fill', { 'text-primary-500': item === layoutConfig.scale, 'text-300': item !== layoutConfig.scale })} key={item}></i>;
+                  return (
+                    <i
+                      className={classNames('pi pi-circle-fill', {
+                        'text-primary-500': item === layoutConfig.scale,
+                        'text-300': item !== layoutConfig.scale
+                      })}
+                      key={item}
+                    ></i>
+                  );
                 })}
               </div>
-              <Button icon="pi pi-plus" type="button" onClick={incrementScale} rounded text className="w-2rem h-2rem ml-2" disabled={layoutConfig.scale === scales[scales.length - 1]}></Button>
+              <Button
+                icon="pi pi-plus"
+                type="button"
+                onClick={incrementScale}
+                rounded
+                text
+                className="w-2rem h-2rem ml-2"
+                disabled={layoutConfig.scale === scales[scales.length - 1]}
+              ></Button>
             </div>
 
             <h5>Menu Type</h5>
             <div className="flex">
               <div className="field-radiobutton flex-1">
-                <RadioButton name="menuMode" value={'static'} checked={layoutConfig.menuMode === 'static'} onChange={(e) => changeMenuMode(e)} inputId="mode1"></RadioButton>
+                <RadioButton
+                  name="menuMode"
+                  value={'static'}
+                  checked={layoutConfig.menuMode === 'static'}
+                  onChange={(e) => changeMenuMode(e)}
+                  inputId="mode1"
+                ></RadioButton>
                 <label htmlFor="mode1">Static</label>
               </div>
               <div className="field-radiobutton flex-1">
-                <RadioButton name="menuMode" value={'overlay'} checked={layoutConfig.menuMode === 'overlay'} onChange={(e) => changeMenuMode(e)} inputId="mode2"></RadioButton>
+                <RadioButton
+                  name="menuMode"
+                  value={'overlay'}
+                  checked={layoutConfig.menuMode === 'overlay'}
+                  onChange={(e) => changeMenuMode(e)}
+                  inputId="mode2"
+                ></RadioButton>
                 <label htmlFor="mode2">Overlay</label>
               </div>
             </div>
@@ -94,11 +141,23 @@ const AppConfig = (props: AppConfigProps) => {
             <h5>Input Style</h5>
             <div className="flex">
               <div className="field-radiobutton flex-1">
-                <RadioButton name="inputStyle" value={'outlined'} checked={layoutConfig.inputStyle === 'outlined'} onChange={(e) => changeInputStyle(e)} inputId="outlined_input"></RadioButton>
+                <RadioButton
+                  name="inputStyle"
+                  value={'outlined'}
+                  checked={layoutConfig.inputStyle === 'outlined'}
+                  onChange={(e) => changeInputStyle(e)}
+                  inputId="outlined_input"
+                ></RadioButton>
                 <label htmlFor="outlined_input">Outlined</label>
               </div>
               <div className="field-radiobutton flex-1">
-                <RadioButton name="inputStyle" value={'filled'} checked={layoutConfig.inputStyle === 'filled'} onChange={(e) => changeInputStyle(e)} inputId="filled_input"></RadioButton>
+                <RadioButton
+                  name="inputStyle"
+                  value={'filled'}
+                  checked={layoutConfig.inputStyle === 'filled'}
+                  onChange={(e) => changeInputStyle(e)}
+                  inputId="filled_input"
+                ></RadioButton>
                 <label htmlFor="filled_input">Filled</label>
               </div>
             </div>

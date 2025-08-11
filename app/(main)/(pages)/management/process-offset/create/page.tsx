@@ -6,9 +6,9 @@ import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
 import { SelectItem } from 'primereact/selectitem';
-import FormDevice from '@/app/components/devices/FormDevice';
+import FormProcessOffset from '@/app/components/process-offset/FormProcessOffset';
 
-const CreateDevicePage = () => {
+const CreateProcessOffsetPage = () => {
   const router = useRouter();
   const lines: SelectItem[] = [
     { label: 'Line 1', value: '1' },
@@ -19,13 +19,13 @@ const CreateDevicePage = () => {
   return (
     <div className="grid">
       <div className="col-6">
-        <PageCard title="Create Device" toolbar={<PageAction actionBack={() => router.push(ROUTES.DEVICES.INDEX)} actions={[PageActions.BACK]} />}>
+        <PageCard title="Create ProcessOffset" toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormDevice>
-                  <FormAction actionCancel={() => router.push(ROUTES.DEVICES.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
-                </FormDevice>
+                <FormProcessOffset>
+                  <FormAction actionCancel={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                </FormProcessOffset>
               </div>
             </div>
           </div>
@@ -35,4 +35,4 @@ const CreateDevicePage = () => {
   );
 };
 
-export default CreateDevicePage;
+export default CreateProcessOffsetPage;

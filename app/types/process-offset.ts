@@ -1,6 +1,6 @@
 import { Operator } from './operator';
 
-export interface Device {
+export interface ProcessOffset {
   id: string;
   name: string;
   device_id?: string;
@@ -10,13 +10,13 @@ export interface Device {
   operators?: Operator[];
 }
 
-export interface CachedDevice {
+export interface CachedProcessOffset {
   id?: string;
   remarks: string;
   device_id?: string;
 }
 
-export interface DeviceForm {
+export interface ProcessOffsetForm {
   id: string;
   name: string;
   device_id?: string;

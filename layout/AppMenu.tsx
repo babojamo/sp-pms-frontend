@@ -29,8 +29,7 @@ const AppMenu = () => {
         { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/management/operators' },
         { label: 'Sewing Lines', icon: 'pi pi-fw pi-check-square', to: '/management/sewing-lines' },
         { label: 'Sewing Line Process', icon: 'pi pi-fw pi-check-square', to: '/management/processes' },
-        { label: 'Production Devices', icon: 'pi pi-fw pi-check-square', to: '/management/production-devices' },
-        { label: 'Shifts', icon: 'pi pi-fw pi-check-square', to: '/management/shifts' }
+        { label: 'Process Offset', icon: 'pi pi-fw pi-check-square', to: '/management/process-offset' }
       ]
     },
     {

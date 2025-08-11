@@ -68,7 +68,14 @@ const AppMenuitem = (props: AppMenuItemProps) => {
       ) : null}
 
       {item!.to && !item!.items && item!.visible !== false ? (
-        <Link href={item!.to} replace={item!.replaceUrl} target={item!.target} onClick={(e) => itemClick(e)} className={classNames(item!.class, 'p-ripple', { 'active-route': isActiveRoute })} tabIndex={0}>
+        <Link
+          href={item!.to}
+          replace={item!.replaceUrl}
+          target={item!.target}
+          onClick={(e) => itemClick(e)}
+          className={classNames(item!.class, 'p-ripple', { 'active-route': isActiveRoute })}
+          tabIndex={0}
+        >
           <i className={classNames('layout-menuitem-icon', item!.icon)}></i>
           <span className={(item?.disabled && `text-gray-300 `) + `layout-menuitem-text`}>{item!.label}</span>
           {item!.items && <i className="pi pi-fw pi-angle-down layout-submenu-toggler"></i>}

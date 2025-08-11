@@ -12,6 +12,7 @@ import { ROUTES } from '@/app/constants/routes';
 import Modal from '@/app/components/modal/component';
 import { Operator } from '@/app/types/operator';
 import { OperatorService } from '@/app/services/OperatorService';
+import DataStatusIcon from '@/app/components/data-status-icon/component';
 
 interface OperatorPageState {
   deleteModalShow?: boolean;
@@ -83,7 +84,7 @@ const OperatorsPage = () => {
   };
 
   const dateBodyTemplate = (rowData: Operator) => {
-    return formatDate(new Date(rowData.created_at));
+    return <span title={formatDate(new Date(rowData.created_at ?? ''))}>{rowData.created_by}</span>;
   };
 
   const statusBodyTemplate = (rowData: Demo.Customer) => {
@@ -118,20 +119,45 @@ const OperatorsPage = () => {
     );
   };
 
+  const nameTemplate = (row: Operator) => {
+    return (
+      <span>
+        <DataStatusIcon className="mr-2" status="active" />
+        {row.name}
+      </span>
+    );
+  };
+
   return (
     <div className="grid">
       <div className="col-12">
         <PageCard title="Operators Management" toolbar={toolbars()}>
-          <DataTable value={operators} paginator className="p-datatable-gridlines" showGridlines rows={10} dataKey="id" filterDisplay="menu" loading={loading} responsiveLayout="scroll" emptyMessage="No customers found." header={renderHeader()}>
-            <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
-            <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
+          <DataTable
+            value={operators}
+            paginator
+            className="p-datatable-gridlines"
+            showGridlines
+            rows={10}
+            dataKey="id"
+            filterDisplay="menu"
+            loading={loading}
+            responsiveLayout="scroll"
+            emptyMessage="No customers found."
+            header={renderHeader()}
+          >
+            <Column header="Name" style={{ minWidth: '10rem' }} body={nameTemplate} />
             <Column field="line_id" header="Sewing Line" style={{ minWidth: '12rem' }} />
-            <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
-            <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
+            <Column field="line_id" header="Processes" style={{ minWidth: '12rem' }} />
+            <Column header="Create" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
             <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
           </DataTable>
-          <Modal title="Delete Record" visible={pageState.deleteModalShow} onHide={() => setPageState({ ...pageState, deleteModalShow: false })} confirmSeverity="danger">
+          <Modal
+            title="Delete Record"
+            visible={pageState.deleteModalShow}
+            onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
+            confirmSeverity="danger"
+          >
             <p>Are you sure you want to delete the record?</p>
           </Modal>
         </PageCard>

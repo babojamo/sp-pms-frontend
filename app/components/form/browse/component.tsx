@@ -13,12 +13,14 @@ interface FormInputFilePros extends React.InputHTMLAttributes<HTMLInputElement> 
   maxFileSize?: number;
 }
 
-const FormInputFile = forwardRef<HTMLInputElement, FormInputFilePros>(({ name, accept, value, maxFileSize = 100000, isError, required, autoFocus, onUpload, errorMessage, ...rest }, ref) => (
-  <div className="field">
-    <FileUpload mode="basic" name={name} accept={accept} maxFileSize={maxFileSize} onUpload={onUpload} />
-    {isError && <small className="text-red-500">{errorMessage}</small>}
-  </div>
-));
+const FormInputFile = forwardRef<HTMLInputElement, FormInputFilePros>(
+  ({ name, accept, value, maxFileSize = 100000, isError, required, autoFocus, onUpload, errorMessage, ...rest }, ref) => (
+    <div className="field">
+      <FileUpload mode="basic" name={name} accept={accept} maxFileSize={maxFileSize} onUpload={onUpload} />
+      {isError && <small className="text-red-500">{errorMessage}</small>}
+    </div>
+  )
+);
 
 FormInputFile.displayName = 'FormInputFile';
 

@@ -16,14 +16,23 @@ const CreateOperatorPage = () => {
     { label: 'Line 4', value: '3' }
   ];
 
+  const processes: SelectItem[] = [
+    { label: 'Process 1', value: '1' },
+    { label: 'Process 3', value: '2' },
+    { label: 'Process 4', value: '3' }
+  ];
+
   return (
     <div className="grid">
       <div className="col-6">
-        <PageCard title="Create Operator" toolbar={<PageAction actionBack={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[PageActions.BACK]} />}>
+        <PageCard
+          title="Create Operator"
+          toolbar={<PageAction actionBack={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[PageActions.BACK]} />}
+        >
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormOperator lines={lines}>
+                <FormOperator lines={lines} processesOptions={processes}>
                   <FormAction actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
                 </FormOperator>
               </div>

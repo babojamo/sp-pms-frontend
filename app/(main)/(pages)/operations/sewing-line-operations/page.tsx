@@ -26,8 +26,20 @@ const SewingLineOperationPage = () => {
     currentDate: new Date()
   });
 
-  const { operatorsProcess, editingRows, onProcessDeleteClick, onAddOperatorClick, operatorsOption, sewingLineOptions, processOptions, shiftOptions, setEditingRows, fetchProcesses, setSelectedOperatorProcess, selectedOperatorProcess } =
-    useSewingLineOperations();
+  const {
+    operatorsProcess,
+    editingRows,
+    onProcessDeleteClick,
+    onAddOperatorClick,
+    operatorsOption,
+    sewingLineOptions,
+    processOptions,
+    shiftOptions,
+    setEditingRows,
+    fetchProcesses,
+    setSelectedOperatorProcess,
+    selectedOperatorProcess
+  } = useSewingLineOperations();
 
   useEffect(() => {
     if (fetchProcesses) {
@@ -118,7 +130,11 @@ const SewingLineOperationPage = () => {
         filterDisplay="menu"
         emptyMessage="No styles provided."
       >
-        <Column field="operator_id" header="Operator" editor={(opts) => <FormMultiDropdown filter={true} className="" placeholder="Select" options={operatorsOption} />} />
+        <Column
+          field="operator_id"
+          header="Operator"
+          editor={(opts) => <FormMultiDropdown filter={true} className="" placeholder="Select" options={operatorsOption} />}
+        />
         <Column field="operator.line.name" header="Line#" />
         <Column field="process_id" header="Process" editor={(opts) => <FormDropdown className="" placeholder="Select" options={processOptions} />} />
         <Column field="target" header="Target" editor={(opts) => <FormInputText className="" placeholder="Quantity" />} />
@@ -126,7 +142,11 @@ const SewingLineOperationPage = () => {
         <Column field="total_output" header="Total Ouput" />
         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
       </DataTable>
-      <OperatorOutput operator_proceess_id={selectedOperatorProcess?.id} visible={state.showOperatorOutput} onHide={() => setState({ ...state, showOperatorOutput: false })} />
+      <OperatorOutput
+        operator_proceess_id={selectedOperatorProcess?.id}
+        visible={state.showOperatorOutput}
+        onHide={() => setState({ ...state, showOperatorOutput: false })}
+      />
     </PageCard>
   );
 };

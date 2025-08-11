@@ -31,7 +31,10 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
   return (
     <div className="grid">
       <div className="col-6">
-        <PageCard title="Edit Department" toolbar={<PageAction actionBack={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[PageActions.BACK]} />}>
+        <PageCard
+          title="Edit Department"
+          toolbar={<PageAction actionBack={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[PageActions.BACK]} />}
+        >
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">

@@ -42,7 +42,16 @@ const MultiplePrintBarcode = ({ styles, visible, onHide }: MultiplePrintBarcodeP
 
   return (
     <Modal title="Print Barcode" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
-      <DataTable rows={10} value={state.styles} paginator className="p-datatable-gridlines" showGridlines dataKey="id" filterDisplay="menu" emptyMessage="No styles provided.">
+      <DataTable
+        rows={10}
+        value={state.styles}
+        paginator
+        className="p-datatable-gridlines"
+        showGridlines
+        dataKey="id"
+        filterDisplay="menu"
+        emptyMessage="No styles provided."
+      >
         <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
         <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
         <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />

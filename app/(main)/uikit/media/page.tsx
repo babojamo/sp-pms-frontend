@@ -76,14 +76,22 @@ const MediaDemo = () => {
   };
 
   const galleriaItemTemplate = (item: Demo.Photo) => <img src={`/${item.itemImageSrc}`} alt={item.alt} style={{ width: '100%', display: 'block' }} />;
-  const galleriaThumbnailTemplate = (item: Demo.Photo) => <img src={`/${item.thumbnailImageSrc}`} alt={item.alt} style={{ width: '100%', display: 'block' }} />;
+  const galleriaThumbnailTemplate = (item: Demo.Photo) => (
+    <img src={`/${item.thumbnailImageSrc}`} alt={item.alt} style={{ width: '100%', display: 'block' }} />
+  );
 
   return (
     <div className="grid p-fluid">
       <div className="col-12">
         <div className="card">
           <h5>Carousel</h5>
-          <Carousel value={products} numVisible={3} numScroll={3} responsiveOptions={carouselResponsiveOptions} itemTemplate={carouselItemTemplate}></Carousel>
+          <Carousel
+            value={products}
+            numVisible={3}
+            numScroll={3}
+            responsiveOptions={carouselResponsiveOptions}
+            itemTemplate={carouselItemTemplate}
+          ></Carousel>
         </div>
       </div>
 
@@ -99,7 +107,15 @@ const MediaDemo = () => {
       <div className="col-12">
         <div className="card">
           <h5>Galleria</h5>
-          <Galleria value={images} responsiveOptions={galleriaResponsiveOptions} numVisible={7} circular style={{ maxWidth: '800px', margin: 'auto' }} item={galleriaItemTemplate} thumbnail={galleriaThumbnailTemplate}></Galleria>
+          <Galleria
+            value={images}
+            responsiveOptions={galleriaResponsiveOptions}
+            numVisible={7}
+            circular
+            style={{ maxWidth: '800px', margin: 'auto' }}
+            item={galleriaItemTemplate}
+            thumbnail={galleriaThumbnailTemplate}
+          ></Galleria>
         </div>
       </div>
     </div>

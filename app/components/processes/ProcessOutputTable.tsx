@@ -69,7 +69,16 @@ const ProcessOutputTable = ({ processOutputs = [] }: ProcessOutputTableProps) =>
   };
 
   return (
-    <DataTable rows={10} value={operatorOutputs} paginator className="p-datatable-gridlines" showGridlines dataKey="id" filterDisplay="menu" emptyMessage="No styles provided.">
+    <DataTable
+      rows={10}
+      value={operatorOutputs}
+      paginator
+      className="p-datatable-gridlines"
+      showGridlines
+      dataKey="id"
+      filterDisplay="menu"
+      emptyMessage="No styles provided."
+    >
       <Column key="operator_name" field="operator_name" header="Operator" />
       <Column field="target" header="Target" />
 

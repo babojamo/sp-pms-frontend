@@ -14,28 +14,30 @@ interface FormDropdownProps {
   value?: any;
 }
 
-const FormDropdown = forwardRef<any, FormDropdownProps>(({ label, isError, value, className = 'field', placeholder, onChange, errorMessage, options, ...rest }, ref) => (
-  <div className={className}>
-    {label && <label htmlFor="name">{label}</label>}
-    <Dropdown
-      value={value}
-      inputRef={ref}
-      {...rest}
-      onChange={onChange}
-      placeholder={placeholder}
-      options={options}
-      optionLabel="label"
-      className={classNames(
-        {
-          'p-invalid': isError
-        },
-        'w-full'
-      )}
-    />
+const FormDropdown = forwardRef<any, FormDropdownProps>(
+  ({ label, isError, value, className = 'field', placeholder, onChange, errorMessage, options, ...rest }, ref) => (
+    <div className={className}>
+      {label && <label htmlFor="name">{label}</label>}
+      <Dropdown
+        value={value}
+        inputRef={ref}
+        {...rest}
+        onChange={onChange}
+        placeholder={placeholder}
+        options={options}
+        optionLabel="label"
+        className={classNames(
+          {
+            'p-invalid': isError
+          },
+          'w-full'
+        )}
+      />
 
-    {isError && <small className="p-invalid">{errorMessage}</small>}
-  </div>
-));
+      {isError && <small className="p-invalid">{errorMessage}</small>}
+    </div>
+  )
+);
 
 FormDropdown.displayName = 'FormDropdown';
 

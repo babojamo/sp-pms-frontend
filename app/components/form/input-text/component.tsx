@@ -13,26 +13,28 @@ interface FormInputTextProps extends React.InputHTMLAttributes<HTMLInputElement>
   onChange?: React.ChangeEventHandler;
 }
 
-const FormInputText = forwardRef<HTMLInputElement, FormInputTextProps>(({ label, className = 'field', inputClassName, value, isError, required, autoFocus, onChange, errorMessage, ...rest }, ref) => (
-  <div className={className}>
-    {label && <label htmlFor="name">{label}</label>}
-    <InputText
-      ref={ref}
-      {...rest}
-      value={value}
-      onChange={onChange}
-      required={required}
-      autoFocus={autoFocus}
-      className={classNames(
-        {
-          'p-invalid': isError
-        },
-        inputClassName
-      )}
-    />
-    {isError && <small className="text-red-500">{errorMessage}</small>}
-  </div>
-));
+const FormInputText = forwardRef<HTMLInputElement, FormInputTextProps>(
+  ({ label, className = 'field', inputClassName, value, isError, required, autoFocus, onChange, errorMessage, ...rest }, ref) => (
+    <div className={className}>
+      {label && <label htmlFor="name">{label}</label>}
+      <InputText
+        ref={ref}
+        {...rest}
+        value={value}
+        onChange={onChange}
+        required={required}
+        autoFocus={autoFocus}
+        className={classNames(
+          {
+            'p-invalid': isError
+          },
+          inputClassName
+        )}
+      />
+      {isError && <small className="text-red-500">{errorMessage}</small>}
+    </div>
+  )
+);
 
 FormInputText.displayName = 'FormInputText';
 
