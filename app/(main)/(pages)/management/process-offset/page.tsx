@@ -133,8 +133,6 @@ const ProcessOffsetsPage = () => {
           >
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-            <Column field="processOffset_id" header="ProcessOffset ID" style={{ minWidth: '12rem' }} />
-            <Column body={attachedToBodyTemplate} header="Attached To" style={{ minWidth: '12rem' }} />
             <Column field="created_by" header="Added By" style={{ minWidth: '12rem' }} />
             <Column body={actionBodyTemplate} headerStyle={{ width: 'auto' }}></Column>
           </DataTable>
