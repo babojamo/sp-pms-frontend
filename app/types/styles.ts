@@ -11,3 +11,16 @@ export interface Style {
   sample: string;
   pattern: string;
 }
+
+export interface StyleItem {
+  id?: string | number;
+  style_id?: string | number; // depends if it's UUID/int, you can refine
+  item_name?: string;
+  item_number?: string;
+  specs_qty?: number;
+  specs_unit?: string;
+  youjyaku_qty?: number;
+  youjyaku_unit?: string;
+  color_detail?: string;
+  style?: Style;
+}

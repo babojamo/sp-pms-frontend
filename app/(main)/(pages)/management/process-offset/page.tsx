@@ -59,8 +59,8 @@ const ProcessOffsetsPage = () => {
 
   const fetchProcessOffsets = useCallback(async () => {
     setLoading(true);
-    const data = await ProcessOffsetService.getProcessOffsets();
-    setProcessOffsets(getProcessOffsets(data));
+    const { data } = await ProcessOffsetService.getProcessOffsets();
+    setProcessOffsets(getProcessOffsets(data.data ?? []));
     setLoading(false);
   }, []);
 
@@ -133,6 +133,7 @@ const ProcessOffsetsPage = () => {
           >
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
+            <Column field="description" header="Description" style={{ minWidth: '12rem' }} />
             <Column field="created_by" header="Added By" style={{ minWidth: '12rem' }} />
             <Column body={actionBodyTemplate} headerStyle={{ width: 'auto' }}></Column>
           </DataTable>

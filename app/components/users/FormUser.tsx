@@ -27,16 +27,6 @@ type FormData = {
 const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) => {
   const { control, handleSubmit, reset } = useForm<FormData>();
 
-  // const {
-  //   handleSubmit,
-  //   formState: { errors, isSubmitting },
-  //   reset,
-  //   register,
-  //   setValue
-  // } = useForm({
-  //   resolver: yupResolver(schema)
-  // });
-
   useEffect(() => {
     if (value) {
       reset({
@@ -50,11 +40,6 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* <FormInputText {...register('name')} label="Employee Name" errorMessage={errors.name?.message} isError={errors.name ? true : false} />
-      <FormInputText {...register('email')} label="Email" type="email" errorMessage={errors.email?.message} isError={errors.email ? true : false} />
-      <FormInputText {...register('username')} label="Username" errorMessage={errors.username?.message} isError={errors.username ? true : false} />
-      <FormInputText {...register('password')} label="Password" errorMessage={errors.password?.message} isError={errors.password ? true : false} /> */}
-
       <Controller
         name="name"
         control={control}

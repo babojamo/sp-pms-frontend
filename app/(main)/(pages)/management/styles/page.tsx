@@ -1,53 +1,51 @@
 'use client';
-import { CustomerService } from '../../../../../demo/service/CustomerService';
-import { ProductService } from '../../../../../demo/service/ProductService';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { Button } from 'primereact/button';
-import { Calendar } from 'primereact/calendar';
-import { Column, ColumnFilterApplyTemplateOptions, ColumnFilterClearTemplateOptions, ColumnFilterElementTemplateOptions } from 'primereact/column';
-import { DataTable, DataTableExpandedRows, DataTableFilterMeta } from 'primereact/datatable';
-import { Dropdown } from 'primereact/dropdown';
-import { InputNumber } from 'primereact/inputnumber';
+import { Column } from 'primereact/column';
+import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useState } from 'react';
-import type { Demo } from '@/types';
-import PageCard from '@/app/components/page-card/component';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
-import Modal from '@/app/components/modal/component';
-import FormDropdown from '@/app/components/form/dropdown/component';
-import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
+import { SelectItem } from 'primereact/selectitem';
 import { Style } from '@/app/types/styles';
-import { StyleService } from '@/app/services/StyleService';
-import UploadStyles from './components/upload-styles';
+import { useRouter } from 'next/navigation';
+import { useStylePage } from './hooks/useStylePage';
+import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
+import Modal from '@/app/components/modal/component';
 import MultiplePrintBarcode from '@/app/components/style/MultiplePrintBarcode';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import React, { useEffect, useState } from 'react';
+import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
+import UploadStyles from './components/upload-styles';
+import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface StylePageState {
   deleteModalShow?: boolean;
-  showSinglePrintBarcode?: boolean;
   showMultiPrintBarcode?: boolean;
+  showSinglePrintBarcode?: boolean;
   showUploading?: boolean;
+}
+
+interface PageFilter {
+  buyers?: string[];
 }
 
 const StylesPage = () => {
 
   const [pageState, setPageState] = useState<StylePageState>({});
   const [selectedStyle, setSelectedStyle] = useState<Style | undefined>(undefined);
-
-  const [styles, setStyles] = useState<Style[]>([]);
+  const [pageFilter, setPageFilter] = useState<PageFilter>({});
   const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
-
+  const [buyerOptions, setBuyerOptions] = useState<SelectItem[]>([]);
   const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
-  const [loading1, setLoading1] = useState(true);
-  const [loading2, setLoading2] = useState(true);
   const [globalFilterValue1, setGlobalFilterValue1] = useState('');
+
   const router = useRouter();
+  const { fetchBuyersSelectOption } = useUtilityData();
+  const { fetchStyles, styles, isFetchStyleLoading } = useStylePage();
 
-  const statuses = ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'];
-
-  const clearFilter1 = () => {
-    initFilters1();
+  const clearPageFilter = () => {
+    setPageFilter({});
   };
 
   const onGlobalFilterChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,14 +57,18 @@ const StylesPage = () => {
     setGlobalFilterValue1(value);
   };
 
-  const renderHeader1 = () => {
+  const handlePageFilter = (e: any) => {
+    setPageFilter({ ...pageFilter, buyers: e.value });
+  }
+
+  const tableHeader = () => {
     return (
       <div className="flex justify-content-start items-center">
         <div>
-          <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
+          <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearPageFilter} />
         </div>
         <div className='flex gap-2 ml-auto'>
-          <FormDropdown placeholder='Filter Buyer' />
+          <FormMultiDropdown value={pageFilter.buyers} onChange={handlePageFilter} filter={true} options={buyerOptions} placeholder='Filter Buyer' />
           <div>
             <span className="p-input-icon-left">
               <i className="pi pi-search" />
@@ -78,84 +80,23 @@ const StylesPage = () => {
     );
   };
 
+  const initData = async () => {
+    fetchStyles();
+    setBuyerOptions(await fetchBuyersSelectOption())
+  }
+
   useEffect(() => {
-    setLoading2(true);
-    StyleService.getStyles().then((data) => {
-      setStyles(getStyles(data));
-      setLoading1(false);
-    });
-    initFilters1();
+    initData();
   }, []);
-
-
-  const getStyles = (data: Style[]) => {
-    return [...(data || [])].map((d) => {
-      return d;
-    });
-  };
-
-  const formatDate = (value: Date) => {
-    return value.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const formatCurrency = (value: number) => {
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    });
-  };
-
-  const initFilters1 = () => {
-    setFilters1({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-      },
-      'country.name': {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-      },
-      representative: { value: null, matchMode: FilterMatchMode.IN },
-      date: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
-      },
-      balance: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
-      },
-      status: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
-      },
-      activity: { value: null, matchMode: FilterMatchMode.BETWEEN },
-      verified: { value: null, matchMode: FilterMatchMode.EQUALS }
-    });
-    setGlobalFilterValue1('');
-  };
 
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.STYLES_EDIT}/${id}`);
   }
 
-
   const onActionDeleteClick = () => {
     setPageState({
       ...pageState,
       deleteModalShow: true
-    })
-  }
-
-  const onSinglePrintBarcodeClick = (data: Style) => {
-    setSelectedStyle(data);
-    setPageState({
-      ...pageState,
-      showSinglePrintBarcode: true
     })
   }
 
@@ -172,67 +113,62 @@ const StylesPage = () => {
     setSelectedStyles(data.value)
   }
 
-  const header1 = renderHeader1();
+ 
 
   return (
-    <div className="grid">
-      <div className="col-12">
-        <PageCard title='Production Style Management'
-          toolbar={
-            <PageAction
-              actionAdd={() => router.push(ROUTES.STYLES_CREATE)}
-              actionUpload={() => setPageState({ ...pageState, showUploading: true })}
-              actions={[
-                PageActions.ADD,
-                PageActions.UPLAOD
-              ]}
-
-            />
-          }
-        >
-          <DataTable
-            value={styles}
-            paginator
-            className="p-datatable-gridlines"
-            showGridlines
-            rows={10}
-            dataKey="id"
-            filters={filters1}
-            filterDisplay="menu"
-            loading={loading1}
-            emptyMessage="No customers found."
-            selectionMode={'checkbox'}
-            selection={selectedStyles}
-            onSelectionChange={onStyleSelectionChange}
-            header={header1}
-          >
-            <Column
-              selectionMode="multiple"
-              headerStyle={{ width: '3em' }}
-            />
-            <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
-            <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
-            <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
-            <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
-            <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
-            <Column header="Japan Date" field="ship_date_from_japan" />
-            <Column field="ship_date_from_cebu" header="Cebu Date" />
-            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
-          </DataTable>
-          <Modal
-            title='Delete Record'
-            visible={pageState.deleteModalShow}
-            onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
-            confirmSeverity='danger'
-          >
-            <p>Are you sure you want to delete the record?</p>
-          </Modal>
-          <SinglePrintBarcode style={selectedStyle} onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })} visible={pageState.showSinglePrintBarcode} />
-          <UploadStyles onHide={() => setPageState({ ...pageState, showUploading: false })} visible={pageState.showUploading} />
-          <MultiplePrintBarcode styles={selectedStyles} onHide={() => setPageState({ ...pageState, showMultiPrintBarcode: false })} visible={pageState.showMultiPrintBarcode} />
-        </PageCard>
-      </div>
-    </div>
+    <PageCard title='Production Style Management'
+      toolbar={
+        <PageAction
+          actionAdd={() => router.push(ROUTES.STYLES_CREATE)}
+          actionUpload={() => setPageState({ ...pageState, showUploading: true })}
+          actions={[
+            PageActions.ADD,
+            PageActions.UPLAOD
+          ]}
+        />
+      }
+    >
+      <DataTable
+        value={styles}
+        paginator
+        className="p-datatable-gridlines"
+        showGridlines
+        rows={10}
+        dataKey="id"
+        filters={filters1}
+        filterDisplay="menu"
+        loading={isFetchStyleLoading}
+        emptyMessage="No customers found."
+        selectionMode={'checkbox'}
+        selection={selectedStyles}
+        onSelectionChange={onStyleSelectionChange}
+        header={tableHeader}
+      >
+        <Column
+          selectionMode="multiple"
+          headerStyle={{ width: '3em' }}
+        />
+        <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
+        <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
+        <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
+        <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
+        <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
+        <Column header="Japan Date" field="ship_date_from_japan" />
+        <Column field="ship_date_from_cebu" header="Cebu Date" />
+        <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+      </DataTable>
+      <Modal
+        title='Delete Record'
+        visible={pageState.deleteModalShow}
+        onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
+        confirmSeverity='danger'
+      >
+        <p>Are you sure you want to delete the record?</p>
+      </Modal>
+      <SinglePrintBarcode style={selectedStyle} onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })} visible={pageState.showSinglePrintBarcode} />
+      <UploadStyles onHide={() => setPageState({ ...pageState, showUploading: false })} visible={pageState.showUploading} />
+      <MultiplePrintBarcode styles={selectedStyles} onHide={() => setPageState({ ...pageState, showMultiPrintBarcode: false })} visible={pageState.showMultiPrintBarcode} />
+    </PageCard>
   );
 };
 

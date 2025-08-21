@@ -17,6 +17,7 @@
     "@xyflow/react": "^12.8.2",
     "axios": "^1.11.0",
     "chart.js": "4.2.1",
+    "dayjs": "^1.11.13",
     "jsbarcode": "^3.12.1",
     "moment": "^2.30.1",
     "next": "13.4.8",

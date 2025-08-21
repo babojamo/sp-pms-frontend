@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { showApiError } = useContext(LayoutContext);
 
   useLayoutEffect(() => {
-    if ((!user && !PUBLIC_ROUTES.includes(pathname)) || (user && pathname == ROUTES.ROUTE_PATH_LOGIN)) {
+    if (!loading && ((!user && !PUBLIC_ROUTES.includes(pathname)) || (user && pathname == ROUTES.ROUTE_PATH_LOGIN))) {
       router.push('/');
     }
   }, [user, router]);
