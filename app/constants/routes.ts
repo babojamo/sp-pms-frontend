@@ -40,6 +40,11 @@ export const ROUTES = {
     CREATE: '/management/shifts/create',
     EDIT: '/management/shifts/edit'
   },
+  BUNDLES: {
+    INDEX: '/management/bundles',
+    CREATE: '/management/bundles/create',
+    EDIT: '/management/bundles/edit'
+  },
   ROUTE_PATH_LOGIN: '/login'
 };
 

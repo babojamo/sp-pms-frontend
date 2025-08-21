@@ -1,50 +1,41 @@
 'use client';
-import { CustomerService } from '../../../../../demo/service/CustomerService';
-import { ProductService } from '../../../../../demo/service/ProductService';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { Button } from 'primereact/button';
-import { Calendar } from 'primereact/calendar';
-import { Column, ColumnFilterApplyTemplateOptions, ColumnFilterClearTemplateOptions, ColumnFilterElementTemplateOptions } from 'primereact/column';
-import { DataTable, DataTableExpandedRows, DataTableFilterMeta } from 'primereact/datatable';
-import { Dropdown } from 'primereact/dropdown';
-import { InputNumber } from 'primereact/inputnumber';
+import { Column } from 'primereact/column';
+import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
 import React, { useEffect, useState } from 'react';
-import type { Demo } from '@/types';
 import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import Modal from '@/app/components/modal/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
-import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
-import { Style } from '@/app/types/styles';
-import { StyleService } from '@/app/services/StyleService';
-import UploadStyles from './components/upload-styles';
-import MultiplePrintBarcode from '@/app/components/style/MultiplePrintBarcode';
+import BundleSinglePrintBarcode from '@/app/components/style/BundleSinglePrintBarcode';
+import { BundleService } from '@/app/services/BundleService';
+import { Bundle } from '@/app/types/bundles';
+import ReleaseBundles from './components/release-bundle';
 
-interface StylePageState {
+interface BundlePageState {
   deleteModalShow?: boolean;
   showSinglePrintBarcode?: boolean;
+  showRelease?: boolean;
+
   showMultiPrintBarcode?: boolean;
   showUploading?: boolean;
 }
 
-const StylesPage = () => {
+const BundlesPage = () => {
+  const [pageState, setPageState] = useState<BundlePageState>({});
+  const [selectedBundle, setSelectedBundle] = useState<Bundle | undefined>(undefined);
 
-  const [pageState, setPageState] = useState<StylePageState>({});
-  const [selectedStyle, setSelectedStyle] = useState<Style | undefined>(undefined);
-
-  const [styles, setStyles] = useState<Style[]>([]);
-  const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
+  const [bundles, setBundles] = useState<Bundle[]>([]);
+  const [selectedBundles, setSelectedBundles] = useState<Bundle[]>([]);
 
   const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
   const [loading1, setLoading1] = useState(true);
-  const [loading2, setLoading2] = useState(true);
   const [globalFilterValue1, setGlobalFilterValue1] = useState('');
   const router = useRouter();
-
-  const statuses = ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'];
 
   const clearFilter1 = () => {
     initFilters1();
@@ -65,8 +56,8 @@ const StylesPage = () => {
         <div>
           <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
         </div>
-        <div className='flex gap-2 ml-auto'>
-          <FormDropdown placeholder='Filter Buyer' />
+        <div className="flex gap-2 ml-auto">
+          <FormDropdown placeholder="Filter Buyer" />
           <div>
             <span className="p-input-icon-left">
               <i className="pi pi-search" />
@@ -79,33 +70,16 @@ const StylesPage = () => {
   };
 
   useEffect(() => {
-    setLoading2(true);
-    StyleService.getStyles().then((data) => {
-      setStyles(getStyles(data));
+    BundleService.getBundles().then((data) => {
+      setBundles(getBundles(data));
       setLoading1(false);
     });
     initFilters1();
   }, []);
 
-
-  const getStyles = (data: Style[]) => {
+  const getBundles = (data: Bundle[]) => {
     return [...(data || [])].map((d) => {
       return d;
-    });
-  };
-
-  const formatDate = (value: Date) => {
-    return value.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const formatCurrency = (value: number) => {
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD'
     });
   };
 
@@ -140,58 +114,65 @@ const StylesPage = () => {
   };
 
   const onActionEditClick = (id: string | number) => {
-    router.push(`${ROUTES.STYLES_EDIT}/${id}`);
-  }
-
+    router.push(`${ROUTES.BUNDLES.EDIT}/${id}`);
+  };
 
   const onActionDeleteClick = () => {
     setPageState({
       ...pageState,
       deleteModalShow: true
-    })
-  }
+    });
+  };
 
-  const onSinglePrintBarcodeClick = (data: Style) => {
-    setSelectedStyle(data);
+  const onSinglePrintBarcodeClick = (data: Bundle) => {
+    setSelectedBundle(data);
     setPageState({
       ...pageState,
       showSinglePrintBarcode: true
-    })
-  }
+    });
+  };
 
-  const actionBodyTemplate = (rowData: Style) => {
+  const actionBodyTemplate = (rowData: Bundle) => {
     return (
-      <div className='flex flex-row gap-2'>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} size='small' severity="warning" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size='small' severity="danger" />
+      <div className="flex flex-row gap-2">
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} size="small" severity="warning" />
+        <Button icon="pi pi-print" onClick={() => onSinglePrintBarcodeClick(rowData)} size="small" severity="help" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
       </div>
     );
   };
 
-  const onStyleSelectionChange = (data: any) => {
-    setSelectedStyles(data.value)
-  }
+  const onBundleSelectionChange = (data: any) => {
+    setSelectedBundles(data.value);
+  };
 
   const header1 = renderHeader1();
 
   return (
     <div className="grid">
       <div className="col-12">
-        <PageCard title='Production Style Management'
+        <PageCard
+          title="Production Bundle Management"
           toolbar={
-            <PageAction
-              actionAdd={() => router.push(ROUTES.STYLES_CREATE)}
-              actionUpload={() => setPageState({ ...pageState, showUploading: true })}
-              actions={[
-                PageActions.ADD,
-                PageActions.UPLAOD
-              ]}
-
-            />
+            <PageAction>
+              <Button
+                onClick={() => setPageState({ ...pageState, showRelease: true })}
+                label="Release Bundle"
+                icon="pi pi-arrow-up-right"
+                style={{ marginRight: '.5em' }}
+              />
+              <Button
+                onClick={() => setPageState({ ...pageState, showMultiPrintBarcode: true })}
+                severity="help"
+                label="Print Barcodes"
+                icon="pi pi-print"
+                style={{ marginRight: '.5em' }}
+              />
+            </PageAction>
           }
         >
           <DataTable
-            value={styles}
+            value={bundles}
             paginator
             className="p-datatable-gridlines"
             showGridlines
@@ -202,38 +183,39 @@ const StylesPage = () => {
             loading={loading1}
             emptyMessage="No customers found."
             selectionMode={'checkbox'}
-            selection={selectedStyles}
-            onSelectionChange={onStyleSelectionChange}
+            selection={selectedBundles}
+            onSelectionChange={onBundleSelectionChange}
             header={header1}
           >
-            <Column
-              selectionMode="multiple"
-              headerStyle={{ width: '3em' }}
-            />
+            <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
+            <Column field="control_number" header="Style#" style={{ minWidth: '12rem' }} />
             <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
-            <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
-            <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
-            <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
-            <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
-            <Column header="Japan Date" field="ship_date_from_japan" />
+            <Column field="bundle_number" header="Bundle#" style={{ minWidth: '12rem' }} />
+            <Column field="buyer_name" header="Quantity" style={{ minWidth: '12rem' }} />
+            <Column field="pleats_name" header="Size" style={{ minWidth: '12rem' }} />
+            <Column field="pleats_name" header="Meter" style={{ minWidth: '12rem' }} />
+            <Column header="Color" field="ship_date_from_japan" />
             <Column field="ship_date_from_cebu" header="Cebu Date" />
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
           </DataTable>
           <Modal
-            title='Delete Record'
+            title="Delete Record"
             visible={pageState.deleteModalShow}
             onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
-            confirmSeverity='danger'
+            confirmSeverity="danger"
           >
             <p>Are you sure you want to delete the record?</p>
           </Modal>
-          <SinglePrintBarcode style={selectedStyle} onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })} visible={pageState.showSinglePrintBarcode} />
-          <UploadStyles onHide={() => setPageState({ ...pageState, showUploading: false })} visible={pageState.showUploading} />
-          <MultiplePrintBarcode styles={selectedStyles} onHide={() => setPageState({ ...pageState, showMultiPrintBarcode: false })} visible={pageState.showMultiPrintBarcode} />
+          <BundleSinglePrintBarcode
+            bundle={selectedBundle}
+            onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })}
+            visible={pageState.showSinglePrintBarcode}
+          />
+          <ReleaseBundles onHide={() => setPageState({ ...pageState, showRelease: false })} visible={pageState.showRelease} />
         </PageCard>
       </div>
     </div>
   );
 };
 
-export default StylesPage;
+export default BundlesPage;

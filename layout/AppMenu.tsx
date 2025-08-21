@@ -25,6 +25,7 @@ const AppMenu = () => {
       label: 'Management',
       items: [
         { label: 'Styles', icon: 'pi pi-fw pi-check-square', to: '/management/styles' },
+        { label: 'Bundles', icon: 'pi pi-fw pi-check-square', to: '/management/bundles' },
         { label: 'Departments', icon: 'pi pi-fw pi-check-square', to: '/management/departments' },
         { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/management/operators' },
         { label: 'Sewing Lines', icon: 'pi pi-fw pi-check-square', to: '/management/sewing-lines' },

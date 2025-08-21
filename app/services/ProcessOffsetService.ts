@@ -1,4 +1,4 @@
-import { ProcessOffset } from "../types/process-offset";
+import { ProcessOffset } from '../types/process-offset';
 
 export const ProcessOffsetService = {
   getProcessOffsets() {

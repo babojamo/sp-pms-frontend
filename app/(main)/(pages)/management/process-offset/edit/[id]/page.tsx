@@ -31,7 +31,10 @@ const EditProcessOffsetPage = ({ params }: EditProcessOffsetPageProps) => {
   return (
     <div className="grid">
       <div className="col-6">
-        <PageCard title="Edit ProcessOffset" toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)} actions={[PageActions.BACK]} />}>
+        <PageCard
+          title="Edit ProcessOffset"
+          toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)} actions={[PageActions.BACK]} />}
+        >
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">

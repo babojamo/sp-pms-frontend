@@ -26,7 +26,7 @@ const FormProcessOffset = ({ value, onSubmit, children }: FormProcessOffsetProps
     handleSubmit,
     formState: { errors },
     reset,
-    register,
+    register
   } = useForm({
     resolver: yupResolver(schema)
   });
