@@ -4,14 +4,13 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import React, { useCallback, useEffect, useState } from 'react';
-import type { Demo } from '@/types';
-import PageCard from '@/app/components/page-card/component';
-import { useRouter } from 'next/navigation';
-import { ROUTES } from '@/app/constants/routes';
-import Modal from '@/app/components/modal/component';
-import { ProcessService } from '@/app/services/ProcessService';
 import { Process } from '@/app/types/process';
+import { ProcessService } from '@/app/services/ProcessService';
+import { ROUTES } from '@/app/constants/routes';
+import { useRouter } from 'next/navigation';
+import Modal from '@/app/components/modal/component';
+import PageCard from '@/app/components/page-card/component';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface ProcessPageState {
   deleteModalShow?: boolean;
@@ -60,7 +59,7 @@ const ProcessesPage = () => {
   const fetchProcesses = useCallback(async () => {
     setLoading(true);
     const data = await ProcessService.getProcesses();
-    setProcesses(getProcesses(data));
+    setProcesses(getProcesses(data.data.data ?? []));
     setLoading(false);
   }, []);
 
@@ -72,22 +71,6 @@ const ProcessesPage = () => {
     return [...(data || [])].map((d) => {
       return d;
     });
-  };
-
-  const formatDate = (value: Date) => {
-    return value.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const dateBodyTemplate = (rowData: Process) => {
-    return formatDate(new Date(rowData.created_at));
-  };
-
-  const statusBodyTemplate = (rowData: Demo.Customer) => {
-    return <span className={`process-badge status-${rowData.status}`}>{rowData.status}</span>;
   };
 
   const toolbars = () => {
@@ -135,12 +118,10 @@ const ProcessesPage = () => {
             emptyMessage="No customers found."
             header={renderHeader()}
           >
-            <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
+            <Column field="id" header="ID" />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-            <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
-            <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-            <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
-            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+            <Column field="created_by" header="Added By" style={{ minWidth: '12rem' }} />
+            <Column body={actionBodyTemplate}></Column>
           </DataTable>
           <Modal
             title="Delete Record"

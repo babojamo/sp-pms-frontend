@@ -14,17 +14,15 @@ interface FormSewingLineProps {
 }
 
 const schema = yup.object().shape({
-  name: yup.string().required('Name is required'),
-  line_id: yup.string().required('Line is required')
+  name: yup.string().required('Name is required')
 });
 
 const FormSewingLine = ({ value, onSubmit, children }: FormSewingLineProps) => {
   const {
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
-    register,
-    setValue
+    register
   } = useForm({
     resolver: yupResolver(schema)
   });

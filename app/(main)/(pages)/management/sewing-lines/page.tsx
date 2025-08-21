@@ -60,7 +60,7 @@ const SewingLinesPage = () => {
   const fetchSewingLines = useCallback(async () => {
     setLoading(true);
     const data = await SewingLineService.getSewingLines();
-    setSewingLines(getSewingLines(data));
+    setSewingLines(getSewingLines(data.data.data ?? []));
     setLoading(false);
   }, []);
 
@@ -72,22 +72,6 @@ const SewingLinesPage = () => {
     return [...(data || [])].map((d) => {
       return d;
     });
-  };
-
-  const formatDate = (value: Date) => {
-    return value.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const dateBodyTemplate = (rowData: SewingLine) => {
-    return formatDate(new Date(rowData.created_at));
-  };
-
-  const statusBodyTemplate = (rowData: Demo.Customer) => {
-    return <span className={`sewingLine-badge status-${rowData.status}`}>{rowData.status}</span>;
   };
 
   const toolbars = () => {
@@ -112,7 +96,7 @@ const SewingLinesPage = () => {
   const actionBodyTemplate = (rowData: SewingLine) => {
     return (
       <>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} rounded severity="warning" className="mr-2" />
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id ?? '')} rounded severity="warning" className="mr-2" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
       </>
     );
@@ -138,9 +122,7 @@ const SewingLinesPage = () => {
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
             <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
-            <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-            <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
-            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+            <Column body={actionBodyTemplate}></Column>
           </DataTable>
           <Modal
             title="Delete Record"

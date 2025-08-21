@@ -21,7 +21,7 @@ const FormProcessOffset = ({ value, onSubmit, children }: FormProcessOffsetProps
   const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
       name: '',
-      description: '',
+      description: ''
     }
   });
 

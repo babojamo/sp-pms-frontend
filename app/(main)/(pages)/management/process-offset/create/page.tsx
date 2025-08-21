@@ -12,21 +12,20 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const CreateProcessOffsetPage = () => {
   const router = useRouter();
-  const { saveProcessOffset, isSaveLoading
-  } = useProcessOffsetPage();
+  const { saveProcessOffset, isSaveLoading } = useProcessOffsetPage();
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const handleSubmit = async (data: DefaultFormData) => {
     try {
       await saveProcessOffset(data);
-      showSuccess("Process offset successfully created.");
+      showSuccess('Process offset successfully created.');
       setTimeout(() => {
         router.push(ROUTES.PROCESS_OFFSETS.INDEX);
       }, 2000);
     } catch (error: any) {
       showApiError(error, 'Failed to process offset.');
     }
-  }
+  };
 
   return (
     <div className="grid">
@@ -39,9 +38,13 @@ const CreateProcessOffsetPage = () => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormProcessOffset onSubmit={handleSubmit}>
-                  <div className='grid'>
-                    <div className='ml-auto'>
-                      <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                  <div className="grid">
+                    <div className="ml-auto">
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.SAVE]}
+                      />
                     </div>
                   </div>
                 </FormProcessOffset>

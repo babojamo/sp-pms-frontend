@@ -1,16 +1,15 @@
-import { ProcessOffsetService } from '@/app/services/ProcessOffsetService';
+import { SewingLineService } from '@/app/services/SewingLineService';
 import { DefaultFormData } from '@/app/types/form';
 import { useState } from 'react';
 
-export const useProcessOffsetPage = () => {
+export const useSewingLinePage = () => {
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
 
-  const saveProcessOffset = async (e: DefaultFormData) => {
+  const saveSewingLine = async (e: DefaultFormData) => {
     try {
       setIsSaveLoading(true);
-      const response = await ProcessOffsetService.createProcessOffset({
-        name: e.name,
-        description: e.description
+      const response = await SewingLineService.createSewingLine({
+        name: e.name
       });
       return response;
     } catch (error) {
@@ -20,7 +19,7 @@ export const useProcessOffsetPage = () => {
   };
 
   return {
-    saveProcessOffset,
+    saveSewingLine,
     isSaveLoading
   };
 };

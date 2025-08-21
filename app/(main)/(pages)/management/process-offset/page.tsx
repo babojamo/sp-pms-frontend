@@ -102,18 +102,6 @@ const ProcessOffsetsPage = () => {
     );
   };
 
-  const attachedToBodyTemplate = (row: ProcessOffset) => {
-    return (
-      <div className="flex flex-column">
-        {row.operators?.map((operator: Operator) => (
-          <>
-            <a href="#">{operator.name}</a>
-          </>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <div className="grid">
       <div className="col-12">
