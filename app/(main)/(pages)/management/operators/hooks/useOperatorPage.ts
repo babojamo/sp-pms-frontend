@@ -7,7 +7,7 @@ export const useOperatorPage = () => {
 
   const saveOperator = async (e: DefaultFormData) => {
     try {
-      console.log("e", e)
+      console.log('e', e);
       setIsSaveLoading(true);
       const response = await OperatorService.createOperator({
         name: e.name,

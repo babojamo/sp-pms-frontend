@@ -59,8 +59,8 @@ const DepartmentsPage = () => {
 
   const fetchDepartments = useCallback(async () => {
     setLoading(true);
-    const data = await DepartmentService.getDepartments();
-    setDepartments(getDepartments(data));
+    const { data } = await DepartmentService.getDepartmentes();
+    setDepartments(getDepartments(data.data ?? []));
     setLoading(false);
   }, []);
 
@@ -137,9 +137,7 @@ const DepartmentsPage = () => {
           >
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-            <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
             <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-            <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
           </DataTable>
           <Modal
