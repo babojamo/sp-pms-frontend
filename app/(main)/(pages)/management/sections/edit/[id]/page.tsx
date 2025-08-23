@@ -6,17 +6,17 @@ import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
 import { SelectItem } from 'primereact/selectitem';
-import { SewingLineForm } from '@/app/types/sewing-line';
-import { SewingLineService } from '@/app/services/SewingLineService';
-import FormSewingLine from '@/app/components/sewing-lines/FormSewingLine';
+import { SectionForm } from '@/app/types/section';
+import { SectionService } from '@/app/services/SectionService';
+import FormSection from '@/app/components/sections/FormSection';
 
-interface EditSewingLinePageProps {
+interface EditSectionPageProps {
   params?: { id: any };
 }
 
-const EditSewingLinePage = ({ params }: EditSewingLinePageProps) => {
+const EditSectionPage = ({ params }: EditSectionPageProps) => {
   const router = useRouter();
-  const [sewingLine, setSewingLine] = useState<SewingLineForm | undefined>();
+  const [Section, setSection] = useState<SectionForm | undefined>();
 
   const lines: SelectItem[] = [
     { label: 'Line 1', value: '1' },
@@ -24,29 +24,29 @@ const EditSewingLinePage = ({ params }: EditSewingLinePageProps) => {
     { label: 'Line 4', value: '3' }
   ];
 
-  const getSewingLine = useCallback(async () => {
-    setSewingLine((await SewingLineService.getSewingLine(params?.id)) as SewingLineForm);
+  const getSection = useCallback(async () => {
+    setSection((await SectionService.getSection(params?.id)) as SectionForm);
   }, [params?.id]);
 
   useEffect(() => {
     if (params?.id) {
-      getSewingLine();
+      getSection();
     }
-  }, [params?.id, getSewingLine]);
+  }, [params?.id, getSection]);
 
   return (
     <div className="grid">
       <div className="col-6">
         <PageCard
-          title="Edit Sewing Line"
-          toolbar={<PageAction actionBack={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[PageActions.BACK]} />}
+          title="Edit Section"
+          toolbar={<PageAction actionBack={() => router.push(ROUTES.SECTION.INDEX)} actions={[PageActions.BACK]} />}
         >
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormSewingLine value={sewingLine} onSubmit={() => {}}>
-                  <FormAction actionCancel={() => router.push(ROUTES.SEWING_LINES.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
-                </FormSewingLine>
+                <FormSection value={Section} onSubmit={() => {}}>
+                  <FormAction actionCancel={() => router.push(ROUTES.SECTION.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                </FormSection>
               </div>
             </div>
           </div>
@@ -56,4 +56,4 @@ const EditSewingLinePage = ({ params }: EditSewingLinePageProps) => {
   );
 };
 
-export default EditSewingLinePage;
+export default EditSectionPage;

@@ -1,10 +1,10 @@
-import { SewingLine } from './sewing-line';
+import { Section } from "./section";
 
 export interface Operator {
   id: string;
   name: string;
-  line_id?: string;
-  line?: SewingLine;
+  section_id?: string;
+  section?: Section;
   created_by?: string;
   created_at?: string;
   updated_at?: string;
@@ -13,7 +13,7 @@ export interface Operator {
 export interface OperatorForm {
   id: string;
   name: string;
-  line_id?: string;
+  section_id?: string;
   created_by?: string;
   created_at: string;
   updated_at: string;

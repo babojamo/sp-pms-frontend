@@ -10,10 +10,10 @@ import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
 import Modal from '@/app/components/modal/component';
-import { SewingLine } from '@/app/types/sewing-line';
-import { SewingLineService } from '@/app/services/SewingLineService';
+import { Section } from '@/app/types/section';
+import { SectionService } from '@/app/services/SectionService';
 
-interface SewingLinePageState {
+interface SectionPageState {
   deleteModalShow?: boolean;
 }
 
@@ -21,9 +21,9 @@ interface SearchFilter {
   keyword?: string;
 }
 
-const SewingLinesPage = () => {
-  const [pageState, setPageState] = useState<SewingLinePageState>({});
-  const [sewingLines, setSewingLines] = useState<SewingLine[]>([]);
+const SectionsPage = () => {
+  const [pageState, setPageState] = useState<SectionPageState>({});
+  const [Sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
 
@@ -33,7 +33,7 @@ const SewingLinesPage = () => {
     setFilter({
       keyword: ''
     });
-    fetchSewingLines();
+    fetchSections();
   };
 
   const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,7 @@ const SewingLinesPage = () => {
       ...filter,
       keyword: value
     });
-    fetchSewingLines();
+    fetchSections();
   };
 
   const renderHeader = () => {
@@ -57,18 +57,18 @@ const SewingLinesPage = () => {
     );
   };
 
-  const fetchSewingLines = useCallback(async () => {
+  const fetchSections = useCallback(async () => {
     setLoading(true);
-    const data = await SewingLineService.getSewingLines();
-    setSewingLines(getSewingLines(data.data.data ?? []));
+    const data = await SectionService.getSections();
+    setSections(getSections(data.data.data ?? []));
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchSewingLines();
-  }, [fetchSewingLines]);
+    fetchSections();
+  }, [fetchSections]);
 
-  const getSewingLines = (data: SewingLine[]) => {
+  const getSections = (data: Section[]) => {
     return [...(data || [])].map((d) => {
       return d;
     });
@@ -77,13 +77,13 @@ const SewingLinesPage = () => {
   const toolbars = () => {
     return (
       <>
-        <Button label="New" onClick={() => router.push(ROUTES.SEWING_LINES.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
+        <Button label="New" onClick={() => router.push(ROUTES.SECTION.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
       </>
     );
   };
 
   const onActionEditClick = (id: string | number) => {
-    router.push(`${ROUTES.SEWING_LINES.EDIT}/${id}`);
+    router.push(`${ROUTES.SECTION.EDIT}/${id}`);
   };
 
   const onActionDeleteClick = () => {
@@ -93,7 +93,7 @@ const SewingLinesPage = () => {
     });
   };
 
-  const actionBodyTemplate = (rowData: SewingLine) => {
+  const actionBodyTemplate = (rowData: Section) => {
     return (
       <>
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id ?? '')} rounded severity="warning" className="mr-2" />
@@ -105,9 +105,9 @@ const SewingLinesPage = () => {
   return (
     <div className="grid">
       <div className="col-12">
-        <PageCard title="Sewing Lines Management" toolbar={toolbars()}>
+        <PageCard title="Sections Management" toolbar={toolbars()}>
           <DataTable
-            value={sewingLines}
+            value={Sections}
             paginator
             className="p-datatable-gridlines"
             showGridlines
@@ -115,13 +115,13 @@ const SewingLinesPage = () => {
             dataKey="id"
             filterDisplay="menu"
             loading={loading}
-            responsiveLayout="scroll"
             emptyMessage="No customers found."
             header={renderHeader()}
           >
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
             <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-            <Column field="created_by" header="Create By" style={{ minWidth: '12rem' }} />
+            <Column field="department.name" header="Department" style={{ minWidth: '12rem' }} />
+            <Column field="created_at" header="Created" style={{ minWidth: '12rem' }} />
             <Column body={actionBodyTemplate}></Column>
           </DataTable>
           <Modal
@@ -138,4 +138,4 @@ const SewingLinesPage = () => {
   );
 };
 
-export default SewingLinesPage;
+export default SectionsPage;

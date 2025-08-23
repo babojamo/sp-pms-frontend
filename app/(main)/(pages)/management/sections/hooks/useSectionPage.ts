@@ -1,15 +1,16 @@
-import { SewingLineService } from '@/app/services/SewingLineService';
+import { SectionService } from '@/app/services/SectionService';
 import { DefaultFormData } from '@/app/types/form';
 import { useState } from 'react';
 
-export const useSewingLinePage = () => {
+export const useSectionPage = () => {
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
 
-  const saveSewingLine = async (e: DefaultFormData) => {
+  const saveSection = async (e: DefaultFormData) => {
     try {
       setIsSaveLoading(true);
-      const response = await SewingLineService.createSewingLine({
-        name: e.name
+      const response = await SectionService.createSection({
+        name: e.name,
+        department_id: e.department_id,
       });
       return response;
     } catch (error) {
@@ -19,7 +20,7 @@ export const useSewingLinePage = () => {
   };
 
   return {
-    saveSewingLine,
+    saveSection,
     isSaveLoading
   };
 };

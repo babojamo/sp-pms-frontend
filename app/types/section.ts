@@ -1,4 +1,4 @@
-export interface SewingLine {
+export interface Section {
   id?: string;
   name: string;
   created_by?: string;
@@ -6,7 +6,7 @@ export interface SewingLine {
   updated_at?: string;
 }
 
-export interface SewingLineForm {
+export interface SectionForm {
   id: string;
   name: string;
   created_by?: string;

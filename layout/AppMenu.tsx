@@ -27,8 +27,8 @@ const AppMenu = () => {
         { label: 'Styles', icon: 'pi pi-fw pi-check-square', to: '/management/styles' },
         { label: 'Bundles', icon: 'pi pi-fw pi-check-square', to: '/management/bundles' },
         { label: 'Departments', icon: 'pi pi-fw pi-check-square', to: '/management/departments' },
+        { label: 'Sections', icon: 'pi pi-fw pi-check-square', to: '/management/sections' },
         { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/management/operators' },
-        { label: 'Sewing Lines', icon: 'pi pi-fw pi-check-square', to: '/management/sewing-lines' },
         { label: 'Sewing Line Process', icon: 'pi pi-fw pi-check-square', to: '/management/processes' },
         { label: 'Process Offset', icon: 'pi pi-fw pi-check-square', to: '/management/process-offset' }
       ]

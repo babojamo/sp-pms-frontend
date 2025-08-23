@@ -20,10 +20,10 @@ export const ROUTES = {
     CREATE: '/management/operators/create',
     EDIT: '/management/operators/edit'
   },
-  SEWING_LINES: {
-    INDEX: '/management/sewing-lines',
-    CREATE: '/management/sewing-lines/create',
-    EDIT: '/management/sewing-lines/edit'
+  SECTION: {
+    INDEX: '/management/sections',
+    CREATE: '/management/sections/create',
+    EDIT: '/management/sections/edit'
   },
   DEPARTMENTS: {
     INDEX: '/management/departments',
