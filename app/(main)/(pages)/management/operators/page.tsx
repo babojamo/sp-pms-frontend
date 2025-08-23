@@ -60,8 +60,8 @@ const OperatorsPage = () => {
 
   const fetchOperators = useCallback(async () => {
     setLoading(true);
-    const data = await OperatorService.getOperators();
-    setOperators(getOperators(data));
+    const {data} = await OperatorService.getOperators();
+    setOperators(getOperators(data.data ?? []));
     setLoading(false);
   }, []);
 
@@ -146,10 +146,9 @@ const OperatorsPage = () => {
             header={renderHeader()}
           >
             <Column header="Name" style={{ minWidth: '10rem' }} body={nameTemplate} />
-            <Column field="line_id" header="Sewing Line" style={{ minWidth: '12rem' }} />
+            <Column field="section.name" header="Section" style={{ minWidth: '12rem' }} />
             <Column field="line_id" header="Processes" style={{ minWidth: '12rem' }} />
-            <Column header="Create" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-            <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
+            <Column header="Create" dataType="created_at" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
           </DataTable>
           <Modal
