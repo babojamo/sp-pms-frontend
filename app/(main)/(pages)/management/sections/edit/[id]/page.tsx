@@ -37,10 +37,7 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
   return (
     <div className="grid">
       <div className="col-6">
-        <PageCard
-          title="Edit Section"
-          toolbar={<PageAction actionBack={() => router.push(ROUTES.SECTION.INDEX)} actions={[PageActions.BACK]} />}
-        >
+        <PageCard title="Edit Section" toolbar={<PageAction actionBack={() => router.push(ROUTES.SECTION.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">

@@ -16,23 +16,26 @@ interface FormOperatorProps {
   onSubmit?: any;
   children?: any;
   processesOptions?: SelectItem[];
+  loading?: {
+    lineField?: boolean;
+    processField?: boolean;
+  };
 }
 
 type FormData = {
   name: string;
-  line_id: string;
+  section_id: string;
   process_ids?: string[];
 };
 
-const FormOperator = ({ value, onSubmit, children, lines, processesOptions }: FormOperatorProps) => {
-  const {
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    control,
-    reset,
-    register,
-    setValue
-  } = useForm<FormData>();
+const FormOperator = ({ value, onSubmit, children, lines, processesOptions, loading }: FormOperatorProps) => {
+  const { handleSubmit, control, reset } = useForm<FormData>({
+    defaultValues: {
+      name: '',
+      section_id: '',
+      process_ids: []
+    }
+  });
 
   useEffect(() => {
     if (value) {
@@ -49,18 +52,23 @@ const FormOperator = ({ value, onSubmit, children, lines, processesOptions }: Fo
         name="name"
         control={control}
         rules={{ required: 'Name is required' }}
-        render={({ fieldState }) => <FormInputText label="Name" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />}
+        render={({ field, fieldState }) => (
+          <FormInputText {...field} label="Name" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+        )}
       />
 
       <Controller
-        name="line_id"
+        name="section_id"
         control={control}
         rules={{ required: 'Line is required' }}
         render={({ field, fieldState }) => (
           <FormDropdown
+            {...field}
             value={field.value}
             onChange={(e: any) => field.onChange(e.value)}
-            label="Line "
+            label="Line"
+            placeholder="Select"
+            loading={loading?.lineField}
             errorMessage={fieldState.error?.message}
             isError={fieldState.error ? true : false}
             options={lines}
@@ -74,9 +82,12 @@ const FormOperator = ({ value, onSubmit, children, lines, processesOptions }: Fo
         rules={{ required: 'Process is required' }}
         render={({ field, fieldState }) => (
           <FormMultiDropdown
+            {...field}
             value={field.value}
             onChange={(e: any) => field.onChange(e.value)}
             label="Processes"
+            placeholder="Select"
+            loading={loading?.processField}
             errorMessage={fieldState.error?.message}
             isError={fieldState.error ? true : false}
             options={processesOptions}

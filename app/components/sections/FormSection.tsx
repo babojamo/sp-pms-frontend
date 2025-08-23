@@ -23,7 +23,7 @@ interface FormSectionProps {
 interface FormData extends DefaultFormData {
   name: string;
   department_id?: string;
-};
+}
 
 const FormSection = ({ onSubmit, children, departments, loading }: FormSectionProps) => {
   const { control, handleSubmit } = useForm<FormData>();
@@ -35,7 +35,13 @@ const FormSection = ({ onSubmit, children, departments, loading }: FormSectionPr
         control={control}
         rules={{ required: 'Name is required' }}
         render={({ fieldState, field }) => (
-          <FormInputText {...field} label="Name" placeholder='Input' errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+          <FormInputText
+            {...field}
+            label="Name"
+            placeholder="Input"
+            errorMessage={fieldState.error?.message}
+            isError={fieldState.error ? true : false}
+          />
         )}
       />
       <Controller
@@ -43,8 +49,15 @@ const FormSection = ({ onSubmit, children, departments, loading }: FormSectionPr
         control={control}
         rules={{ required: 'Department is required' }}
         render={({ fieldState, field }) => (
-          <FormDropdown  {...field}  label="Department" placeholder="Select" loading={loading?.deparmentField} options={departments} errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
-
+          <FormDropdown
+            {...field}
+            label="Department"
+            placeholder="Select"
+            loading={loading?.deparmentField}
+            options={departments}
+            errorMessage={fieldState.error?.message}
+            isError={fieldState.error ? true : false}
+          />
         )}
       />
       {children}

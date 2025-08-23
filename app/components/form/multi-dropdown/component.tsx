@@ -14,10 +14,14 @@ interface FormMultiDropdownProps {
   filter?: any;
   maxSelectedLabels?: number;
   value?: any;
+  loading?: boolean;
 }
 
 const FormMultiDropdown = forwardRef<any, FormMultiDropdownProps>(
-  ({ label, filter, isError, className = 'field', placeholder, value, onChange, maxSelectedLabels = 3, errorMessage, options, ...rest }, ref) => (
+  (
+    { label, filter, isError, className = 'field', placeholder, loading, value, onChange, maxSelectedLabels = 3, errorMessage, options, ...rest },
+    ref
+  ) => (
     <div className={className}>
       {label && <label htmlFor="name">{label}</label>}
       <MultiSelect
@@ -27,6 +31,7 @@ const FormMultiDropdown = forwardRef<any, FormMultiDropdownProps>(
         filter={filter}
         onChange={onChange}
         placeholder={placeholder}
+        loading={loading}
         maxSelectedLabels={maxSelectedLabels}
         options={options}
         optionLabel="label"

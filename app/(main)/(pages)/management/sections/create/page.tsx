@@ -35,19 +35,16 @@ const CreateSectionPage = () => {
 
   useEffect(() => {
     initData();
-  }, [])
+  }, []);
 
   const initData = async () => {
     setDepartmentOption(await fetchDepartmentOptions());
-  }
+  };
 
   return (
     <div className="grid">
       <div className="col-12 md:col-6">
-        <PageCard
-          title="Create Section"
-          toolbar={<PageAction actionBack={() => router.push(ROUTES.SECTION.INDEX)} actions={[PageActions.BACK]} />}
-        >
+        <PageCard title="Create Section" toolbar={<PageAction actionBack={() => router.push(ROUTES.SECTION.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">

@@ -2,9 +2,13 @@ import { SelectItem } from 'primereact/selectitem';
 import UtilityService from '../services/UtilityService';
 import { Department } from '../types/department';
 import { useState } from 'react';
+import { Section } from '../types/section';
+import { Process } from '../types/process';
 
 export default function useUtilityData() {
-  const [isDepartmentLoading, setIsDeparmentLoading] = useState<boolean>(false);
+  const [isDepartmentLoading, setIsDepartmentLoading] = useState<boolean>(false);
+  const [isSectionLoading, setIsSectionLoading] = useState<boolean>(false);
+  const [isProcessLoading, setIsProcessLoading] = useState<boolean>(false);
 
   const fetchItemTypes = async (): Promise<string[]> => {
     const { data } = await UtilityService.itemTypes();
@@ -18,13 +22,37 @@ export default function useUtilityData() {
 
   const fetchDepartments = async (): Promise<Department[]> => {
     try {
-      setIsDeparmentLoading(true);
+      setIsDepartmentLoading(true);
       const { data } = await UtilityService.departments();
       return data;
     } catch (error) {
       throw error;
     } finally {
-      setIsDeparmentLoading(false);
+      setIsDepartmentLoading(false);
+    }
+  };
+
+  const fetchProcesses = async (): Promise<Process[]> => {
+    try {
+      setIsProcessLoading(true);
+      const { data } = await UtilityService.processes();
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsProcessLoading(false);
+    }
+  };
+
+  const fetchSections = async (): Promise<Section[]> => {
+    try {
+      setIsSectionLoading(true);
+      const { data } = await UtilityService.sections();
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsSectionLoading(false);
     }
   };
 
@@ -38,12 +66,28 @@ export default function useUtilityData() {
     return data.map((d: Department) => ({ value: d.id, label: d.name }));
   };
 
+  const fetchSectionOptions = async (): Promise<SelectItem[]> => {
+    const data = await fetchSections();
+    return data.map((d: Section) => ({ value: d.id, label: d.name }));
+  };
+
+  const fetchProcessOptions = async (): Promise<SelectItem[]> => {
+    const data = await fetchProcesses();
+    return data.map((d: Process) => ({ value: d.id, label: d.name }));
+  };
+
   return {
     fetchItemTypes,
     fetchBuyersSelectOption,
     fetchBuyers,
     fetchDepartments,
     fetchDepartmentOptions,
-    isDepartmentLoading
+    fetchSections,
+    fetchSectionOptions,
+    fetchProcesses,
+    fetchProcessOptions,
+    isDepartmentLoading,
+    isSectionLoading,
+    isProcessLoading
   };
 }

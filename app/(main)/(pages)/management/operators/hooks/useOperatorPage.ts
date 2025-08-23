@@ -1,16 +1,18 @@
-import { SectionService } from '@/app/services/SectionService';
+import { OperatorService } from '@/app/services/OperatorService';
 import { DefaultFormData } from '@/app/types/form';
 import { useState } from 'react';
 
-export const useSectionPage = () => {
+export const useOperatorPage = () => {
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
 
-  const saveSection = async (e: DefaultFormData) => {
+  const saveOperator = async (e: DefaultFormData) => {
     try {
+      console.log("e", e)
       setIsSaveLoading(true);
-      const response = await SectionService.createSection({
+      const response = await OperatorService.createOperator({
         name: e.name,
-        department_id: e.department_id
+        section_id: e.section_id,
+        process_ids: e.process_ids
       });
       return response;
     } catch (error) {
@@ -20,7 +22,7 @@ export const useSectionPage = () => {
   };
 
   return {
-    saveSection,
+    saveOperator,
     isSaveLoading
   };
 };
