@@ -13,16 +13,18 @@ interface FormDropdownProps {
   className?: string;
   loading?: boolean;
   value?: any;
+  filter?: boolean;
 }
 
 const FormDropdown = forwardRef<any, FormDropdownProps>(
-  ({ label, isError, value, className = 'field', placeholder, loading, onChange, errorMessage, options, ...rest }, ref) => (
+  ({ label, isError, value, className = 'field', placeholder, filter, loading, onChange, errorMessage, options, ...rest }, ref) => (
     <div className={className}>
       {label && <label htmlFor="name">{label}</label>}
       <Dropdown
         value={value}
         inputRef={ref}
         {...rest}
+        filter={filter}
         onChange={onChange}
         placeholder={placeholder}
         loading={loading}
@@ -36,7 +38,7 @@ const FormDropdown = forwardRef<any, FormDropdownProps>(
         )}
       />
 
-      {isError && <small className="p-invalid">{errorMessage}</small>}
+      {isError && <small className="text-red-500">{errorMessage}</small>}
     </div>
   )
 );

@@ -1,5 +1,5 @@
 import { PaginatedResponse } from '.';
-import { Style } from '../styles';
+import { Style, StyleBundle, StylePlannedFabric, StylePlannedFabricSize } from '../styles';
 
 export interface StyleCreatePayload {
   control_number: string;
@@ -12,7 +12,8 @@ export interface StyleCreatePayload {
   noumae?: string | null;
   sample?: string | null;
   pattern?: string | null;
-  item_styles?: ItemStyleCreatePayload[];
+  style_items?: ItemStyleCreatePayload[];
+  style_fabrics?: ItemFabricCreatePayload[];
 }
 
 export interface ItemStyleCreatePayload {
@@ -25,6 +26,34 @@ export interface ItemStyleCreatePayload {
   color_detail?: string;
 }
 
+export interface ItemFabricCreatePayload {
+  col_number?: string;
+  color?: string;
+  size_one?: number;
+  size_two?: number;
+  size_three?: number;
+  size_four?: number;
+  size_five?: number;
+}
+
 export interface StylePaginatedResponse extends PaginatedResponse {
   data?: Style[];
+}
+
+export interface StyleBundlePaginatedResponse extends PaginatedResponse {
+  data?: StyleBundle[];
+}
+
+export interface StylePlannedFabricsResponse {
+  colors: StylePlannedFabric[];
+  sizes: StylePlannedFabricSize[];
+}
+
+export interface StyleReleaseFabricPayload {
+  bundles: {
+    style_planned_fabric_id?: string;
+    style_planned_fabric_size_id?: string;
+    quantity?: number;
+    remarks?: string;
+  }[]
 }

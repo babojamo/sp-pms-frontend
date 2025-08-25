@@ -42,8 +42,7 @@ const FormMultiDropdown = forwardRef<any, FormMultiDropdownProps>(
           'w-full'
         )}
       />
-
-      {isError && <small className="text-red-500">{errorMessage}</small>}
+      {isError && <div><small className="text-red-500">{errorMessage}</small></div>}
     </div>
   )
 );

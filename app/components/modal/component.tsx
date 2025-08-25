@@ -11,6 +11,7 @@ interface ModalProps {
   cancelSeverity?: 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'help' | undefined;
   hideActions?: boolean;
   width?: string;
+  minWidth?: string;
 }
 
 const Modal = ({
@@ -21,11 +22,12 @@ const Modal = ({
   title,
   confirmSeverity = 'success',
   width,
+  minWidth,
   cancelSeverity = 'secondary',
   hideActions = false
 }: ModalProps) => {
   return (
-    <Dialog header={title} visible={visible} onHide={onHide} style={{ width }}>
+    <Dialog header={title} visible={visible} onHide={onHide} style={{ width, minWidth }}>
       {children}
       {!hideActions && (
         <div className="flex">

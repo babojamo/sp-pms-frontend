@@ -1,24 +1,20 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
-import PageCard from '@/app/components/page-card/component';
+import { DefaultFormData } from '@/app/types/form';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
+import { useRouter } from 'next/navigation';
+import { useStylePage } from '../hooks/useStylePage';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
 import FormStyle from '@/app/components/style/FormStyle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import { useRouter } from 'next/navigation';
-import { ROUTES } from '@/app/constants/routes';
-import useUtilityData from '@/app/hooks/useUtilityData';
-import FormAction, { FormActions } from '@/app/components/form-action/component';
-import { useStylePage } from '../hooks/useStylePage';
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import FormStyleItemTable from '@/app/components/style/FormStyleItemTable';
-import { StyleItem } from '@/app/types/styles';
+import PageCard from '@/app/components/page-card/component';
+import React, { useContext, useEffect } from 'react';
 
 const CreateStylePage = () => {
   const router = useRouter();
-  const { fetchItemTypes } = useUtilityData();
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { saveStyle, isSaveLoading } = useStylePage();
-  const [styleItems, setStyleItems] = useState<StyleItem[]>([]);
 
   useEffect(() => {
     initData();
@@ -32,9 +28,9 @@ const CreateStylePage = () => {
     { label: 'Type 1', value: 'type-1' }
   ];
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: DefaultFormData) => {
     try {
-      await saveStyle(e, styleItems);
+      await saveStyle(e);
       showSuccess("Style successfully created.");
       setTimeout(() => {
         router.push(ROUTES.STYLES_INDEX);
@@ -42,10 +38,6 @@ const CreateStylePage = () => {
     } catch (error: any) {
       showApiError(error, 'Failed to create style.');
     }
-  }
-
-  const handleItemChange = (items: StyleItem[]) => {
-    setStyleItems(items);
   }
 
   return (
@@ -61,10 +53,8 @@ const CreateStylePage = () => {
       <div className='grid'>
         <div className='col-12'>
           <div className='p-fluid'>
-            <FormStyle onSubmit={handleSubmit} styleOptions={styleOptions}  >
-
-              <FormStyleItemTable onItemsChanged={handleItemChange}/>
-              <div className='grid'>
+            <FormStyle onSubmit={handleSubmit} styleOptions={styleOptions}>
+              <div className='grid mt-5'>
                 <div className='ml-auto'>
                   <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.USERS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
                 </div>

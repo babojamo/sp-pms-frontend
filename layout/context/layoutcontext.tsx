@@ -38,12 +38,14 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
   };
 
   const [layoutConfig, setLayoutConfig] = useState<LayoutConfig>({
-    ripple: false,
-    inputStyle: 'outlined',
-    menuMode: 'static',
-    colorScheme: 'light',
-    theme: 'lara-light-indigo',
-    scale: 14
+
+    "ripple": false,
+    "inputStyle": "outlined",
+    "menuMode": "static",
+    "colorScheme": "light",
+    "theme": "soho-light",
+    "scale": 14
+
   });
 
   useEffect(() => {

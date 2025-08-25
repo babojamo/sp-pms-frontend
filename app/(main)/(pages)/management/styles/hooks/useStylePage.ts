@@ -1,5 +1,5 @@
 import { StyleService } from '@/app/services/StyleService';
-import { StyleCreatePayload, StylePaginatedResponse } from '@/app/types/api/styles';
+import { ItemFabricCreatePayload, ItemStyleCreatePayload, StyleCreatePayload, StylePaginatedResponse } from '@/app/types/api/styles';
 import { DefaultFormData } from '@/app/types/form';
 import { Style, StyleItem } from '@/app/types/styles';
 import dayjs from 'dayjs';
@@ -48,12 +48,13 @@ export const useStylePage = () => {
       ship_date_from_cebu: data.ship_date_from_cebu
         ? dayjs(data.ship_date_from_cebu).format("YYYY-MM-DD")
         : null,
+      style_items: ((data?.style_items ?? []) as ItemStyleCreatePayload[]),
+      style_fabrics: ((data?.style_fabrics ?? []) as ItemFabricCreatePayload[]),
     };
   }
 
-  const saveStyle = async (e: DefaultFormData, items?: StyleItem[]) => {
+  const saveStyle = async (e: DefaultFormData) => {
     try {
-      if (!items || (items && !items.length)) throw new Error("Style items required.");
       setIsSaveLoading(true);
       const response = await StyleService.createStyle(formatSavePayload(e));
       return response;

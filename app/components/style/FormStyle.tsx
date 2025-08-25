@@ -1,11 +1,14 @@
 'use client';
 
+import { Controller, useForm } from 'react-hook-form';
+import { DefaultFormData } from '@/app/types/form';
+import { generateSimpleId } from '@/app/utils';
 import { SelectItem } from 'primereact/selectitem';
+import { FormStyleFabric, StyleItem } from '@/app/types/styles';
 import FormCalendar from '../form/calendar/component';
 import FormInputText from '../form/input-text/component';
-import { Controller, useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { DefaultFormData } from '@/app/types/form';
+import FormStyleItemTable from './FormStyleItemTable';
+import FormStyleFabricTable from './FormStyleFabricTable';
 
 interface FormStyleProps {
   styleOptions: SelectItem[];
@@ -26,9 +29,34 @@ interface FormData extends DefaultFormData {
   sample?: string | null;
   pattern?: string | null;
   name?: string;
+  style_items: StyleItem[];
+  style_fabrics: FormStyleFabric[];
 }
 
-const FormStyle = ({ styleOptions = [], itemTypes = [], onSubmit, children }: FormStyleProps) => {
+const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
+  const emptyStyleItem = (): StyleItem => ({
+    id: generateSimpleId(),
+    item_name: '',
+    item_number: '',
+    specs_qty: 0,
+    specs_unit: '',
+    youjyaku_qty: 0,
+    youjyaku_unit: '',
+    color_detail: ''
+  });
+
+  const emptyStyleFabric = (): FormStyleFabric => ({
+    id: generateSimpleId(),
+    col_number: '',
+    color: '',
+    size_one: 0,
+    size_two: 0,
+    size_three: 0,
+    size_four: 0,
+    size_five: 0,
+    total: 0
+  });
+
   const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
       control_number: '',
@@ -41,7 +69,9 @@ const FormStyle = ({ styleOptions = [], itemTypes = [], onSubmit, children }: Fo
       noumae: '',
       sample: '',
       pattern: '',
-      name: ''
+      name: '',
+      style_items: [emptyStyleItem()],
+      style_fabrics: [emptyStyleFabric()]
     }
   });
 
@@ -175,7 +205,9 @@ const FormStyle = ({ styleOptions = [], itemTypes = [], onSubmit, children }: Fo
           />
         </div>
       </div>
-
+      <FormStyleItemTable control={control} />
+      <div className='m-5'></div>
+      <FormStyleFabricTable control={control} />
       {children}
     </form>
   );

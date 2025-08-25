@@ -8,19 +8,22 @@ import React, { useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageAction from '@/app/components/page-action/component';
 import Modal from '@/app/components/modal/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
 import BundleSinglePrintBarcode from '@/app/components/style/BundleSinglePrintBarcode';
 import { BundleService } from '@/app/services/BundleService';
 import { Bundle } from '@/app/types/bundles';
 import ReleaseBundles from './components/release-bundle';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
+import { StyleBundleService } from '@/app/services/StyleBundleService';
+import { StyleBundle } from '@/app/types/styles';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
   showSinglePrintBarcode?: boolean;
   showRelease?: boolean;
-
   showMultiPrintBarcode?: boolean;
   showUploading?: boolean;
 }
@@ -29,8 +32,8 @@ const BundlesPage = () => {
   const [pageState, setPageState] = useState<BundlePageState>({});
   const [selectedBundle, setSelectedBundle] = useState<Bundle | undefined>(undefined);
 
-  const [bundles, setBundles] = useState<Bundle[]>([]);
-  const [selectedBundles, setSelectedBundles] = useState<Bundle[]>([]);
+  const [bundles, setBundles] = useState<StyleBundle[]>([]);
+  const [selectedBundles, setSelectedBundles] = useState<StyleBundle[]>([]);
 
   const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
   const [loading1, setLoading1] = useState(true);
@@ -58,30 +61,22 @@ const BundlesPage = () => {
         </div>
         <div className="flex gap-2 ml-auto">
           <FormDropdown placeholder="Filter Buyer" />
-          <div>
-            <span className="p-input-icon-left">
-              <i className="pi pi-search" />
-              <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Keyword Search" />
-            </span>
-          </div>
+          <IconField iconPosition="left">
+            <InputIcon className="pi pi-search" style={{ marginTop: '-0.9rem' }} />
+            <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Keyword Search" />
+          </IconField>
         </div>
       </div>
     );
   };
 
   useEffect(() => {
-    BundleService.getBundles().then((data) => {
-      setBundles(getBundles(data));
+    StyleBundleService.getBundles().then(({ data }) => {
+      setBundles(data.data ?? []);
       setLoading1(false);
     });
     initFilters1();
   }, []);
-
-  const getBundles = (data: Bundle[]) => {
-    return [...(data || [])].map((d) => {
-      return d;
-    });
-  };
 
   const initFilters1 = () => {
     setFilters1({
@@ -188,14 +183,14 @@ const BundlesPage = () => {
             header={header1}
           >
             <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
-            <Column field="control_number" header="Style#" style={{ minWidth: '12rem' }} />
-            <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
             <Column field="bundle_number" header="Bundle#" style={{ minWidth: '12rem' }} />
-            <Column field="buyer_name" header="Quantity" style={{ minWidth: '12rem' }} />
-            <Column field="pleats_name" header="Size" style={{ minWidth: '12rem' }} />
-            <Column field="pleats_name" header="Meter" style={{ minWidth: '12rem' }} />
-            <Column header="Color" field="ship_date_from_japan" />
-            <Column field="ship_date_from_cebu" header="Cebu Date" />
+            <Column field="style.style_number" header="Style#" style={{ minWidth: '12rem' }} />
+            <Column field="style.buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
+            <Column field="style.ship_date_from_cebu" header="Cebu Date" />
+            <Column field="style.ship_date_from_japan" header="Japan Date" />
+            <Column header="Color" field="style_planned_fabric.color" />
+            <Column header="Size" field="style_planned_fabric_size.size_number" />
+            <Column field="quantity" header="Quantity" style={{ minWidth: '12rem' }} />
             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
           </DataTable>
           <Modal

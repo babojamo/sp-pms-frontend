@@ -1,17 +1,23 @@
 'use client';
+
+import { AutoCompleteSelectEvent } from 'primereact/autocomplete';
 import { Button } from 'primereact/button';
-import React, { useEffect, useState } from 'react';
+import { DefaultFormData } from '@/app/types/form';
+import { FormReleaseBundle, StylePlannedFabricSize } from '@/app/types/styles';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Option } from '@/app/types';
+import { SelectItem } from 'primereact/selectitem';
+import { StyleService } from '@/app/services/StyleService';
+import { useForm } from 'react-hook-form';
 import Modal from '@/app/components/modal/component';
-import { DataTable } from 'primereact/datatable';
-import { useSewingLineOperations } from '../hooks/useSewingLineOperations';
-import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
-import { Column } from 'primereact/column';
-import FormDropdown from '@/app/components/form/dropdown/component';
-import FormInputText from '@/app/components/form/input-text/component';
-import { OperatorProcess } from '@/app/types/operator';
+import React, { useContext, useEffect, useState } from 'react';
+import ReleaseBundleTable from '@/app/components/style/ReleaseBundleTable';
+import RemoteStyleDropdown from '@/app/components/remote/style-dropdown/component';
+import { StyleBundleService } from '@/app/services/StyleBundleService';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
+  loadingSave?: boolean;
 }
 
 interface SinglePrintBarcodeProps {
@@ -19,117 +25,123 @@ interface SinglePrintBarcodeProps {
   onHide?: any;
 }
 
-interface BundleDetail {
-  name: string;
-  value: string;
+interface FormData extends DefaultFormData {
+  bundles: FormReleaseBundle[];
 }
 
 const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   const [state, setState] = useState<SinglePrintBarcodeState>({});
+  const [selectedStyleNumber, setSelectedStyleNumber] = useState<Option | null>(null);
+  const [colorOptions, setColorOptions] = useState<SelectItem[]>([]);
+  const [sizesOptions, setSizesOptions] = useState<StylePlannedFabricSize[]>([]);
+  const [isStyleSelected, setIsStyleSelected] = useState<boolean>(false);
+  const [shouldPrint, setShouldPrint] = useState<boolean>(false);
+  const { showApiError, showSuccess } = useContext(LayoutContext);
+  const emptyStyleItem = (): FormReleaseBundle => ({
+    id: 1,
+    style_planned_fabric_id: '',
+    style_planned_fabric_size_id: '',
+    quantity: 0,
+    remarks: '',
+  });
 
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const {
-    operatorsProcess,
-    editingRows,
-    onProcessDeleteClick,
-    onAddOperatorClick,
-    operatorsOption,
-    sewingLineOptions,
-    processOptions,
-    shiftOptions,
-    setEditingRows,
-    fetchProcesses,
-    setSelectedOperatorProcess,
-    selectedOperatorProcess
-  } = useSewingLineOperations();
-
-  useEffect(() => {
-    if (fetchProcesses) {
-      fetchProcesses();
+  const { control, handleSubmit, reset } = useForm<FormData>({
+    defaultValues: {
+      bundles: [],
     }
-  }, []);
+  });
+
+  const fetchPlannedFabics = async (id: string) => {
+    try {
+      setState({ ...state, loadingSave: true })
+      const { data: res } = await StyleService.getPlannedFabrics(id);
+      setColorOptions(res.colors.map(col => ({
+        label: col.color,
+        value: col.id,
+      })));
+      setSizesOptions(res.sizes);
+      reset({
+        bundles: [emptyStyleItem()]
+      });
+      setIsStyleSelected(true);
+    } catch (e: any) {
+      setIsStyleSelected(false);
+      showApiError(e, 'Error loading the planned fabric options.');
+    } finally {
+      setState({ ...state, loadingSave: false })
+    }
+  }
+
+  const releaseFabrics = async (e: FormData) => {
+    try {
+      setState({ ...state, loadingSave: true })
+      await StyleBundleService.releaseFabrics({
+        bundles: e.bundles?.map(r => ({
+          style_planned_fabric_id: r.style_planned_fabric_id,
+          style_planned_fabric_size_id: r.style_planned_fabric_size_id,
+          quantity: r.quantity,
+          remarks: r.remarks,
+        })),
+      }, selectedStyleNumber?.value.toString() ?? '');
+      showSuccess("Bundles has been succesfully released.");
+      // Reset and close modal
+      resetAllState();
+
+      if(shouldPrint) alert("Printing");
+      setTimeout(() => {
+        setHide();
+      }, 2000);
+
+    } catch (e: any) {
+      showApiError(e, 'Error releasing bundles.');
+    } finally {
+      setState({ ...state, loadingSave: false })
+    }
+  }
 
   useEffect(() => {
     setState({ ...state, show: visible });
   }, [visible]);
 
-  const onHideModal = () => {
+  const resetAllState = () => {
+    setSelectedStyleNumber(null);
+    setIsStyleSelected(false);
+    reset({
+      bundles: []
+    });
+    setShouldPrint(false);
+  }
+  const setHide = () => {
     setState({ ...state, show: false });
     if (onHide) onHide();
   };
 
-  const tableHeader = () => {
-    return (
-      <div className="flex flex-align-items-center">
-        <div className="flex align-items-center gap-2">
-          <FormMultiDropdown label="Style" filter={true} placeholder="Select" options={sewingLineOptions} />
-        </div>
-      </div>
-    );
+  const handleSelectedStyle = (option: AutoCompleteSelectEvent<Option>) => {
+    fetchPlannedFabics(option.value?.value?.toString());
   };
 
-  const actionBodyTemplate = (rowData: OperatorProcess) => {
-    return (
-      <div className="flex gap-2">
-        <Button size="small" icon="pi pi-copy" rounded title="Clone" severity="warning" />
-        <Button size="small" onClick={() => onProcessDeleteClick(rowData.id)} icon="pi pi-trash" rounded severity="danger" />
-      </div>
-    );
-  };
+  const submit = (e: FormData) => {
+    releaseFabrics(e);
+  }
 
-  const numberBodyTemplate = (rowData: OperatorProcess) => {
-    return (
-      <>
-        <i className="pi pi-lock text-sm" title="Locked"></i>
-        <span>{rowData.id}</span>
-      </>
-    );
-  };
   return (
-    <Modal title="Release Bundles" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
-      <DataTable
-        rows={10}
-        editMode="row"
-        editingRows={editingRows}
-        onRowEditChange={(e: any) => setEditingRows(e.value)}
-        header={tableHeader()}
-        value={operatorsProcess}
-        loading={loading}
-        paginator
-        className="p-datatable-gridlines"
-        showGridlines
-        dataKey="id"
-        filterDisplay="menu"
-        emptyMessage="No styles provided."
-      >
-        <Column body={numberBodyTemplate} field="operator.line.name" header="#" />
-        <Column
-          field="operator_id"
-          header="Color"
-          editor={(opts) => <FormMultiDropdown filter={true} className="" placeholder="Select" options={operatorsOption} />}
-        />
-        <Column
-          field="operator_id"
-          header="Meter"
-          editor={(opts) => <FormMultiDropdown filter={true} className="" placeholder="Select" options={operatorsOption} />}
-        />
-        <Column
-          field="operator_id"
-          header="Size"
-          editor={(opts) => <FormMultiDropdown filter={true} className="" placeholder="Select" options={operatorsOption} />}
-        />
-        <Column field="target" header="Quantity" editor={(opts) => <FormInputText className="" placeholder="Quantity" />} />
-        <Column field="target" header="Remark" editor={(opts) => <FormInputText className="" placeholder="Remarks" />} />
-        <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
-      </DataTable>
-
-      <p className="mt-2">Locked bundles could not be edited</p>
-      <div className="flex">
-        <div className="ml-auto">
-          <Button onClick={() => {}} icon="pi pi-arrow-up-right" severity="info" label="Release" className="mr-2" />
+    <Modal title="Release Bundles" visible={state.show} minWidth='90vh' onHide={setHide} confirmSeverity="danger" hideActions={true}>
+      <form onSubmit={handleSubmit(submit)}>
+        <div className="flex align-items-center mt-b-2">
+          <RemoteStyleDropdown value={selectedStyleNumber} onSelect={handleSelectedStyle} onChange={(option) => setSelectedStyleNumber(option)} />
+          <div className='ml-auto'>
+            <Button loading={state.loadingSave} type='submit' disabled={!isStyleSelected} onClick={() => setShouldPrint(true)} icon="pi pi-print" severity="info" label="Release & Print" className="mr-2" />
+            <Button loading={state.loadingSave} type='submit' disabled={!isStyleSelected} icon="pi pi-arrow-up-right" severity="info" label="Release" className="mr-2" />
+          </div>
         </div>
-      </div>
+        <div className='m-5'></div>
+        <ReleaseBundleTable control={control} sizesOptions={sizesOptions} disabled={!isStyleSelected} colorOptions={colorOptions} />
+        <p className="mt-2">Locked bundles could not be edited</p>
+        <div className="flex">
+          <div className="ml-auto">
+          </div>
+        </div>
+      </form>
     </Modal>
   );
 };

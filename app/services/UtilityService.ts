@@ -3,6 +3,7 @@ import apiClient from '../api/http-common';
 import { Department } from '../types/department';
 import { Section } from '../types/section';
 import { Process } from '../types/process';
+import { StylePaginatedResponse } from '../types/api/styles';
 
 const BASE_URL = '/api/utils';
 
@@ -21,6 +22,9 @@ class UtilityService {
   }
   processes(): AxiosPromise<Process[]> {
     return apiClient.get(`${BASE_URL}/processes`);
+  }
+  findStyles(keyword: string, perPage: number = 15): AxiosPromise<StylePaginatedResponse> {
+    return apiClient.get(`${BASE_URL}/find-styles`, { params: { q: keyword, page: 1, perPage } });
   }
 }
 export default new UtilityService();

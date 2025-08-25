@@ -60,7 +60,7 @@ const OperatorsPage = () => {
 
   const fetchOperators = useCallback(async () => {
     setLoading(true);
-    const {data} = await OperatorService.getOperators();
+    const { data } = await OperatorService.getOperators();
     setOperators(getOperators(data.data ?? []));
     setLoading(false);
   }, []);

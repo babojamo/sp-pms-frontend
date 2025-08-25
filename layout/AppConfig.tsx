@@ -59,17 +59,6 @@ const AppConfig = (props: AppConfigProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layoutConfig.scale]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLayoutConfig((prevState: LayoutConfig) => ({
-        ...prevState,
-
-        colorScheme: 'dark',
-        theme: 'lara-dark-blue'
-      }));
-    }, 5000);
-  }, []);
-
   return (
     <>
       <button className="layout-config-button config-link" type="button" onClick={onConfigButtonClick}>

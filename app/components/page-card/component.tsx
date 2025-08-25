@@ -14,8 +14,7 @@ const PageCard = ({ title, children, toolbar }: PageCardProps) => {
 
   return (
     <>
-      <BreadCrumb model={items} home={home} />
-      <div className="card mt-2">
+      <div className="card">
         <div className="flex align-items-center">
           <h5>{title ?? 'Page Card'}</h5>
           <div className="ml-auto pb-3">{toolbar}</div>

@@ -1,4 +1,4 @@
-import { InputNumber, InputNumberChangeEvent } from 'primereact/inputnumber';
+import { InputNumber, InputNumberChangeEvent, InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { classNames } from 'primereact/utils';
 import React, { forwardRef } from 'react';
 
@@ -13,10 +13,14 @@ interface FormInputNumberProps {
   className?: string;
   placeholder?: string;
   onChange?: (event: InputNumberChangeEvent) => void;
+  onValueChange?: (event: InputNumberValueChangeEvent) => void;
 }
 
 const FormInputNumber = forwardRef<any, FormInputNumberProps>(
-  ({ label, className = 'field', inputClassName, value, isError, required, placeholder, autoFocus, onChange, errorMessage, ...rest }, ref) => (
+  (
+    { label, className = 'field', inputClassName, value, isError, required, placeholder, autoFocus, onChange, onValueChange, errorMessage, ...rest },
+    ref
+  ) => (
     <div className={className}>
       {label && <label htmlFor="name">{label}</label>}
       <InputNumber
@@ -25,6 +29,7 @@ const FormInputNumber = forwardRef<any, FormInputNumberProps>(
         value={value}
         onChange={onChange}
         required={required}
+        onValueChange={onValueChange}
         autoFocus={autoFocus}
         placeholder={placeholder}
         className={classNames(
@@ -34,7 +39,7 @@ const FormInputNumber = forwardRef<any, FormInputNumberProps>(
           inputClassName
         )}
       />
-      {isError && <small className="text-red-500">{errorMessage}</small>}
+      {isError && <div><small className="text-red-500">{errorMessage}</small></div>}
     </div>
   )
 );

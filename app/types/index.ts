@@ -17,3 +17,5 @@ export interface Pagination {
   to?: number;
   total?: number;
 }
+
+export type Option = { label: string; value: number };

@@ -1,4 +1,4 @@
-import { StyleCreatePayload, StylePaginatedResponse } from '../types/api/styles';
+import { StyleCreatePayload, StylePaginatedResponse, StylePlannedFabricsResponse, StyleReleaseFabricPayload } from '../types/api/styles';
 import { Style } from '../types/styles';
 import apiClient from '../api/http-common';
 import { AxiosPromise } from 'axios';
@@ -8,6 +8,9 @@ const BASE_URL = '/api/styles';
 export const StyleService = {
   getStyles(params?: Record<string, any>): AxiosPromise<StylePaginatedResponse> {
     return apiClient.get(`${BASE_URL}`, { params });
+  },
+  getPlannedFabrics(style_id: string): AxiosPromise<StylePlannedFabricsResponse> {
+    return apiClient.get(`${BASE_URL}/planned-fabrics/${style_id}`);
   },
   getStyle(id: string) {
     return fetch('/demo/data/styles.json', { headers: { 'Cache-Control': 'no-cache' } })
