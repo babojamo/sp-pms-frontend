@@ -7,13 +7,15 @@ import { FormReleaseBundle, StylePlannedFabricSize } from '@/app/types/styles';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Option } from '@/app/types';
 import { SelectItem } from 'primereact/selectitem';
+import { StyleBundleService } from '@/app/services/StyleBundleService';
 import { StyleService } from '@/app/services/StyleService';
 import { useForm } from 'react-hook-form';
+import FormDropdown from '@/app/components/form/dropdown/component';
 import Modal from '@/app/components/modal/component';
 import React, { useContext, useEffect, useState } from 'react';
 import ReleaseBundleTable from '@/app/components/style/ReleaseBundleTable';
 import RemoteStyleDropdown from '@/app/components/remote/style-dropdown/component';
-import { StyleBundleService } from '@/app/services/StyleBundleService';
+import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
@@ -33,32 +35,38 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   const [state, setState] = useState<SinglePrintBarcodeState>({});
   const [selectedStyleNumber, setSelectedStyleNumber] = useState<Option | null>(null);
   const [colorOptions, setColorOptions] = useState<SelectItem[]>([]);
+  const [printerOptions, setPrinterOptions] = useState<SelectItem[]>([]);
+  const [selectedPrinter, setSelectedPrinter] = useState<string | null>();
   const [sizesOptions, setSizesOptions] = useState<StylePlannedFabricSize[]>([]);
   const [isStyleSelected, setIsStyleSelected] = useState<boolean>(false);
   const [shouldPrint, setShouldPrint] = useState<boolean>(false);
-  const { showApiError, showSuccess } = useContext(LayoutContext);
+  const { showApiError, showSuccess, showWarning } = useContext(LayoutContext);
+  const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
+
   const emptyStyleItem = (): FormReleaseBundle => ({
     id: 1,
     style_planned_fabric_id: '',
     style_planned_fabric_size_id: '',
     quantity: 0,
-    remarks: '',
+    remarks: ''
   });
 
   const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
-      bundles: [],
+      bundles: []
     }
   });
 
   const fetchPlannedFabics = async (id: string) => {
     try {
-      setState({ ...state, loadingSave: true })
+      setState({ ...state, loadingSave: true });
       const { data: res } = await StyleService.getPlannedFabrics(id);
-      setColorOptions(res.colors.map(col => ({
-        label: col.color,
-        value: col.id,
-      })));
+      setColorOptions(
+        res.colors.map((col) => ({
+          label: col.color,
+          value: col.id
+        }))
+      );
       setSizesOptions(res.sizes);
       reset({
         bundles: [emptyStyleItem()]
@@ -68,40 +76,53 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       setIsStyleSelected(false);
       showApiError(e, 'Error loading the planned fabric options.');
     } finally {
-      setState({ ...state, loadingSave: false })
+      setState({ ...state, loadingSave: false });
     }
-  }
+  };
 
   const releaseFabrics = async (e: FormData) => {
     try {
-      setState({ ...state, loadingSave: true })
-      await StyleBundleService.releaseFabrics({
-        bundles: e.bundles?.map(r => ({
-          style_planned_fabric_id: r.style_planned_fabric_id,
-          style_planned_fabric_size_id: r.style_planned_fabric_size_id,
-          quantity: r.quantity,
-          remarks: r.remarks,
-        })),
-      }, selectedStyleNumber?.value.toString() ?? '');
-      showSuccess("Bundles has been succesfully released.");
+      setState({ ...state, loadingSave: true });
+      const fabrics = await StyleBundleService.releaseFabrics(
+        {
+          bundles: e.bundles?.map((r) => ({
+            style_planned_fabric_id: r.style_planned_fabric_id,
+            style_planned_fabric_size_id: r.style_planned_fabric_size_id,
+            quantity: r.quantity,
+            remarks: r.remarks
+          }))
+        },
+        selectedStyleNumber?.value.toString() ?? ''
+      );
+      showSuccess('Bundles has been succesfully released.');
+
+      console.log(fabrics);
+
+      if (shouldPrint) {
+        //queuePrintStyleBundle()
+      }
+
       // Reset and close modal
       resetAllState();
 
-      if(shouldPrint) alert("Printing");
       setTimeout(() => {
         setHide();
       }, 2000);
-
     } catch (e: any) {
       showApiError(e, 'Error releasing bundles.');
     } finally {
-      setState({ ...state, loadingSave: false })
+      setState({ ...state, loadingSave: false });
     }
-  }
+  };
 
   useEffect(() => {
     setState({ ...state, show: visible });
+    if (visible) initData();
   }, [visible]);
+
+  const initData = async () => {
+    setPrinterOptions(await fetchPrintersSelectOptions());
+  };
 
   const resetAllState = () => {
     setSelectedStyleNumber(null);
@@ -110,7 +131,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       bundles: []
     });
     setShouldPrint(false);
-  }
+  };
   const setHide = () => {
     setState({ ...state, show: false });
     if (onHide) onHide();
@@ -122,23 +143,43 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const submit = (e: FormData) => {
     releaseFabrics(e);
-  }
+  };
 
   return (
-    <Modal title="Release Bundles" visible={state.show} minWidth='90vh' onHide={setHide} confirmSeverity="danger" hideActions={true}>
+    <Modal title="Release Bundles" visible={state.show} minWidth="90vh" onHide={setHide} confirmSeverity="danger" hideActions={true}>
       <form onSubmit={handleSubmit(submit)}>
-        <div className="flex align-items-center mt-b-2">
-          <RemoteStyleDropdown value={selectedStyleNumber} onSelect={handleSelectedStyle} onChange={(option) => setSelectedStyleNumber(option)} />
-          <div className='ml-auto'>
-            <Button loading={state.loadingSave} type='submit' disabled={!isStyleSelected} onClick={() => setShouldPrint(true)} icon="pi pi-print" severity="info" label="Release & Print" className="mr-2" />
-            <Button loading={state.loadingSave} type='submit' disabled={!isStyleSelected} icon="pi pi-arrow-up-right" severity="info" label="Release" className="mr-2" />
-          </div>
-        </div>
-        <div className='m-5'></div>
+        <RemoteStyleDropdown value={selectedStyleNumber} onSelect={handleSelectedStyle} onChange={(option) => setSelectedStyleNumber(option)} />
+        <div className="m-3"></div>
         <ReleaseBundleTable control={control} sizesOptions={sizesOptions} disabled={!isStyleSelected} colorOptions={colorOptions} />
-        <p className="mt-2">Locked bundles could not be edited</p>
-        <div className="flex">
+        <div className="m-5"></div>
+        <div className="flex align-items-end mt-b-2">
           <div className="ml-auto">
+            <FormDropdown
+              label="Barcode Printer"
+              value={selectedPrinter}
+              onChange={(option: any) => setSelectedPrinter(option.value)}
+              placeholder="Select"
+              options={printerOptions}
+            />
+            <Button
+              loading={state.loadingSave}
+              type="submit"
+              disabled={!isStyleSelected}
+              onClick={() => setShouldPrint(true)}
+              icon="pi pi-print"
+              severity="info"
+              label="Release & Print"
+              className="mr-2"
+            />
+            <Button
+              loading={state.loadingSave}
+              type="submit"
+              disabled={!isStyleSelected}
+              icon="pi pi-arrow-up-right"
+              severity="info"
+              label="Release"
+              className="mr-2"
+            />
           </div>
         </div>
       </form>

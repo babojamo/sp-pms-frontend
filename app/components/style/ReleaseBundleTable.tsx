@@ -15,32 +15,32 @@ interface FormStyleProps {
   control?: any;
   colorOptions?: SelectItem[];
   disabled?: boolean;
-  sizesOptions?: StylePlannedFabricSize[]
+  sizesOptions?: StylePlannedFabricSize[];
 }
 
 const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: FormStyleProps) => {
-
   const items = useWatch({ control, name: 'bundles' }) || [];
 
-  const colors = React.useMemo(
-    () => colorOptions,
-    [colorOptions]
-  );
+  const colors = React.useMemo(() => colorOptions, [colorOptions]);
 
-  const getSizeOptions = (rowIndex: number) : SelectItem[] => {
+  const getSizeOptions = (rowIndex: number): SelectItem[] => {
     const option = items[rowIndex];
-    return sizesOptions?.filter(s=>s.style_planned_fabric_id == option.style_planned_fabric_id)?.map(r=>({
-      label: `${r.size_number.toString()} - ${r.quantity.toString()}`,
-      value: r.id,
-    })) ?? [];
-  }
+    return (
+      sizesOptions
+        ?.filter((s) => s.style_planned_fabric_id == option.style_planned_fabric_id)
+        ?.map((r) => ({
+          label: `${r.size_number.toString()} - ${r.quantity.toString()}`,
+          value: r.id
+        })) ?? []
+    );
+  };
 
   const emptyItem = (): FormReleaseBundle => ({
     id: items?.length + 1,
     style_planned_fabric_id: '',
     style_planned_fabric_size_id: '',
     quantity: 0,
-    remarks: '',
+    remarks: ''
   });
 
   const { append, remove } = useFieldArray({
@@ -48,11 +48,10 @@ const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: F
     name: 'bundles'
   });
 
-
   const actionBodyTemplate = (rowData: FormReleaseBundle, options: { rowIndex: number }) => {
     return (
       <div className="flex gap-2">
-        <Button size="small" type="button" onClick={() => remove(options.rowIndex)} icon="pi pi-trash" rounded severity="danger" />
+        <Button size="small" type="button" onClick={() => remove(options.rowIndex)} icon="pi pi-trash" severity="danger" />
       </div>
     );
   };
@@ -88,10 +87,7 @@ const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: F
       filterDisplay="menu"
       emptyMessage="No record provided."
     >
-      <Column
-        field="id"
-        header="#"
-      />
+      <Column field="id" header="#" />
       <Column
         field="style_planned_fabric_id"
         header="Color"
@@ -134,21 +130,16 @@ const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: F
               />
             )}
           />
-
-
-
-
         )}
       />
       <Column
         field="quantity"
         header="Quantity"
-        
         body={(_row: any, options: { rowIndex: number }) => (
           <Controller
             control={control}
             name={`bundles.${options.rowIndex}.quantity` as const}
-            rules={{ required: 'Quantity is required',  min: { value: 1, message: 'Minimum is 1' } }}
+            rules={{ required: 'Quantity is required', min: { value: 1, message: 'Minimum is 1' } }}
             render={({ field, fieldState }) => (
               <FormInputNumber
                 value={field.value as number | null}

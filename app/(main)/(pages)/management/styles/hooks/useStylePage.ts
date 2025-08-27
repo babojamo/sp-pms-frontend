@@ -21,12 +21,9 @@ export const useStylePage = () => {
       const { data } = await StyleService.getStyles();
       setStyles(formatStyleTable(data));
     } catch (error) {
-      setIsFetchStyleLoading(false);
-
       throw error;
     } finally {
       setIsFetchStyleLoading(false);
-
     }
   }
 

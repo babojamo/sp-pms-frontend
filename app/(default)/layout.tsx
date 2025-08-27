@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import AppConfig from '../../layout/AppConfig';
 import React from 'react';
 import { AuthProvider } from '../contexts/useAuth';
 
@@ -15,10 +14,7 @@ export const metadata: Metadata = {
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <AuthProvider>
-      <React.Fragment>
-        {children}
-        <AppConfig simple />
-      </React.Fragment>
+      <React.Fragment>{children}</React.Fragment>
     </AuthProvider>
   );
 }

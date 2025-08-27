@@ -17,25 +17,29 @@ const AppMenu = () => {
     {
       label: 'Operations',
       items: [
-        { label: 'Operators Process', icon: 'pi pi-fw pi-id-card', to: '/operations/sewing-line-operations' },
-        { label: 'Style Flow', icon: 'pi pi-fw pi-id-card', to: '/operations/style-flow', disabled: true }
+        { label: 'Production', icon: 'pi pi-fw pi-cog', to: '/operations/production-operations' },
+        { label: 'Style Flow', icon: 'pi pi-fw pi-share-alt', to: '/operations/style-flow', disabled: true }
       ]
     },
     {
       label: 'Management',
       items: [
-        { label: 'Styles', icon: 'pi pi-fw pi-check-square', to: '/management/styles' },
-        { label: 'Bundles', icon: 'pi pi-fw pi-check-square', to: '/management/bundles' },
-        { label: 'Departments', icon: 'pi pi-fw pi-check-square', to: '/management/departments' },
-        { label: 'Sections', icon: 'pi pi-fw pi-check-square', to: '/management/sections' },
-        { label: 'Operators', icon: 'pi pi-fw pi-check-square', to: '/management/operators' },
-        { label: 'Processes', icon: 'pi pi-fw pi-check-square', to: '/management/processes' },
-        { label: 'Process Offset', icon: 'pi pi-fw pi-check-square', to: '/management/process-offset' }
+        { label: 'Styles', icon: 'pi pi-fw pi-clone', to: '/management/styles' },
+        { label: 'Release Bundles', icon: 'pi pi-fw pi-box', to: '/management/bundles' },
+        { label: 'Departments', icon: 'pi pi-fw pi-building', to: '/management/departments' },
+        { label: 'Sections', icon: 'pi pi-fw pi-sitemap', to: '/management/sections' },
+        { label: 'Operators', icon: 'pi pi-fw pi-users', to: '/management/operators' },
+        { label: 'Processes', icon: 'pi pi-fw pi-cog', to: '/management/processes' },
+        { label: 'Process Offset', icon: 'pi pi-fw pi-sliders-h', to: '/management/process-offset' }
       ]
     },
     {
       label: 'Reports',
-      items: [{ label: 'Sewing Line Output', icon: 'pi pi-fw pi-id-card', to: '/management/users', disabled: true }]
+      items: [
+        { label: 'Sewing Line Output', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true },
+        { label: 'Bundle Releases', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true },
+        { label: 'System Audit', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true }
+      ]
     },
     {
       label: 'Administrator',

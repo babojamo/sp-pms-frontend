@@ -19,6 +19,9 @@ import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { StyleBundleService } from '@/app/services/StyleBundleService';
 import { StyleBundle } from '@/app/types/styles';
+import PageHeader from '@/app/components/page-header/component';
+import TableHeader from '@/app/components/table-header/component';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -54,20 +57,7 @@ const BundlesPage = () => {
   };
 
   const renderHeader1 = () => {
-    return (
-      <div className="flex justify-content-start items-center">
-        <div>
-          <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
-        </div>
-        <div className="flex gap-2 ml-auto">
-          <FormDropdown placeholder="Filter Buyer" />
-          <IconField iconPosition="left">
-            <InputIcon className="pi pi-search" style={{ marginTop: '-0.9rem' }} />
-            <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Keyword Search" />
-          </IconField>
-        </div>
-      </div>
-    );
+    return <TableHeader onClear={clearFilter1} />;
   };
 
   useEffect(() => {
@@ -144,72 +134,66 @@ const BundlesPage = () => {
   const header1 = renderHeader1();
 
   return (
-    <div className="grid">
-      <div className="col-12">
-        <PageCard
-          title="Production Bundle Management"
-          toolbar={
-            <PageAction>
-              <Button
-                onClick={() => setPageState({ ...pageState, showRelease: true })}
-                label="Release Bundle"
-                icon="pi pi-arrow-up-right"
-                style={{ marginRight: '.5em' }}
-              />
-              <Button
-                onClick={() => setPageState({ ...pageState, showMultiPrintBarcode: true })}
-                severity="help"
-                label="Print Barcodes"
-                icon="pi pi-print"
-                style={{ marginRight: '.5em' }}
-              />
-            </PageAction>
-          }
-        >
-          <DataTable
-            value={bundles}
-            paginator
-            className="p-datatable-gridlines"
-            showGridlines
-            rows={10}
-            dataKey="id"
-            filters={filters1}
-            filterDisplay="menu"
-            loading={loading1}
-            emptyMessage="No customers found."
-            selectionMode={'checkbox'}
-            selection={selectedBundles}
-            onSelectionChange={onBundleSelectionChange}
-            header={header1}
-          >
-            <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
-            <Column field="bundle_number" header="Bundle#" style={{ minWidth: '12rem' }} />
-            <Column field="style.style_number" header="Style#" style={{ minWidth: '12rem' }} />
-            <Column field="style.buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
-            <Column field="style.ship_date_from_cebu" header="Cebu Date" />
-            <Column field="style.ship_date_from_japan" header="Japan Date" />
-            <Column header="Color" field="style_planned_fabric.color" />
-            <Column header="Size" field="style_planned_fabric_size.size_number" />
-            <Column field="quantity" header="Quantity" style={{ minWidth: '12rem' }} />
-            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
-          </DataTable>
-          <Modal
-            title="Delete Record"
-            visible={pageState.deleteModalShow}
-            onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
-            confirmSeverity="danger"
-          >
-            <p>Are you sure you want to delete the record?</p>
-          </Modal>
-          <BundleSinglePrintBarcode
-            bundle={selectedBundle}
-            onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })}
-            visible={pageState.showSinglePrintBarcode}
+    <>
+      <PageHeader titles={['Management', 'Release Bundles']}>
+        <PageAction>
+          <Button
+            onClick={() => setPageState({ ...pageState, showRelease: true })}
+            label="Release Bundle"
+            icon="pi pi-arrow-up-right"
+            style={{ marginRight: '.5em' }}
           />
-          <ReleaseBundles onHide={() => setPageState({ ...pageState, showRelease: false })} visible={pageState.showRelease} />
-        </PageCard>
-      </div>
-    </div>
+          <Button
+            onClick={() => setPageState({ ...pageState, showMultiPrintBarcode: true })}
+            severity="help"
+            label="Print Barcodes"
+            icon="pi pi-print"
+            style={{ marginRight: '.5em' }}
+          />
+        </PageAction>
+      </PageHeader>
+      <DataTable
+        value={bundles}
+        paginator
+        className="p-datatable-gridlines"
+        showGridlines
+        rows={10}
+        dataKey="id"
+        filters={filters1}
+        filterDisplay="menu"
+        loading={loading1}
+        emptyMessage={EMPTY_TABLE_MESSAGE}
+        selectionMode={'checkbox'}
+        selection={selectedBundles}
+        onSelectionChange={onBundleSelectionChange}
+        header={header1}
+      >
+        <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
+        <Column field="bundle_number" header="Bundle#" style={{ minWidth: '12rem' }} />
+        <Column field="style.style_number" header="Style#" style={{ minWidth: '12rem' }} />
+        <Column field="style.buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
+        <Column field="style.ship_date_from_cebu" header="Cebu Date" />
+        <Column field="style.ship_date_from_japan" header="Japan Date" />
+        <Column header="Color" field="style_planned_fabric.color" />
+        <Column header="Size" field="style_planned_fabric_size.size_number" />
+        <Column field="quantity" header="Quantity" style={{ minWidth: '12rem' }} />
+        <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+      </DataTable>
+      <Modal
+        title="Delete Record"
+        visible={pageState.deleteModalShow}
+        onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
+        confirmSeverity="danger"
+      >
+        <p>Are you sure you want to delete the record?</p>
+      </Modal>
+      <BundleSinglePrintBarcode
+        bundle={selectedBundle}
+        onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })}
+        visible={pageState.showSinglePrintBarcode}
+      />
+      <ReleaseBundles onHide={() => setPageState({ ...pageState, showRelease: false })} visible={pageState.showRelease} />
+    </>
   );
 };
 

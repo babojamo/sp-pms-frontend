@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-sync-scripts */
-import { BreadCrumb } from 'primereact/breadcrumb';
 import React from 'react';
 
 interface PageCardProps {
@@ -9,9 +8,6 @@ interface PageCardProps {
 }
 
 const PageCard = ({ title, children, toolbar }: PageCardProps) => {
-  const items = [{ label: 'Electronics' }, { label: 'Computer' }, { label: 'Accessories' }, { label: 'Keyboard' }, { label: 'Wireless' }];
-  const home = { icon: 'pi pi-home', url: 'https://primereact.org' };
-
   return (
     <>
       <div className="card">

@@ -25,7 +25,6 @@ export interface StyleItem {
   style?: Style;
 }
 
-
 export interface StylePlannedFabric {
   id: number;
   style_id: number;
@@ -71,12 +70,10 @@ export interface StyleBundle {
   style_id: number;
   style_planned_fabric_id: number;
   style_planned_fabric_size_id: number;
-  bundle_number: string;   // change to number if your DB uses int
+  bundle_number: string; // change to number if your DB uses int
   quantity: number;
   remarks?: string | null;
   style?: Style;
   style_planned_fabric?: StylePlannedFabric;
   style_planned_fabric_size?: StylePlannedFabricSize;
 }
-
-

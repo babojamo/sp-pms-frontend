@@ -12,6 +12,7 @@ import { ROUTES } from '@/app/constants/routes';
 import Modal from '@/app/components/modal/component';
 import { Shift } from '@/app/types/shift';
 import { ShiftService } from '@/app/services/ShiftService';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 
 interface ShiftPageState {
   deleteModalShow?: boolean;
@@ -112,8 +113,8 @@ const ShiftsPage = () => {
   const actionBodyTemplate = (rowData: Shift) => {
     return (
       <>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} rounded severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} severity="warning" className="mr-2" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} severity="danger" />
       </>
     );
   };
@@ -132,7 +133,7 @@ const ShiftsPage = () => {
             filterDisplay="menu"
             loading={loading}
             responsiveLayout="scroll"
-            emptyMessage="No customers found."
+            emptyMessage={EMPTY_TABLE_MESSAGE}
             header={renderHeader()}
           >
             <Column field="id" header="ID" style={{ minWidth: '12rem' }} />

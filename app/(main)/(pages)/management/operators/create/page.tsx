@@ -20,7 +20,7 @@ const CreateOperatorPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const { isSectionLoading, fetchSectionOptions, isProcessLoading, fetchProcessOptions } = useUtilityData();
-  const { saveOperator } = useOperatorPage();
+  const { saveOperator, isSaveLoading } = useOperatorPage();
 
   useEffect(() => {
     initData();
@@ -61,7 +61,7 @@ const CreateOperatorPage = () => {
                 >
                   <div className="flex mt-2">
                     <div className="ml-auto">
-                      <FormAction actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                      <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
                     </div>
                   </div>
                 </FormOperator>

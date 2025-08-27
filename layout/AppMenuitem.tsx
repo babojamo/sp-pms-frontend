@@ -61,7 +61,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
       {(!item!.to || item!.items) && item!.visible !== false ? (
         <a href={item!.url} onClick={(e) => itemClick(e)} className={classNames(item!.class, 'p-ripple')} target={item!.target} tabIndex={0}>
           <i className={classNames('layout-menuitem-icon', item!.icon)}></i>
-          <span className={(item?.disabled && `text-gray-300 `) + `layout-menuitem-text`}>{item!.label}</span>
+          <span className={(item?.disabled && `text-red-300 cursor-not-allowed `) + `layout-menuitem-text`}>{item!.label}</span>
           {item!.items && <i className="pi pi-fw pi-angle-down layout-submenu-toggler"></i>}
           <Ripple />
         </a>
@@ -77,7 +77,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
           tabIndex={0}
         >
           <i className={classNames('layout-menuitem-icon', item!.icon)}></i>
-          <span className={(item?.disabled && `text-gray-300 `) + `layout-menuitem-text`}>{item!.label}</span>
+          <span className={(item?.disabled && `text-red-300 cursor-not-allowed `) + `layout-menuitem-text`}>{item!.label}</span>
           {item!.items && <i className="pi pi-fw pi-angle-down layout-submenu-toggler"></i>}
           <Ripple />
         </Link>

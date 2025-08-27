@@ -36,7 +36,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
   const actionBodyTemplate = (rowData: StyleItem, options: { rowIndex: number }) => {
     return (
       <div className="flex gap-2">
-        <Button size="small" type="button" onClick={() => remove(options.rowIndex)} icon="pi pi-trash" rounded severity="danger" />
+        <Button size="small" type="button" onClick={() => remove(options.rowIndex)} icon="pi pi-trash" severity="danger" />
       </div>
     );
   };
@@ -44,7 +44,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
   const tableHeader = () => {
     return (
       <div className="flex align-items-center">
-        <p>Style Items</p>
+        <p>Planned Fabrics</p>
         <div className="ml-auto flex align-items-center gap-2">
           <Button severity="help" type="button" onClick={onAddOperatorClick} className="mt-2" icon="pi pi-plus" label="Add" />
         </div>
@@ -81,12 +81,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
             name={`style_fabrics.${options.rowIndex}.col_number` as const}
             rules={{ required: 'Col no is required' }}
             render={({ field, fieldState }) => (
-              <FormInputText
-                {...field}
-                placeholder="Number"
-                errorMessage={fieldState.error?.message}
-                isError={fieldState.error ? true : false}
-              />
+              <FormInputText {...field} placeholder="Number" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
             )}
           />
         )}

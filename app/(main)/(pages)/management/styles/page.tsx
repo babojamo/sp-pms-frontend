@@ -2,7 +2,6 @@
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
@@ -18,6 +17,11 @@ import React, { useEffect, useState } from 'react';
 import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
 import UploadStyles from './components/upload-styles';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
+import PageHeader from '@/app/components/page-header/component';
+import TableHeader from '@/app/components/table-header/component';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 
 interface StylePageState {
   deleteModalShow?: boolean;
@@ -38,7 +42,6 @@ const StylesPage = () => {
   const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
   const [buyerOptions, setBuyerOptions] = useState<SelectItem[]>([]);
   const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
-  const [globalFilterValue1, setGlobalFilterValue1] = useState('');
 
   const router = useRouter();
   const { fetchBuyersSelectOption } = useUtilityData();
@@ -48,14 +51,7 @@ const StylesPage = () => {
     setPageFilter({});
   };
 
-  const onGlobalFilterChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    let _filters1 = { ...filters1 };
-    (_filters1['global'] as any).value = value;
-
-    setFilters1(_filters1);
-    setGlobalFilterValue1(value);
-  };
+ 
 
   const handlePageFilter = (e: any) => {
     setPageFilter({ ...pageFilter, buyers: e.value });
@@ -63,20 +59,18 @@ const StylesPage = () => {
 
   const tableHeader = () => {
     return (
-      <div className="flex justify-content-start items-center">
-        <div>
-          <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearPageFilter} />
+      <TableHeader onClear={clearPageFilter}>
+        <div className="w-full md:w-20rem">
+          <FormMultiDropdown
+            value={pageFilter.buyers}
+            onChange={handlePageFilter}
+            filter
+            options={buyerOptions}
+            placeholder="Filter Buyer"
+            className="w-full"
+          />
         </div>
-        <div className='flex gap-2 ml-auto'>
-          <FormMultiDropdown value={pageFilter.buyers} onChange={handlePageFilter} filter={true} options={buyerOptions} placeholder='Filter Buyer' />
-          <div>
-            <span className="p-input-icon-left">
-              <i className="pi pi-search" />
-              <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Keyword Search" />
-            </span>
-          </div>
-        </div>
-      </div>
+      </TableHeader>
     );
   };
 
@@ -113,11 +107,9 @@ const StylesPage = () => {
     setSelectedStyles(data.value)
   }
 
- 
-
   return (
-    <PageCard title='Production Style Management'
-      toolbar={
+    <>
+      <PageHeader titles={['Management', 'Styles']}>
         <PageAction
           actionAdd={() => router.push(ROUTES.STYLES_CREATE)}
           actionUpload={() => setPageState({ ...pageState, showUploading: true })}
@@ -126,8 +118,7 @@ const StylesPage = () => {
             PageActions.UPLAOD
           ]}
         />
-      }
-    >
+      </PageHeader>
       <DataTable
         value={styles}
         paginator
@@ -136,9 +127,9 @@ const StylesPage = () => {
         rows={10}
         dataKey="id"
         filters={filters1}
-        filterDisplay="menu"
+        scrollable 
         loading={isFetchStyleLoading}
-        emptyMessage="No customers found."
+        emptyMessage={EMPTY_TABLE_MESSAGE}
         selectionMode={'checkbox'}
         selection={selectedStyles}
         onSelectionChange={onStyleSelectionChange}
@@ -155,8 +146,9 @@ const StylesPage = () => {
         <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
         <Column header="Japan Date" field="ship_date_from_japan" />
         <Column field="ship_date_from_cebu" header="Cebu Date" />
-        <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+        <Column header="Actions" body={actionBodyTemplate}></Column>
       </DataTable>
+   
       <Modal
         title='Delete Record'
         visible={pageState.deleteModalShow}
@@ -168,7 +160,8 @@ const StylesPage = () => {
       <SinglePrintBarcode style={selectedStyle} onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })} visible={pageState.showSinglePrintBarcode} />
       <UploadStyles onHide={() => setPageState({ ...pageState, showUploading: false })} visible={pageState.showUploading} />
       <MultiplePrintBarcode styles={selectedStyles} onHide={() => setPageState({ ...pageState, showMultiPrintBarcode: false })} visible={pageState.showMultiPrintBarcode} />
-    </PageCard>
+    </>
+
   );
 };
 

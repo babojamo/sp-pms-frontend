@@ -12,6 +12,10 @@ import { ROUTES } from '@/app/constants/routes';
 import Modal from '@/app/components/modal/component';
 import { Department } from '@/app/types/department';
 import { DepartmentService } from '@/app/services/DepartmentService';
+import PageHeader from '@/app/components/page-header/component';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import TableHeader from '@/app/components/table-header/component';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 
 interface DepartmentPageState {
   deleteModalShow?: boolean;
@@ -46,15 +50,7 @@ const DepartmentsPage = () => {
   };
 
   const renderHeader = () => {
-    return (
-      <div className="flex justify-content-between">
-        <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
-        <span className="p-input-icon-left">
-          <i className="pi pi-search" />
-          <InputText value={filter.keyword} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
-        </span>
-      </div>
-    );
+    return <TableHeader onClear={clearFilter1} />;
   };
 
   const fetchDepartments = useCallback(async () => {
@@ -86,18 +82,6 @@ const DepartmentsPage = () => {
     return formatDate(new Date(rowData.created_at));
   };
 
-  const statusBodyTemplate = (rowData: Demo.Customer) => {
-    return <span className={`department-badge status-${rowData.status}`}>{rowData.status}</span>;
-  };
-
-  const toolbars = () => {
-    return (
-      <>
-        <Button label="New" onClick={() => router.push(ROUTES.DEPARTMENTS.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
-      </>
-    );
-  };
-
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.DEPARTMENTS.EDIT}/${id}`);
   };
@@ -112,45 +96,43 @@ const DepartmentsPage = () => {
   const actionBodyTemplate = (rowData: Department) => {
     return (
       <>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} rounded severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
       </>
     );
   };
 
   return (
-    <div className="grid">
-      <div className="col-12">
-        <PageCard title="Departments Management" toolbar={toolbars()}>
-          <DataTable
-            value={departments}
-            paginator
-            className="p-datatable-gridlines"
-            showGridlines
-            rows={10}
-            dataKey="id"
-            filterDisplay="menu"
-            loading={loading}
-            responsiveLayout="scroll"
-            emptyMessage="No customers found."
-            header={renderHeader()}
-          >
-            <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
-            <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-            <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
-          </DataTable>
-          <Modal
-            title="Delete Record"
-            visible={pageState.deleteModalShow}
-            onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
-            confirmSeverity="danger"
-          >
-            <p>Are you sure you want to delete the record?</p>
-          </Modal>
-        </PageCard>
-      </div>
-    </div>
+    <>
+      <PageHeader titles={['Management', 'Departments']}>
+        <PageAction actionAdd={() => router.push(ROUTES.DEPARTMENTS.CREATE)} actions={[PageActions.ADD]} />
+      </PageHeader>
+      <DataTable
+        value={departments}
+        paginator
+        className="p-datatable-gridlines"
+        showGridlines
+        rows={10}
+        dataKey="id"
+        filterDisplay="menu"
+        loading={loading}
+        emptyMessage={EMPTY_TABLE_MESSAGE}
+        header={renderHeader()}
+      >
+        <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
+        <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
+        <Column header="Create At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
+        <Column body={actionBodyTemplate} header="Actions"></Column>
+      </DataTable>
+      <Modal
+        title="Delete Record"
+        visible={pageState.deleteModalShow}
+        onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
+        confirmSeverity="danger"
+      >
+        <p>Are you sure you want to delete the record?</p>
+      </Modal>
+    </>
   );
 };
 

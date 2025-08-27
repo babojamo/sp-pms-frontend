@@ -56,6 +56,11 @@ export default function useUtilityData() {
     }
   };
 
+  const fetchSectionSelectOption = async (): Promise<SelectItem[]> => {
+    const data = await fetchSections();
+    return data.map((b: Section) => ({ value: b.id, label: b.name }));
+  };
+
   const fetchBuyersSelectOption = async (): Promise<SelectItem[]> => {
     const data = await fetchBuyers();
     return data.map((b: string) => ({ value: b, label: b }));
@@ -85,6 +90,7 @@ export default function useUtilityData() {
     fetchSections,
     fetchSectionOptions,
     fetchProcesses,
+    fetchSectionSelectOption,
     fetchProcessOptions,
     isDepartmentLoading,
     isSectionLoading,

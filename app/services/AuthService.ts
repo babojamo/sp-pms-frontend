@@ -1,8 +1,8 @@
-import type { AxiosPromise } from 'axios';
-import apiClient from '../api/http-common';
 import { API_ROUTE_LOGIN, API_ROUTE_LOGOUT, API_ROUTE_PASSWORD_RESET, API_ROUTE_PASSWORD_RESET_REQUEST } from '../constants/api-routes';
-import TokenService from './TokenService';
 import { PUBLIC_ROUTES, ROUTES } from '../constants/routes';
+import apiClient from '../api/http-common';
+import TokenService from './TokenService';
+import type { AxiosPromise } from 'axios';
 
 class AuthService {
   getRegisterDropdowns() {

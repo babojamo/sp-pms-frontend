@@ -33,9 +33,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useLayoutEffect(() => {
     if (!loading && ((!user && !PUBLIC_ROUTES.includes(pathname)) || (user && pathname == ROUTES.ROUTE_PATH_LOGIN))) {
-      router.push('/');
+      router.push('/login');
     }
-  }, [user, router]);
+  }, [user, router, loading]);
 
   useEffect(() => {
     const loadUser = async () => {

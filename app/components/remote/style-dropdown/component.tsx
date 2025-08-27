@@ -7,12 +7,18 @@ import UtilityService from '@/app/services/UtilityService';
 interface RemoteStyleDropdownProps {
   value?: Option | null;
   onChange?: (val: Option | null) => void;
-  onSelect?(event: AutoCompleteSelectEvent<Option>): void
+  onSelect?(event: AutoCompleteSelectEvent<Option>): void;
   placeholder?: string;
   perPage?: number;
 }
 
-export default function RemoteStyleDropdown({ value = null, onChange, onSelect, placeholder = 'Find style...', perPage = 15 }: RemoteStyleDropdownProps) {
+export default function RemoteStyleDropdown({
+  value = null,
+  onChange,
+  onSelect,
+  placeholder = 'Find style...',
+  perPage = 15
+}: RemoteStyleDropdownProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const { showApiError } = useContext(LayoutContext);
 
@@ -51,12 +57,10 @@ export default function RemoteStyleDropdown({ value = null, onChange, onSelect, 
       dropdown
       placeholder={placeholder}
       field="label" // what to display
-  
       // Optional: custom item template
       itemTemplate={(opt) => <div className="flex items-center">{opt?.label}</div>}
       // Optional: selected chip/label
       selectedItemTemplate={(opt) => (opt ? opt.label : '')}
-  
     />
   );
 }

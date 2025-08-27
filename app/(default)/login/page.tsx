@@ -11,7 +11,6 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import AuthService from '@/app/services/AuthService';
 import { useAuth } from '@/app/contexts/useAuth';
 
 const schema = yup.object().shape({
@@ -23,7 +22,7 @@ const LoginPage = () => {
   const [checked, setChecked] = useState(false);
   const { layoutConfig } = useContext(LayoutContext);
 
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
   const {
     handleSubmit,
     formState: { errors },
@@ -81,7 +80,7 @@ const LoginPage = () => {
                 Forgot password?
               </a>
             </div>
-            <Button label="Sign In" className="w-full p-3 text-xl" type="submit"></Button>
+            <Button loading={loading} label="Sign In" className="w-full p-3 text-xl" type="submit"></Button>
           </form>
         </div>
       </div>

@@ -206,7 +206,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
         </div>
       </div>
       <FormStyleItemTable control={control} />
-      <div className='m-5'></div>
+      <div className="m-5"></div>
       <FormStyleFabricTable control={control} />
       {children}
     </form>

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '@/app/components/modal/component';
 import { OperatorProcess } from '@/app/types/operator';
-import { useSewingLineOperations } from '../hooks/useSewingLineOperations';
+import { useProductionOperations } from '../hooks/useProductionOperations';
 import ProcessOutputTable from '@/app/components/processes/ProcessOutputTable';
 
 interface OperatorOutputPageState {
@@ -32,7 +32,7 @@ const OperatorOutput = ({ operator_proceess_id, visible, onHide }: OperatorOutpu
   const [state, setState] = useState<OperatorOutputPageState>({});
   const [processOutputs, setProcessOutputs] = useState<OperatorProcess[]>([]);
 
-  const { fetchProcess } = useSewingLineOperations();
+  const { fetchProcess } = useProductionOperations();
 
   useEffect(() => {
     if (operator_proceess_id) getProcess();

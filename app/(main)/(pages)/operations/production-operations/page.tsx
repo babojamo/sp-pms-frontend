@@ -1,28 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import '@xyflow/react/dist/style.css';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { OperatorProcess } from '@/app/types/operator';
-import { Column } from 'primereact/column';
+import { useEffect, useState } from 'react';
+import { useProductionOperations } from './hooks/useProductionOperations';
+import FormCalendar from '@/app/components/form/calendar/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
 import FormInputText from '@/app/components/form/input-text/component';
-import FormCalendar from '@/app/components/form/calendar/component';
-import { Button } from 'primereact/button';
-import PageCard from '@/app/components/page-card/component';
-import moment from 'moment';
 import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
-import { useSewingLineOperations } from './hooks/useSewingLineOperations';
+import moment from 'moment';
 import OperatorOutput from './components/operator-output';
 
-interface SewingLineOperationPageState {
+interface ProductionOperationPageState {
   currentDate?: Date;
   showOperatorOutput?: boolean;
 }
 
-const SewingLineOperationPage = () => {
+const ProductionOperationPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [state, setState] = useState<SewingLineOperationPageState>({
+  const [state, setState] = useState<ProductionOperationPageState>({
     currentDate: new Date()
   });
 
@@ -36,24 +35,17 @@ const SewingLineOperationPage = () => {
     processOptions,
     shiftOptions,
     setEditingRows,
-    fetchProcesses,
     setSelectedOperatorProcess,
-    selectedOperatorProcess
-  } = useSewingLineOperations();
+    selectedOperatorProcess,
+    loadings,
+    initData
+  } = useProductionOperations();
 
   useEffect(() => {
-    if (fetchProcesses) {
-      fetchProcesses();
-    }
+    initData();
   }, []);
 
-  const title = () => {
-    return (
-      <>
-        Operators Process for <strong>{moment(state.currentDate).format('Y MMMM D')}</strong>
-      </>
-    );
-  };
+
 
   const onShowOutput = (rowData: OperatorProcess) => {
     setSelectedOperatorProcess(rowData);
@@ -77,16 +69,31 @@ const SewingLineOperationPage = () => {
   const actionBodyTemplate = (rowData: OperatorProcess) => {
     return (
       <div className="flex gap-2">
-        <Button size="small" icon="pi pi-eye" onClick={() => onShowOutput(rowData)} label="Show Ouputs" rounded severity="warning" />
-        <Button size="small" onClick={() => onProcessDeleteClick(rowData.id)} icon="pi pi-trash" rounded severity="danger" />
+        <Button size="small" icon="pi pi-eye" onClick={() => onShowOutput(rowData)} label="Show Ouputs" severity="warning" />
+        <Button size="small" onClick={() => onProcessDeleteClick(rowData.id)} icon="pi pi-trash" severity="danger" />
       </div>
     );
   };
 
-  const toolbar = () => {
+
+  const tableHeader = () => {
     return (
       <div className="flex flex-align-items-center">
-        <h3></h3>
+        <div className="flex align-items-center gap-2">
+          <FormMultiDropdown loading={loadings.fetchingSections} label="Sewing Line" filter={true} placeholder="Select" options={sewingLineOptions} />
+          <FormMultiDropdown loading={loadings.fetchingProcesses} label="Process" filter={true} placeholder="Select" options={processOptions} />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <div className="flex flex-align-items-center">
+        <p className="m-0 text-lg line-height-3 flex-1">
+          Production Process for <strong>{moment(state.currentDate).format('Y MMMM D')}</strong>
+        </p>
+
         <div className="flex align-items-center gap-2 ml-auto">
           <div className="mt-2">
             <Button severity="help" onClick={onPrevDateClick} icon="pi pi-arrow-left" />
@@ -99,22 +106,6 @@ const SewingLineOperationPage = () => {
           <Button severity="success" onClick={onAddOperatorClick} className="mt-2" icon="pi pi-save" label="Save" />
         </div>
       </div>
-    );
-  };
-
-  const tableHeader = () => {
-    return (
-      <div className="flex flex-align-items-center">
-        <div className="flex align-items-center gap-2">
-          <FormMultiDropdown label="Sewing Line" filter={true} placeholder="Select" options={sewingLineOptions} />
-          <FormMultiDropdown label="Process" filter={true} placeholder="Select" options={processOptions} />
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <PageCard title={title()} toolbar={toolbar()}>
       <DataTable
         rows={10}
         editMode="row"
@@ -147,8 +138,8 @@ const SewingLineOperationPage = () => {
         visible={state.showOperatorOutput}
         onHide={() => setState({ ...state, showOperatorOutput: false })}
       />
-    </PageCard>
+    </>
   );
 };
 
-export default SewingLineOperationPage;
+export default ProductionOperationPage;

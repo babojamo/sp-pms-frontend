@@ -35,7 +35,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
   const actionBodyTemplate = (rowData: StyleItem, options: { rowIndex: number }) => {
     return (
       <div className="flex gap-2">
-        <Button size="small" type="button" onClick={() => remove(options.rowIndex)} icon="pi pi-trash" rounded severity="danger" />
+        <Button size="small" type="button" onClick={() => remove(options.rowIndex)} icon="pi pi-trash" severity="danger" />
       </div>
     );
   };

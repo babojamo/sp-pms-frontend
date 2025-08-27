@@ -55,5 +55,5 @@ export interface StyleReleaseFabricPayload {
     style_planned_fabric_size_id?: string;
     quantity?: number;
     remarks?: string;
-  }[]
+  }[];
 }

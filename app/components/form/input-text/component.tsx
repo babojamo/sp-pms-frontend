@@ -31,7 +31,11 @@ const FormInputText = forwardRef<HTMLInputElement, FormInputTextProps>(
           inputClassName
         )}
       />
-       {isError && <div><small className="text-red-500">{errorMessage}</small></div>}
+      {isError && (
+        <div>
+          <small className="text-red-500">{errorMessage}</small>
+        </div>
+      )}
     </div>
   )
 );

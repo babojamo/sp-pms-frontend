@@ -4,14 +4,17 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import React, { useCallback, useEffect, useState } from 'react';
-import type { Demo } from '@/types';
-import PageCard from '@/app/components/page-card/component';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
-import Modal from '@/app/components/modal/component';
 import { Section } from '@/app/types/section';
 import { SectionService } from '@/app/services/SectionService';
+import { useRouter } from 'next/navigation';
+import Modal from '@/app/components/modal/component';
+import PageCard from '@/app/components/page-card/component';
+import React, { useCallback, useEffect, useState } from 'react';
+import PageHeader from '@/app/components/page-header/component';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import TableHeader from '@/app/components/table-header/component';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 
 interface SectionPageState {
   deleteModalShow?: boolean;
@@ -36,25 +39,8 @@ const SectionsPage = () => {
     fetchSections();
   };
 
-  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFilter({
-      ...filter,
-      keyword: value
-    });
-    fetchSections();
-  };
-
   const renderHeader = () => {
-    return (
-      <div className="flex justify-content-between">
-        <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter1} />
-        <span className="p-input-icon-left">
-          <i className="pi pi-search" />
-          <InputText value={filter.keyword} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
-        </span>
-      </div>
-    );
+    return <TableHeader onClear={clearFilter1} />;
   };
 
   const fetchSections = useCallback(async () => {
@@ -74,14 +60,6 @@ const SectionsPage = () => {
     });
   };
 
-  const toolbars = () => {
-    return (
-      <>
-        <Button label="New" onClick={() => router.push(ROUTES.SECTION.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
-      </>
-    );
-  };
-
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.SECTION.EDIT}/${id}`);
   };
@@ -96,45 +74,45 @@ const SectionsPage = () => {
   const actionBodyTemplate = (rowData: Section) => {
     return (
       <>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id ?? '')} rounded severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} rounded severity="danger" />
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id ?? '')} size="small" severity="warning" className="mr-2" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
       </>
     );
   };
 
   return (
-    <div className="grid">
-      <div className="col-12">
-        <PageCard title="Sections Management" toolbar={toolbars()}>
-          <DataTable
-            value={Sections}
-            paginator
-            className="p-datatable-gridlines"
-            showGridlines
-            rows={10}
-            dataKey="id"
-            filterDisplay="menu"
-            loading={loading}
-            emptyMessage="No customers found."
-            header={renderHeader()}
-          >
-            <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
-            <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-            <Column field="department.name" header="Department" style={{ minWidth: '12rem' }} />
-            <Column field="created_at" header="Created" style={{ minWidth: '12rem' }} />
-            <Column body={actionBodyTemplate}></Column>
-          </DataTable>
-          <Modal
-            title="Delete Record"
-            visible={pageState.deleteModalShow}
-            onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
-            confirmSeverity="danger"
-          >
-            <p>Are you sure you want to delete the record?</p>
-          </Modal>
-        </PageCard>
-      </div>
-    </div>
+    <>
+      <PageHeader titles={['Management', 'Sections']}>
+        <PageAction actionAdd={() => router.push(ROUTES.SECTION.CREATE)} actions={[PageActions.ADD]} />
+      </PageHeader>
+
+      <DataTable
+        value={Sections}
+        paginator
+        className="p-datatable-gridlines"
+        showGridlines
+        rows={10}
+        dataKey="id"
+        filterDisplay="menu"
+        loading={loading}
+        emptyMessage={EMPTY_TABLE_MESSAGE}
+        header={renderHeader()}
+      >
+        <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
+        <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
+        <Column field="department.name" header="Department" style={{ minWidth: '12rem' }} />
+        <Column field="created_at" header="Created" style={{ minWidth: '12rem' }} />
+        <Column header="Actions" body={actionBodyTemplate}></Column>
+      </DataTable>
+      <Modal
+        title="Delete Record"
+        visible={pageState.deleteModalShow}
+        onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
+        confirmSeverity="danger"
+      >
+        <p>Are you sure you want to delete the record?</p>
+      </Modal>
+    </>
   );
 };
 
