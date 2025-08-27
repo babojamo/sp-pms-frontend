@@ -11,12 +11,12 @@ export interface Operator {
 }
 
 export interface OperatorForm {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   section_id?: string;
   created_by?: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface OperatorProcess {

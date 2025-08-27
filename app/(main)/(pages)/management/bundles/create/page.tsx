@@ -2,7 +2,6 @@
 import React from 'react';
 import PageCard from '@/app/components/page-card/component';
 import { SelectItem } from 'primereact/selectitem';
-import FormBundle from '@/app/components/bundle/FormBundle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/constants/routes';
@@ -14,11 +13,10 @@ const CreateBundlePage = () => {
   return (
     <div className="grid">
       <div className="col-6">
-        <PageCard title="Create Bundle" toolbar={<PageAction actionBack={() => router.push(ROUTES.BUNDLES_INDEX)} actions={[PageActions.BACK]} />}>
+        <PageCard title="Create Bundle" toolbar={<PageAction actionBack={() => router.push(ROUTES.BUNDLES.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormBundle bundleOptions={bundleOptions} />
               </div>
             </div>
           </div>

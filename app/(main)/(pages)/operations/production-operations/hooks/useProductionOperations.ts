@@ -74,9 +74,6 @@ export const useProductionOperations = () => {
         operator: {
           id: '1',
           name: 'Operator 4',
-          line: {
-            name: 'SW 3'
-          }
         }
       }
     ]);
