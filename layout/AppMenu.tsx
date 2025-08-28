@@ -18,6 +18,7 @@ const AppMenu = () => {
       label: 'Operations',
       items: [
         { label: 'Production', icon: 'pi pi-fw pi-cog', to: '/operations/production-operations' },
+        { label: 'Release Bundles', icon: 'pi pi-fw pi-box', to: '/operations/bundles' },
         { label: 'Style Flow', icon: 'pi pi-fw pi-share-alt', to: '/operations/style-flow', disabled: true }
       ]
     },
@@ -25,7 +26,6 @@ const AppMenu = () => {
       label: 'Management',
       items: [
         { label: 'Styles', icon: 'pi pi-fw pi-clone', to: '/management/styles' },
-        { label: 'Release Bundles', icon: 'pi pi-fw pi-box', to: '/management/bundles' },
         { label: 'Departments', icon: 'pi pi-fw pi-building', to: '/management/departments' },
         { label: 'Sections', icon: 'pi pi-fw pi-sitemap', to: '/management/sections' },
         { label: 'Operators', icon: 'pi pi-fw pi-users', to: '/management/operators' },

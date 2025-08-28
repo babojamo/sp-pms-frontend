@@ -43,9 +43,12 @@ const Dashboard = () => {
   const { layoutConfig } = useContext(LayoutContext);
 
   const router = useRouter();
-  // Force the update temp
-  router.push('/management/styles');
 
+  useEffect(() => {
+    // Force the update temp
+    router.push('/management/styles');
+
+  }, [])
   const applyLightTheme = () => {
     const lineOptions: ChartOptions = {
       plugins: {

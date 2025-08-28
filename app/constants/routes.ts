@@ -41,9 +41,9 @@ export const ROUTES = {
     EDIT: '/management/shifts/edit'
   },
   BUNDLES: {
-    INDEX: '/management/bundles',
-    CREATE: '/management/bundles/create',
-    EDIT: '/management/bundles/edit'
+    INDEX: '/operations/bundles',
+    CREATE: '/operations/bundles/create',
+    EDIT: '/operations/bundles/edit'
   },
   ROUTE_PATH_LOGIN: '/login'
 };
