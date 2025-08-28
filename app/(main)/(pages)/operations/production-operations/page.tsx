@@ -17,6 +17,7 @@ import OperatorOutput from './components/operator-output';
 interface ProductionOperationPageState {
   currentDate?: Date;
   showOperatorOutput?: boolean;
+  selectedSection?: any;
 }
 
 const ProductionOperationPage = () => {
@@ -24,9 +25,9 @@ const ProductionOperationPage = () => {
   const [state, setState] = useState<ProductionOperationPageState>({
     currentDate: new Date()
   });
+ 
 
   const {
-    operatorsProcess,
     editingRows,
     onProcessDeleteClick,
     onAddOperatorClick,
@@ -79,7 +80,7 @@ const ProductionOperationPage = () => {
     return (
       <div className="flex flex-align-items-center">
         <div className="flex align-items-center gap-2">
-          <FormMultiDropdown loading={loadings.fetchingSections} label="Sewing Line" filter={true} placeholder="Select" options={sewingLineOptions} />
+          <FormDropdown loading={loadings.fetchingSections} label="Section" value={state.selectedSection} onChange={(option) => setState({...state, selectedSection: option.value})} filter={true} placeholder="Select" options={sewingLineOptions} />
           <FormMultiDropdown loading={loadings.fetchingProcesses} label="Process" filter={true} placeholder="Select" options={processOptions} />
         </div>
       </div>
@@ -111,7 +112,7 @@ const ProductionOperationPage = () => {
         editingRows={editingRows}
         onRowEditChange={(e: any) => setEditingRows(e.value)}
         header={tableHeader()}
-        value={operatorsProcess}
+        value={[]}
         loading={loading}
         paginator
         className="p-datatable-gridlines"

@@ -1,9 +1,17 @@
 import useUtilityData from '@/app/hooks/useUtilityData';
 import { OperatorProcessService } from '@/app/services/OperatorProcessService';
 import { OperatorProcess } from '@/app/types/operator';
+import { ProductionTrack } from '@/app/types/production-track';
 import { generateSimpleId } from '@/app/utils';
 import { SelectItem } from 'primereact/selectitem';
 import { useState } from 'react';
+
+
+interface TrackFilter {
+  date?: any;
+  section_id?: any;
+  process_id?: any;
+}
 
 export const useProductionOperations = () => {
   const [loadings, setLoadings] = useState<{
@@ -14,8 +22,12 @@ export const useProductionOperations = () => {
     fetchingSections: false
   });
 
+  const [trackFilter, setTrackFilter] = useState<TrackFilter>({});
+
   const [selectedOperatorProcess, setSelectedOperatorProcess] = useState<OperatorProcess | undefined>();
-  const [operatorsProcess, setOperatorsProcess] = useState<OperatorProcess[]>([]);
+  const [productionTracks, setProductionTracks] = useState<ProductionTrack[]>([]);
+
+
   const [operatorsOption, setOperatorsOption] = useState<SelectItem[]>([
     { label: 'Process 1', value: '1' },
     { label: 'Process 2', value: '2' }
@@ -65,12 +77,16 @@ export const useProductionOperations = () => {
       ...editingRows,
       [id]: true
     });
-    setOperatorsProcess([
-      ...operatorsProcess,
+    setProductionTracks([
+      ...productionTracks,
       {
         id,
         process_id: '1',
-        operator_id: '4',
+        section_id: trackFilter.section_id,
+        operator_id: '',
+        date: trackFilter.date,
+        target: 0,
+        remarks: '',
         operator: {
           id: '1',
           name: 'Operator 4',
@@ -80,7 +96,7 @@ export const useProductionOperations = () => {
   };
 
   const onProcessDeleteClick = (id: any) => {
-    setOperatorsProcess(operatorsProcess.filter((e) => e.id != id));
+    setProductionTracks(productionTracks.filter((e) => e.id != id));
   };
 
 
@@ -91,14 +107,14 @@ export const useProductionOperations = () => {
   return {
     onAddOperatorClick,
     onProcessDeleteClick,
-    setOperatorsProcess,
+    setProductionTracks,
     setEditingRows,
     setSelectedOperatorProcess,
     operatorsOption,
     processOptions,
     sewingLineOptions,
     shiftOptions,
-    operatorsProcess,
+    productionTracks,
     editingRows,
     selectedOperatorProcess,
     loadings,
