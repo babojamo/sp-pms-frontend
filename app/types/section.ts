@@ -13,6 +13,7 @@ export interface Section {
 export interface SectionForm {
   id: string;
   name: string;
+  department_id?: string;
   created_by?: string;
   created_at: string;
   updated_at: string;
