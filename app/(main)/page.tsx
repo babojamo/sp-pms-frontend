@@ -11,6 +11,7 @@ import { LayoutContext } from '../../layout/context/layoutcontext';
 import Link from 'next/link';
 import { Demo } from '@/types';
 import { ChartData, ChartOptions } from 'chart.js';
+import { useRouter } from 'next/navigation';
 
 const lineData: ChartData = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -40,6 +41,10 @@ const Dashboard = () => {
   const menu2 = useRef<Menu>(null);
   const [lineOptions, setLineOptions] = useState<ChartOptions>({});
   const { layoutConfig } = useContext(LayoutContext);
+
+  const router = useRouter();
+  // Force the update temp
+  router.push('/management/styles');
 
   const applyLightTheme = () => {
     const lineOptions: ChartOptions = {
