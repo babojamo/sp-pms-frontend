@@ -10,7 +10,8 @@ import { SectionService } from '@/app/services/SectionService';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/modal/component';
 import PageCard from '@/app/components/page-card/component';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import PageHeader from '@/app/components/page-header/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import TableHeader from '@/app/components/table-header/component';
@@ -18,6 +19,7 @@ import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 
 interface SectionPageState {
   deleteModalShow?: boolean;
+  deleteId?: string | number;
 }
 
 interface SearchFilter {
@@ -29,6 +31,7 @@ const SectionsPage = () => {
   const [Sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
 
@@ -64,10 +67,11 @@ const SectionsPage = () => {
     router.push(`${ROUTES.SECTION.EDIT}/${id}`);
   };
 
-  const onActionDeleteClick = () => {
+  const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
-      deleteModalShow: true
+      deleteModalShow: true,
+      deleteId: id, // <-- store the id
     });
   };
 
@@ -75,9 +79,20 @@ const SectionsPage = () => {
     return (
       <>
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id ?? '')} size="small" severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id ?? '')} size="small" severity="danger" />
       </>
     );
+  };
+
+  const handleDelete = async () => {
+    try {
+      await SectionService.deleteSection(pageState.deleteId);
+      showSuccess('Section offset successfully created.');
+      setPageState({ ...pageState, deleteModalShow: false });
+      fetchSections();
+    } catch (error: any) {
+      showApiError(error, 'Failed to process offset.');
+    }
   };
 
   return (
@@ -109,6 +124,7 @@ const SectionsPage = () => {
         visible={pageState.deleteModalShow}
         onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
         confirmSeverity="danger"
+        onConfirm={() => handleDelete()}
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>

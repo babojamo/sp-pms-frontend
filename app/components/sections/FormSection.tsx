@@ -9,6 +9,7 @@ import { SectionForm } from '@/app/types/section';
 import FormDropdown from '../form/dropdown/component';
 import { SelectItem } from 'primereact/selectitem';
 import { DefaultFormData } from '@/app/types/form';
+import { get } from 'http';
 
 interface FormSectionProps {
   value?: SectionForm;
@@ -25,8 +26,22 @@ interface FormData extends DefaultFormData {
   department_id?: string;
 }
 
-const FormSection = ({ onSubmit, children, departments, loading }: FormSectionProps) => {
-  const { control, handleSubmit } = useForm<FormData>();
+const FormSection = ({ onSubmit, children, departments, value, loading }: FormSectionProps) => {
+  const { control, handleSubmit, reset } = useForm<FormData>({
+    defaultValues: {
+      name: value?.name || '',
+      department_id: value?.department_id || '',
+    },
+  });
+
+  useEffect(() => {
+    if (value) {
+      reset({
+        name: value.name || '',
+        department_id: value.department_id || '',
+      });
+    }
+  }, [value, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

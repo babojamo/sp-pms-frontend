@@ -19,8 +19,23 @@ export const useSectionPage = () => {
     }
   };
 
+  const updateSection = async (id: string, e: DefaultFormData) => {
+    try {
+      setIsSaveLoading(true);
+      const response = await SectionService.updateSection(id, {
+        name: e.name,
+        department_id: e.department_id
+      });
+      return response;
+    } catch (error) {
+      setIsSaveLoading(false);
+      throw error;
+    }
+  };
+
   return {
     saveSection,
+    updateSection,
     isSaveLoading
   };
 };
