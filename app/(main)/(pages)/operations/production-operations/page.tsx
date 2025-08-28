@@ -33,7 +33,6 @@ const ProductionOperationPage = () => {
     operatorsOption,
     sewingLineOptions,
     processOptions,
-    shiftOptions,
     setEditingRows,
     setSelectedOperatorProcess,
     selectedOperatorProcess,

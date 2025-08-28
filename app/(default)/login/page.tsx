@@ -48,7 +48,7 @@ const LoginPage = () => {
           alt="Sun Pleats logo"
           className="mb-5 w-6rem flex-shrink-0"
         />
-        <div className="w-full surface-card py-8 px-5 sm:px-8" style={{ borderRadius: '53px' }}>
+        <div className="w-full surface-card py-8 px-5 sm:px-8" style={{ borderRadius: '10px' }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="username" className="block text-900 text-xl font-medium mb-2">
               {errors.username ? <span className="text-red-500">{errors.username?.message}</span> : `User`}
@@ -70,15 +70,13 @@ const LoginPage = () => {
               placeholder="Password"
               type="password"
               autoComplete="false"
-            ></InputText>
+              style={{ padding: '1rem' }}
+            />
             <div className="flex align-items-center justify-content-between mb-5 gap-5">
               <div className="flex align-items-center">
                 <Checkbox inputId="rememberme1" checked={checked} onChange={(e) => setChecked(e.checked ?? false)} className="mr-2"></Checkbox>
                 <label htmlFor="rememberme1">Remember me</label>
               </div>
-              <a className="font-medium no-underline ml-2 text-right cursor-pointer" style={{ color: 'var(--primary-color)' }}>
-                Forgot password?
-              </a>
             </div>
             <Button loading={loading} label="Sign In" className="w-full p-3 text-xl" type="submit"></Button>
           </form>
