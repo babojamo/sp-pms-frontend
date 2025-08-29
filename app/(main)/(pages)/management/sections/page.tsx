@@ -71,7 +71,7 @@ const SectionsPage = () => {
     setPageState({
       ...pageState,
       deleteModalShow: true,
-      deleteId: id, // <-- store the id
+      deleteId: id,
     });
   };
 
@@ -86,7 +86,7 @@ const SectionsPage = () => {
 
   const handleDelete = async () => {
     try {
-      await SectionService.deleteSection(pageState.deleteId);
+      await SectionService.deleteSection(pageState.deleteId as string);
       showSuccess('Section offset successfully created.');
       setPageState({ ...pageState, deleteModalShow: false });
       fetchSections();

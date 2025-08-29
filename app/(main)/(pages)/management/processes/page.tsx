@@ -3,21 +3,23 @@
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { InputText } from 'primereact/inputtext';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Process } from '@/app/types/process';
 import { ProcessService } from '@/app/services/ProcessService';
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/modal/component';
-import PageCard from '@/app/components/page-card/component';
-import React, { useCallback, useEffect, useState } from 'react';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import PageHeader from '@/app/components/page-header/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import PageHeader from '@/app/components/page-header/component';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 
 interface ProcessPageState {
   deleteModalShow?: boolean;
+  deleteId?: string | number;
 }
 
 interface SearchFilter {
@@ -29,6 +31,7 @@ const ProcessesPage = () => {
   const [processes, setProcesses] = useState<Process[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
 
@@ -81,10 +84,11 @@ const ProcessesPage = () => {
     router.push(`${ROUTES.PROCESS.EDIT}/${id}`);
   };
 
-  const onActionDeleteClick = () => {
+  const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
-      deleteModalShow: true
+      deleteModalShow: true,
+      deleteId: id,
     });
   };
 
@@ -92,9 +96,20 @@ const ProcessesPage = () => {
     return (
       <>
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} severity="danger" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} severity="danger" />
       </>
     );
+  };
+  
+  const handleDelete = async () => {
+    try {
+      await ProcessService.deleteProcess(pageState.deleteId as string);
+      showSuccess('Section offset successfully created.');
+      setPageState({ ...pageState, deleteModalShow: false });
+      fetchProcesses();
+    } catch (error: any) {
+      showApiError(error, 'Failed to process offset.');
+    }
   };
 
   return (
@@ -125,6 +140,7 @@ const ProcessesPage = () => {
         visible={pageState.deleteModalShow}
         onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
         confirmSeverity="danger"
+        onConfirm={() => handleDelete()}
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>

@@ -18,8 +18,22 @@ export const useProcessPage = () => {
     }
   };
 
+  const updateProcess = async (id: string, e: DefaultFormData) => {
+    try {
+      setIsSaveLoading(true);
+      const response = await ProcessService.updateProcess(id, {
+        name: e.name
+      });
+      return response;
+    } catch (error) {
+      setIsSaveLoading(false);
+      throw error;
+    }
+  };
+
   return {
     saveProcess,
+    updateProcess,
     isSaveLoading
   };
 };
