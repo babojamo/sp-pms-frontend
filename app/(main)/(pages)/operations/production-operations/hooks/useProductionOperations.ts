@@ -1,54 +1,82 @@
 import useUtilityData from '@/app/hooks/useUtilityData';
 import { OperatorProcessService } from '@/app/services/OperatorProcessService';
-import { OperatorProcess } from '@/app/types/operator';
+import { ProductionTrackService } from '@/app/services/ProductionTrackService';
+import { DefaultFormData } from '@/app/types/form';
+import { Operator, OperatorProcess } from '@/app/types/operator';
 import { ProductionTrack } from '@/app/types/production-track';
 import { generateSimpleId } from '@/app/utils';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import moment from 'moment';
 import { SelectItem } from 'primereact/selectitem';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 
 
 interface TrackFilter {
   date?: any;
   section_id?: any;
-  process_id?: any;
+  process_ids?: string[];
+}
+
+export interface FormData extends DefaultFormData {
+  tracks: ProductionTrack[];
 }
 
 export const useProductionOperations = () => {
   const [loadings, setLoadings] = useState<{
+    fetchingProcesses: boolean,
+    fetchingOperator: boolean,
     fetchingSections: boolean,
-    fetchingProcesses: boolean
+    storingTracks: boolean,
+    fetchingTracks: boolean,
+
   }>({
     fetchingProcesses: false,
-    fetchingSections: false
+    fetchingOperator: false,
+    fetchingSections: false,
+    storingTracks: false,
+    fetchingTracks: false,
+
   });
 
-  const [trackFilter, setTrackFilter] = useState<TrackFilter>({});
-
+  const [trackFilter, setTrackFilter] = useState<TrackFilter>({
+    date: new Date()
+  });
   const [selectedOperatorProcess, setSelectedOperatorProcess] = useState<OperatorProcess | undefined>();
   const [productionTracks, setProductionTracks] = useState<ProductionTrack[]>([]);
-
-
-  const [operatorsOption, setOperatorsOption] = useState<SelectItem[]>([
-    { label: 'Process 1', value: '1' },
-    { label: 'Process 2', value: '2' }
-  ]);
+  const [operators, setOperators] = useState<Operator[]>([]);
+  const [operatorsOption, setOperatorsOption] = useState<SelectItem[]>([]);
   const [processOptions, setProcessOptions] = useState<SelectItem[]>();
   const [sewingLineOptions, setSewingLineOptions] = useState<SelectItem[]>();
-
-  const [shiftOptions, setShiftOptions] = useState<SelectItem[]>([
-    { label: '08:00 - 18:00', value: '1' },
-    { label: '19:00 - 23:00', value: '2' }
-  ]);
-
-  const [editingRows, setEditingRows] = useState<Record<string, boolean>>({
-    '1': true,
-    '2': true,
-    '3': true,
-    '4': true
+  const [tracksToDelete, setTracksToDelete] = useState<string[]>([]);
+  const { showApiError, showSuccess } = useContext(LayoutContext);
+  const { fetchProcessOptions, fetchOperators, fetchSectionSelectOption } = useUtilityData();
+  const { control, handleSubmit, reset } = useForm<FormData>({
+    defaultValues: {
+      tracks: []
+    }
   });
 
-  const { fetchProcessOptions, fetchSectionSelectOption } = useUtilityData();
+  const { append, remove } = useFieldArray({
+    control,
+    name: 'tracks'
+  });
 
+  const items = useWatch({ control, name: 'tracks' }) || [];
+
+  const addNewItem = () => {
+    append(emptyItem());
+  };
+
+  const emptyItem = (): ProductionTrack => ({
+    id: generateSimpleId() + (items?.length + 1).toString(),
+    date: trackFilter.date,
+    section_id: trackFilter.section_id,
+    target: 0,
+    process_id: '',
+    operator_id: '',
+    remarks: ''
+  });
 
   const setLoading = (loading: any) => {
     setLoadings({
@@ -56,44 +84,96 @@ export const useProductionOperations = () => {
       ...loading
     })
   }
+
+  const getProcessOptions = (rowIndex: number): SelectItem[] => {
+    const option = items[rowIndex];
+    return (
+      operators
+        ?.find((s) => s.id == option.operator_id)
+        ?.operator_processes?.map(p => ({ value: p.process.id, label: p.process.name })) ?? []
+    );
+  };
+
+  const storeTracks = async (e: FormData) => {
+    try {
+      setLoading({ storingTracks: true });
+      await ProductionTrackService.storeTracks({
+        tracks: e.tracks.map(r => ({
+          id: r.id ?? false,
+          date: r.date,
+          section_id: trackFilter.section_id,
+          operator_id: r.operator_id ?? '',
+          process_id: r.process_id ?? '',
+          target: r.target,
+          remarks: r.remarks,
+        })),
+        delete_tracks: tracksToDelete,
+      })
+      showSuccess("Production process successfully saved.")
+    } catch (e: any) {
+      showApiError(e, 'Error saving production process.');
+    } finally {
+      setLoading({ storingTracks: false });
+    }
+  }
+
+  const fetchTracks = async () => {
+    try {
+      setLoading({ fetchingTracks: true });
+
+      const { data } = await ProductionTrackService.getTracks(trackFilter.section_id, {
+        track_date: moment(trackFilter.date).format("YYYY-MM-DD"),
+        process_ids: trackFilter.process_ids,
+      });
+
+      reset();
+
+      data.forEach(d => {
+        append({
+          id: d.id,
+          date: d.date,
+          section_id: d.section_id,
+          operator_id: d.operator_id,
+          process_id: d.process_id,
+          target: d.target,
+          remarks: d.remarks,
+        })
+      });
+      addNewItem();
+    } catch (e: any) {
+      showApiError(e, 'Error fetching production process.');
+    } finally {
+      setLoading({ fetchingTracks: false });
+
+    }
+  }
+
+  useEffect(() => {
+    if (trackFilter.section_id)
+      fetchTracks();
+  }, [trackFilter])
+
   const initData = () => {
 
-    setLoading({ fetchingProcesses: true, fetchingSections: true });
+    setLoading({ fetchingProcesses: true, fetchingOperator: true, fetchingSections: true, });
 
     // Fetch processes
     fetchProcessOptions().then((data) => {
       setProcessOptions(data);
     }).finally(() => setLoading({ fetchingProcesses: false }))
 
+    // Fetch processes
+    fetchOperators().then((data) => {
+      setOperators(data);
+      setOperatorsOption(data.map(r => ({ label: r.name, value: r.id })));
+    }).finally(() => setLoading({ fetchingOperator: false }))
+
+
     // Fetch sections
     fetchSectionSelectOption().then((data) => {
       setSewingLineOptions(data);
     }).finally(() => setLoading({ fetchingSections: false }))
   }
-
-  const onAddOperatorClick = () => {
-    const id = generateSimpleId();
-    setEditingRows({
-      ...editingRows,
-      [id]: true
-    });
-    setProductionTracks([
-      ...productionTracks,
-      {
-        id,
-        process_id: '1',
-        section_id: trackFilter.section_id,
-        operator_id: '',
-        date: trackFilter.date,
-        target: 0,
-        remarks: '',
-        operator: {
-          id: '1',
-          name: 'Operator 4',
-        }
-      }
-    ]);
-  };
 
   const onProcessDeleteClick = (id: any) => {
     setProductionTracks(productionTracks.filter((e) => e.id != id));
@@ -104,21 +184,34 @@ export const useProductionOperations = () => {
     return await OperatorProcessService.getProcess(process_id);
   };
 
+  const removeTrack = (track: ProductionTrack, rowIndex: number) => {
+    setTracksToDelete([...tracksToDelete, (track.id ?? '') ]);
+    remove(rowIndex);
+  }
+
   return {
-    onAddOperatorClick,
     onProcessDeleteClick,
     setProductionTracks,
-    setEditingRows,
     setSelectedOperatorProcess,
+    getProcessOptions,
+    handleSubmit,
+    reset,
+    removeTrack,
+    fetchProcess,
+    initData,
+    addNewItem,
+    storeTracks,
+    fetchTracks,
     operatorsOption,
-    processOptions,
     sewingLineOptions,
-    shiftOptions,
+    processOptions,
     productionTracks,
-    editingRows,
     selectedOperatorProcess,
     loadings,
-    fetchProcess,
-    initData
+    operators,
+    items,
+    control,
+    trackFilter,
+    setTrackFilter,
   };
 };

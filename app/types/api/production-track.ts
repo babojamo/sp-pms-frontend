@@ -1,19 +1,20 @@
 export interface StoreProductionTrackPayload {
   tracks: {
-    id?: number | boolean;
+    id?: string | boolean;
     date: string;
-    section_id: number;
-    operator_id: number;
-    process_id: number;
+    section_id: string;
+    operator_id: string;
+    process_id: string;
     target: number | string;
     remarks: string;
   }[];
+  delete_tracks?: string[];
 }
 
 
 
 export interface GetProductionTrackPayload {
   track_date: string;
-  process_id?: string;
+  process_ids?: any[];
 }
 

@@ -4,11 +4,13 @@ import { Department } from '../types/department';
 import { useState } from 'react';
 import { Section } from '../types/section';
 import { Process } from '../types/process';
+import { Operator } from '../types/operator';
 
 export default function useUtilityData() {
   const [isDepartmentLoading, setIsDepartmentLoading] = useState<boolean>(false);
   const [isSectionLoading, setIsSectionLoading] = useState<boolean>(false);
   const [isProcessLoading, setIsProcessLoading] = useState<boolean>(false);
+  const [isOperatorLoading, setIsOperatorLoading] = useState<boolean>(false);
 
   const fetchItemTypes = async (): Promise<string[]> => {
     const { data } = await UtilityService.itemTypes();
@@ -18,6 +20,18 @@ export default function useUtilityData() {
   const fetchBuyers = async (): Promise<string[]> => {
     const { data } = await UtilityService.buyers();
     return data;
+  };
+
+  const fetchOperators = async (): Promise<Operator[]> => {
+    try {
+      setIsOperatorLoading(true);
+      const { data } = await UtilityService.operators();
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsOperatorLoading(false);
+    }
   };
 
   const fetchDepartments = async (): Promise<Department[]> => {
@@ -81,6 +95,12 @@ export default function useUtilityData() {
     return data.map((d: Process) => ({ value: d.id, label: d.name }));
   };
 
+  const fetchOperatorOptions = async (): Promise<SelectItem[]> => {
+    const data = await fetchOperators();
+    return data.map((d: Operator) => ({ value: d.id, label: d.name }));
+  };
+
+
   return {
     fetchItemTypes,
     fetchBuyersSelectOption,
@@ -92,6 +112,9 @@ export default function useUtilityData() {
     fetchProcesses,
     fetchSectionSelectOption,
     fetchProcessOptions,
+    fetchOperators,
+    fetchOperatorOptions,
+    isOperatorLoading,
     isDepartmentLoading,
     isSectionLoading,
     isProcessLoading

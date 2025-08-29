@@ -5,9 +5,9 @@ import { Section } from "./section";
 export interface ProductionTrack {
     id?: string;
     date: string;
-    section_id: string;
-    operator_id: string;
-    process_id: string;
+    section_id?: string;
+    operator_id?: string;
+    process_id?: string;
     target: number | string;
     remarks: string;
     section?: Section;

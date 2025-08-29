@@ -1,3 +1,4 @@
+import { Process } from './process';
 import { Section } from './section';
 
 export interface Operator {
@@ -8,6 +9,9 @@ export interface Operator {
   created_by?: string;
   created_at?: string;
   updated_at?: string;
+  operator_processes?: {
+    process: Process
+  }[];
 }
 
 export interface OperatorForm {

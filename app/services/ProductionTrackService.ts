@@ -10,6 +10,6 @@ export const ProductionTrackService = {
     return apiClient.get(`${BASE_URL}/${section_id}`, { params });
   },
   storeTracks(payload: StoreProductionTrackPayload) {
-    return apiClient.post(`${BASE_URL}/`, payload);
+    return apiClient.post(`${BASE_URL}`, payload);
   }
 };
