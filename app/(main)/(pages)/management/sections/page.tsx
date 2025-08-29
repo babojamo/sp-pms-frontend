@@ -87,11 +87,11 @@ const SectionsPage = () => {
   const handleDelete = async () => {
     try {
       await SectionService.deleteSection(pageState.deleteId as string);
-      showSuccess('Section offset successfully created.');
+      showSuccess('Section successfully deleted.');
       setPageState({ ...pageState, deleteModalShow: false });
       fetchSections();
     } catch (error: any) {
-      showApiError(error, 'Failed to process offset.');
+      showApiError(error, 'Failed to delete section.');
     }
   };
 

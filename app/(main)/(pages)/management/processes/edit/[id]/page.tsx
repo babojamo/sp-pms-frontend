@@ -26,14 +26,14 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
   }, [params?.id]);
 
   const handleSubmit = async (data: ProcessForm) => {
-      try {
-        await updateProcess(params?.id as string, data);
-        showSuccess('Section offset successfully created.');
-      } catch (error: any) {
-        showApiError(error, 'Failed to process offset.');
-      }
-      console.log('handleSubmit', data);
-    };
+    try {
+      await updateProcess(params?.id as string, data);
+      showSuccess('Process successfully created.');
+    } catch (error: any) {
+      showApiError(error, 'Failed to save process.');
+    }
+    console.log('handleSubmit', data);
+  };
 
   useEffect(() => {
     if (params?.id) {

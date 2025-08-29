@@ -19,8 +19,23 @@ export const useProcessOffsetPage = () => {
     }
   };
 
+  const updateProcessOffset = async (id: string, e: DefaultFormData) => {
+    try {
+      setIsSaveLoading(true);
+      const response = await ProcessOffsetService.updateProcessOffset(id, {
+        name: e.name,
+        description: e.description
+      });
+      return response;
+    } catch (error) {
+      setIsSaveLoading(false);
+      throw error;
+    }
+  };
+
   return {
     saveProcessOffset,
+    updateProcessOffset,
     isSaveLoading
   };
 };

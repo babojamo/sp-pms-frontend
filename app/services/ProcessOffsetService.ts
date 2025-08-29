@@ -13,8 +13,12 @@ export const ProcessOffsetService = {
     return apiClient.post(`${BASE_URL}`, payload);
   },
   getProcessOffset(id: string) {
-    return fetch('/demo/data/process-offsets.json', { headers: { 'Cache-Control': 'no-cache' } })
-      .then((res) => res.json())
-      .then((d) => d.data.find((r: ProcessOffset) => r.id == id));
+    return apiClient.get(`${BASE_URL}/${id}`);
+  },
+  updateProcessOffset(id: string, payload: ProcessOffsetCreatePayload) {
+    return apiClient.put(`${BASE_URL}/${id}`, payload);
+  },
+  deleteProcessOffset(id: string) {
+    return apiClient.delete(`${BASE_URL}/${id}`);
   }
 };

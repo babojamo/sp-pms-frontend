@@ -104,11 +104,11 @@ const ProcessesPage = () => {
   const handleDelete = async () => {
     try {
       await ProcessService.deleteProcess(pageState.deleteId as string);
-      showSuccess('Section offset successfully created.');
+      showSuccess('Offset successfully deleted.');
       setPageState({ ...pageState, deleteModalShow: false });
       fetchProcesses();
     } catch (error: any) {
-      showApiError(error, 'Failed to process offset.');
+      showApiError(error, 'Failed to delete offset.');
     }
   };
 

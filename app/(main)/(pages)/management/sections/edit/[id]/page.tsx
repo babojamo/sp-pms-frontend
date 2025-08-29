@@ -33,9 +33,9 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
   const handleSubmit = async (data: SectionForm) => {
     try {
       await updateSection(params?.id as string, data);
-      showSuccess('Section offset successfully created.');
+      showSuccess('Section successfully created.');
     } catch (error: any) {
-      showApiError(error, 'Failed to process offset.');
+      showApiError(error, 'Failed to process section.');
     }
   };
   

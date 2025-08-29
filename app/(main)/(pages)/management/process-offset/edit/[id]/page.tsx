@@ -1,14 +1,16 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
-import PageCard from '@/app/components/page-card/component';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { ProcessOffsetForm } from '@/app/types/process-offset';
+import { ProcessOffsetService } from '@/app/services/ProcessOffsetService';
 import { ROUTES } from '@/app/constants/routes';
+import { SelectItem } from 'primereact/selectitem';
+import { useProcessOffsetPage } from '../../hooks/useProcessOffsetPage';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
-import { SelectItem } from 'primereact/selectitem';
-import { ProcessOffsetService } from '@/app/services/ProcessOffsetService';
-import { ProcessOffsetForm } from '@/app/types/process-offset';
 import FormProcessOffset from '@/app/components/process-offset/FormProcessOffset';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
 
 interface EditProcessOffsetPageProps {
   params?: { id: any };
@@ -16,11 +18,23 @@ interface EditProcessOffsetPageProps {
 
 const EditProcessOffsetPage = ({ params }: EditProcessOffsetPageProps) => {
   const router = useRouter();
+  const { updateProcessOffset, isSaveLoading } = useProcessOffsetPage();
   const [processOffset, setProcessOffset] = useState<ProcessOffsetForm | undefined>();
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const getProcessOffset = useCallback(async () => {
-    setProcessOffset((await ProcessOffsetService.getProcessOffset(params?.id)) as ProcessOffsetForm);
+    setProcessOffset((await ProcessOffsetService.getProcessOffset(params?.id)).data as ProcessOffsetForm);
   }, [params?.id]);
+
+  const handleSubmit = async (data: ProcessOffsetForm) => {
+    try {
+      await updateProcessOffset(params?.id as string, data);
+      showSuccess('Process offset successfully created.');
+    } catch (error: any) {
+      showApiError(error, 'Failed to save process offset.');
+    }
+    console.log('handleSubmit', data);
+  };
 
   useEffect(() => {
     if (params?.id) {
@@ -38,7 +52,7 @@ const EditProcessOffsetPage = ({ params }: EditProcessOffsetPageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormProcessOffset value={processOffset} onSubmit={() => {}}>
+                <FormProcessOffset value={processOffset} onSubmit={handleSubmit}>
                   <FormAction actionCancel={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
                 </FormProcessOffset>
               </div>
