@@ -16,10 +16,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import ReleaseBundleTable from '@/app/components/style/ReleaseBundleTable';
 import RemoteStyleDropdown from '@/app/components/remote/style-dropdown/component';
 import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
+import { createSolutionBuilderWithWatch } from 'typescript';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
   loadingSave?: boolean;
+  loadingFetch?: boolean;
 }
 
 interface SinglePrintBarcodeProps {
@@ -40,7 +42,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   const [sizesOptions, setSizesOptions] = useState<StylePlannedFabricSize[]>([]);
   const [isStyleSelected, setIsStyleSelected] = useState<boolean>(false);
   const [shouldPrint, setShouldPrint] = useState<boolean>(false);
-  const { showApiError, showSuccess, showWarning } = useContext(LayoutContext);
+  const { showApiError, showSuccess, showError } = useContext(LayoutContext);
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
 
   const emptyStyleItem = (): FormReleaseBundle => ({
@@ -59,7 +61,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const fetchPlannedFabics = async (id: string) => {
     try {
-      setState({ ...state, loadingSave: true });
+      setState({ ...state, loadingFetch: true });
       const { data: res } = await StyleService.getPlannedFabrics(id);
       setColorOptions(
         res.colors.map((col) => ({
@@ -76,14 +78,18 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       setIsStyleSelected(false);
       showApiError(e, 'Error loading the planned fabric options.');
     } finally {
-      setState({ ...state, loadingSave: false });
+      setState({ ...state, loadingFetch: false });
     }
   };
 
   const releaseFabrics = async (e: FormData) => {
+    if (shouldPrint && !selectedPrinter) {
+      showError("Please select a printer.")
+      return;
+    }
     try {
       setState({ ...state, loadingSave: true });
-      const fabrics = await StyleBundleService.releaseFabrics(
+      const { data: fabrics } = await StyleBundleService.releaseFabrics(
         {
           bundles: e.bundles?.map((r) => ({
             style_planned_fabric_id: r.style_planned_fabric_id,
@@ -96,17 +102,16 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       );
       showSuccess('Bundles has been succesfully released.');
 
-      console.log(fabrics);
 
       if (shouldPrint) {
-        //queuePrintStyleBundle()
+        queuePrintStyleBundle(selectedPrinter?.toString() ?? '', fabrics.flatMap(r => r.id?.toString() ?? ''))
       }
 
       // Reset and close modal
       resetAllState();
 
       setTimeout(() => {
-        setHide();
+        //setHide();
       }, 2000);
     } catch (e: any) {
       showApiError(e, 'Error releasing bundles.');
@@ -150,7 +155,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       <form onSubmit={handleSubmit(submit)}>
         <RemoteStyleDropdown value={selectedStyleNumber} onSelect={handleSelectedStyle} onChange={(option) => setSelectedStyleNumber(option)} />
         <div className="m-3"></div>
-        <ReleaseBundleTable control={control} sizesOptions={sizesOptions} disabled={!isStyleSelected} colorOptions={colorOptions} />
+        <ReleaseBundleTable loading={state.loadingFetch} control={control} sizesOptions={sizesOptions} disabled={!isStyleSelected} colorOptions={colorOptions} />
         <div className="m-5"></div>
         <div className="flex align-items-end mt-b-2">
           <div className="ml-auto">
@@ -159,6 +164,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
               value={selectedPrinter}
               onChange={(option: any) => setSelectedPrinter(option.value)}
               placeholder="Select"
+              filter
               options={printerOptions}
             />
             <Button

@@ -50,10 +50,12 @@ export interface StylePlannedFabricsResponse {
 }
 
 export interface StyleReleaseFabricPayload {
-  bundles: {
-    style_planned_fabric_id?: string;
-    style_planned_fabric_size_id?: string;
-    quantity?: number;
-    remarks?: string;
-  }[];
+  bundles:SaveStyleFabricPayload[];
+}
+
+export interface SaveStyleFabricPayload {
+  style_planned_fabric_id?: string;
+  style_planned_fabric_size_id?: string;
+  quantity?: number;
+  remarks?: string;
 }

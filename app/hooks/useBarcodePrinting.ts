@@ -44,7 +44,7 @@ export default function useBarcodePrinting() {
           model
         }))
       });
-      showWarning('Successfully added to barcode printing queue.');
+      showWarning('Successfully added to barcode printing queue.', 'Printing Queue');
     } catch (error) {
       showApiError(error, 'Error adding to barcode printing queue.');
     }

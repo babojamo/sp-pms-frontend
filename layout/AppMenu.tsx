@@ -36,7 +36,8 @@ const AppMenu = () => {
     {
       label: 'Reports',
       items: [
-        { label: 'Sewing Line Output', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true },
+        { label: 'Daily Line Output', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true },
+        { label: 'Monthly Line Output', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true },
         { label: 'Bundle Releases', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true },
         { label: 'System Audit', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true }
       ]

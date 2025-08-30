@@ -16,9 +16,10 @@ interface FormStyleProps {
   colorOptions?: SelectItem[];
   disabled?: boolean;
   sizesOptions?: StylePlannedFabricSize[];
+  loading?: boolean;
 }
 
-const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: FormStyleProps) => {
+const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], sizesOptions = [] }: FormStyleProps) => {
   const items = useWatch({ control, name: 'bundles' }) || [];
 
   const colors = React.useMemo(() => colorOptions, [colorOptions]);
@@ -58,8 +59,8 @@ const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: F
 
   const tableHeader = () => {
     return (
-      <div className="flex align-items-center">
-        <p>Bundle List</p>
+      <div className="grid align-items-center p-0">
+        <p className='m-0'>Bundle List</p>
         <div className="ml-auto flex align-items-center gap-2">
           <Button disabled={disabled} severity="help" type="button" onClick={onAddOperatorClick} className="mt-2" icon="pi pi-plus" label="Add" />
         </div>
@@ -84,6 +85,7 @@ const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: F
       className="p-datatable-gridlines"
       showGridlines
       dataKey="id"
+      loading={loading}
       filterDisplay="menu"
       emptyMessage="No record provided."
     >
@@ -102,6 +104,7 @@ const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: F
                 value={field.value}
                 onChange={(e: any) => field.onChange(e.value)}
                 placeholder="Select"
+                filter
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
                 options={colors}
@@ -122,6 +125,7 @@ const ReleaseBundleTable = ({ control, disabled, colorOptions, sizesOptions }: F
               <FormDropdown
                 {...field}
                 value={field.value}
+                filter
                 onChange={(e: any) => field.onChange(e.value)}
                 placeholder="Select"
                 errorMessage={fieldState.error?.message}

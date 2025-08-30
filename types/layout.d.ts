@@ -46,7 +46,7 @@ export interface LayoutContextProps {
   onMenuToggle: () => void;
   showProfileSidebar: () => void;
   showSuccess: (detail: string) => void;
-  showWarning: (detail: string) => void;
+  showWarning: (detail: string, summary?: string) => void;
   showError: (detail: string) => void;
   showApiError: (error?: AxiosError, summary: string) => void;
 }

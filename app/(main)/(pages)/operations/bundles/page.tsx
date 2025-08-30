@@ -12,11 +12,7 @@ import PageAction from '@/app/components/page-action/component';
 import Modal from '@/app/components/modal/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
 import BundleSinglePrintBarcode from '@/app/components/style/BundleSinglePrintBarcode';
-import { BundleService } from '@/app/services/BundleService';
-import { Bundle } from '@/app/types/bundles';
 import ReleaseBundles from './components/release-bundle';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
 import { StyleBundleService } from '@/app/services/StyleBundleService';
 import { StyleBundle } from '@/app/types/styles';
 import PageHeader from '@/app/components/page-header/component';
@@ -34,7 +30,7 @@ interface BundlePageState {
 
 const BundlesPage = () => {
   const [pageState, setPageState] = useState<BundlePageState>({});
-  const [selectedBundle, setSelectedBundle] = useState<Bundle | undefined>(undefined);
+  const [selectedBundle, setSelectedBundle] = useState<StyleBundle | undefined>(undefined);
 
   const [bundles, setBundles] = useState<StyleBundle[]>([]);
   const [selectedBundles, setSelectedBundles] = useState<StyleBundle[]>([]);
@@ -110,7 +106,7 @@ const BundlesPage = () => {
     });
   };
 
-  const onSinglePrintBarcodeClick = (data: Bundle) => {
+  const onSinglePrintBarcodeClick = (data: StyleBundle) => {
     setSelectedBundle(data);
     setPageState({
       ...pageState,
@@ -118,10 +114,10 @@ const BundlesPage = () => {
     });
   };
 
-  const actionBodyTemplate = (rowData: Bundle) => {
+  const actionBodyTemplate = (rowData: StyleBundle) => {
     return (
       <div className="flex flex-row gap-2">
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} size="small" severity="warning" />
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id?.toString() ?? '')} size="small" severity="warning" />
         <Button icon="pi pi-print" onClick={() => onSinglePrintBarcodeClick(rowData)} size="small" severity="help" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
       </div>
@@ -141,6 +137,7 @@ const BundlesPage = () => {
         <PageAction>
           <Button
             onClick={() => setPageState({ ...pageState, showRelease: true })}
+            size='small'
             label="Release Bundle"
             icon="pi pi-arrow-up-right"
             style={{ marginRight: '.5em' }}
@@ -148,6 +145,7 @@ const BundlesPage = () => {
           <Button
             onClick={() => setPageState({ ...pageState, showMultiPrintBarcode: true })}
             severity="help"
+            size='small'
             label="Print Barcodes"
             icon="pi pi-print"
             style={{ marginRight: '.5em' }}

@@ -100,7 +100,6 @@ const ProductionOperationPage = () => {
       <PageTile title="Production" icon="pi pi-fw pi-cog" url={ROUTES.PRODUCTION_OPERATION.INDEX} />
       <PageHeader titles={['Operations', 'Production', ` Production Process for ${moment(trackFilter.date).format('Y MMMM D')}`]}></PageHeader>
       <form onSubmit={handleSubmit(submit)}>
-        <h3 className="m-0 text-lg line-height-3 flex-1"></h3>
         <div className="flex flex-align-items-center">
           <div className="flex flex-align-items-center mr-2">
             <div className="flex align-items-center gap-2">
@@ -136,7 +135,7 @@ const ProductionOperationPage = () => {
           </div>
           <div className="flex align-items-center gap-2 ml-auto">
             <div className="mt-2">
-              <Button size="small" disabled={!trackFilter.section_id} severity="help" onClick={onPrevDateClick} icon="pi pi-arrow-left" />
+              <Button size="small" type='button' disabled={!trackFilter.section_id} severity="help" onClick={onPrevDateClick} icon="pi pi-arrow-left" />
             </div>
             <FormCalendar
               disabled={!trackFilter.section_id}
@@ -145,7 +144,7 @@ const ProductionOperationPage = () => {
               label="Operation Date"
             />
             <div className="mt-2">
-              <Button size="small" disabled={!trackFilter.section_id} severity="help" onClick={onNextDateClick} icon="pi pi-arrow-right" />
+              <Button size="small" type='button' disabled={!trackFilter.section_id} severity="help" onClick={onNextDateClick} icon="pi pi-arrow-right" />
             </div>
             <Button
               disabled={!trackFilter.section_id}
