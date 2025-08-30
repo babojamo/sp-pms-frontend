@@ -11,10 +11,7 @@ export interface StoreProductionTrackPayload {
   delete_tracks?: string[];
 }
 
-
-
 export interface GetProductionTrackPayload {
   track_date: string;
   process_ids?: any[];
 }
-

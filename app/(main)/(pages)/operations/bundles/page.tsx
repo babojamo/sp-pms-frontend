@@ -22,6 +22,7 @@ import { StyleBundle } from '@/app/types/styles';
 import PageHeader from '@/app/components/page-header/component';
 import TableHeader from '@/app/components/table-header/component';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import PageTile from '@/app/components/page-title/component';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -135,6 +136,7 @@ const BundlesPage = () => {
 
   return (
     <>
+      <PageTile title="Release Bundles" icon="pi pi-fw pi-box" url={ROUTES.BUNDLES.INDEX} />
       <PageHeader titles={['Management', 'Release Bundles']}>
         <PageAction>
           <Button

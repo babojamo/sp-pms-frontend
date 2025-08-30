@@ -14,6 +14,7 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import PageHeader from '@/app/components/page-header/component';
 import React, { useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
+import PageTile from '@/app/components/page-title/component';
 
 interface OperatorPageState {
   deleteModalShow?: boolean;
@@ -85,9 +86,9 @@ const OperatorsPage = () => {
   const actionBodyTemplate = (rowData: Operator) => {
     return (
       <>
-        <Button icon="pi pi-print" title='Print Process Codes' size='small' severity="success" className="mr-2" />
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size='small' severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size='small' severity="danger" />
+        <Button icon="pi pi-print" title="Print Process Codes" size="small" severity="success" className="mr-2" />
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
       </>
     );
   };
@@ -103,6 +104,7 @@ const OperatorsPage = () => {
 
   return (
     <>
+      <PageTile title="Operators" icon="pi pi-fw pi-users" url={ROUTES.OPERATORS.INDEX} />
       <PageHeader titles={['Management', 'Operators']}>
         <PageAction actionAdd={() => router.push(ROUTES.OPERATORS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
@@ -122,7 +124,7 @@ const OperatorsPage = () => {
         <Column field="section.name" header="Section" style={{ minWidth: '12rem' }} />
         <Column field="section.department.name" header="Department" style={{ minWidth: '12rem' }} />
         <Column field="line_id" header="Processes" style={{ minWidth: '12rem' }} />
-        <Column header="Create" field="created_at" dataType="created_at"   body={dateBodyTemplate} />
+        <Column header="Create" field="created_at" dataType="created_at" body={dateBodyTemplate} />
         <Column body={actionBodyTemplate} header="Actions"></Column>
       </DataTable>
       <Modal

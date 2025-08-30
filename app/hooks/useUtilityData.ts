@@ -100,7 +100,6 @@ export default function useUtilityData() {
     return data.map((d: Operator) => ({ value: d.id, label: d.name }));
   };
 
-
   return {
     fetchItemTypes,
     fetchBuyersSelectOption,

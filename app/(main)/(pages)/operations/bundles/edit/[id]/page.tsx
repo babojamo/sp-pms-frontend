@@ -18,8 +18,7 @@ const EditBundlePage = () => {
         <PageCard title="Edit Bundle" toolbar={<PageAction actionBack={() => router.push(ROUTES.BUNDLES.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">
-              <div className="p-fluid">
-              </div>
+              <div className="p-fluid"></div>
             </div>
           </div>
         </PageCard>

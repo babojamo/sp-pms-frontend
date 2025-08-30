@@ -49,7 +49,11 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormProcess value={process} onSubmit={handleSubmit}>
-                  <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.PROCESS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                  <FormAction
+                    loadingSave={isSaveLoading}
+                    actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
+                    actions={[FormActions.CANCEL, FormActions.UPDATE]}
+                  />
                 </FormProcess>
               </div>
             </div>

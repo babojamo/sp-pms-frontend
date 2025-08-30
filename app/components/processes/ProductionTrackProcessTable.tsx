@@ -26,11 +26,7 @@ const ProductionTrackProcessTable = ({ control, disabled, operatorsOption, opera
 
   const getProcessOptions = (rowIndex: number): SelectItem[] => {
     const option = items[rowIndex];
-    return (
-      operators
-        ?.find((s) => s.id == option.value)
-        ?.processes?.map(p => ({ value: p.id, label: p.name })) ?? []
-    );
+    return operators?.find((s) => s.id == option.value)?.processes?.map((p) => ({ value: p.id, label: p.name })) ?? [];
   };
 
   const emptyItem = (): FormReleaseBundle => ({
@@ -40,8 +36,6 @@ const ProductionTrackProcessTable = ({ control, disabled, operatorsOption, opera
     quantity: 0,
     remarks: ''
   });
-
-
 
   const { append, remove } = useFieldArray({
     control,
@@ -56,7 +50,6 @@ const ProductionTrackProcessTable = ({ control, disabled, operatorsOption, opera
       </div>
     );
   };
-
 
   const addNewItem = () => {
     append(emptyItem());

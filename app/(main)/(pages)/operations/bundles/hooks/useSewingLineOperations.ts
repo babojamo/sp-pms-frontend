@@ -48,7 +48,7 @@ export const useSewingLineOperations = () => {
         operator_id: '4',
         operator: {
           id: '1',
-          name: 'Operator 4',
+          name: 'Operator 4'
         }
       }
     ]);

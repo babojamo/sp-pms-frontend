@@ -16,6 +16,7 @@ import PageHeader from '@/app/components/page-header/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import TableHeader from '@/app/components/table-header/component';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import PageTile from '@/app/components/page-title/component';
 
 interface DepartmentPageState {
   deleteModalShow?: boolean;
@@ -36,15 +37,6 @@ const DepartmentsPage = () => {
   const clearFilter1 = () => {
     setFilter({
       keyword: ''
-    });
-    fetchDepartments();
-  };
-
-  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFilter({
-      ...filter,
-      keyword: value
     });
     fetchDepartments();
   };
@@ -104,6 +96,7 @@ const DepartmentsPage = () => {
 
   return (
     <>
+      <PageTile title="Departments" icon="pi pi-fw pi-building" url={ROUTES.DEPARTMENTS.INDEX} />
       <PageHeader titles={['Management', 'Departments']}>
         <PageAction actionAdd={() => router.push(ROUTES.DEPARTMENTS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>

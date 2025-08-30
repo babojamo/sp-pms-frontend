@@ -30,15 +30,15 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
   const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
       name: value?.name || '',
-      department_id: value?.department_id || '',
-    },
+      department_id: value?.department_id || ''
+    }
   });
 
   useEffect(() => {
     if (value) {
       reset({
         name: value.name || '',
-        department_id: value.department_id || '',
+        department_id: value.department_id || ''
       });
     }
   }, [value, reset]);

@@ -21,7 +21,7 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
   const router = useRouter();
   const [departmentOption, setDepartmentOption] = useState<SelectItem[]>([]);
   const { updateSection, isSaveLoading } = useSectionPage();
-  const [ section, setSection ] = useState<SectionForm | undefined>();
+  const [section, setSection] = useState<SectionForm | undefined>();
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { fetchDepartmentOptions, isDepartmentLoading } = useUtilityData();
 
@@ -38,7 +38,7 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
       showApiError(error, 'Failed to process section.');
     }
   };
-  
+
   const initData = async () => {
     setDepartmentOption(await fetchDepartmentOptions());
   };
@@ -61,8 +61,11 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormSection value={section} onSubmit={handleSubmit} loading={{ deparmentField: isDepartmentLoading }} departments={departmentOption}>
-                  <FormAction 
-                        loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.SECTION.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                  <FormAction
+                    loadingSave={isSaveLoading}
+                    actionCancel={() => router.push(ROUTES.SECTION.INDEX)}
+                    actions={[FormActions.CANCEL, FormActions.UPDATE]}
+                  />
                 </FormSection>
               </div>
             </div>

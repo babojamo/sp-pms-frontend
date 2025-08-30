@@ -14,6 +14,7 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import PageHeader from '@/app/components/page-header/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
+import PageTile from '@/app/components/page-title/component';
 
 interface ProcessOffsetPageState {
   deleteModalShow?: boolean;
@@ -60,19 +61,11 @@ const ProcessOffsetsPage = () => {
     });
   };
 
-  const toolbars = () => {
-    return (
-      <>
-        <Button label="New" onClick={() => router.push(ROUTES.PROCESS_OFFSETS.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
-      </>
-    );
-  };
-
   const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
       deleteModalShow: true,
-      deleteId: id,
+      deleteId: id
     });
   };
 
@@ -92,7 +85,7 @@ const ProcessOffsetsPage = () => {
 
   const handleDelete = async () => {
     try {
-      await ProcessOffsetService.deleteProcessOffset(pageState.deleteId as string); 
+      await ProcessOffsetService.deleteProcessOffset(pageState.deleteId as string);
       showSuccess('Process offset successfully deleted.');
       setPageState({ ...pageState, deleteModalShow: false });
       fetchProcessOffsets();
@@ -103,6 +96,7 @@ const ProcessOffsetsPage = () => {
 
   return (
     <>
+      <PageTile title="Process Offset" icon="pi pi-fw pi-sliders-h" url={ROUTES.PROCESS_OFFSETS.INDEX} />
       <PageHeader titles={['Management', 'Process Offsets']}>
         <PageAction actionAdd={() => router.push(ROUTES.PROCESS_OFFSETS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
@@ -130,7 +124,7 @@ const ProcessOffsetsPage = () => {
         visible={pageState.deleteModalShow}
         onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
         confirmSeverity="danger"
-        onConfirm={handleDelete} 
+        onConfirm={handleDelete}
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>

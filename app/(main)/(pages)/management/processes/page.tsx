@@ -16,6 +16,7 @@ import PageCard from '@/app/components/page-card/component';
 import PageHeader from '@/app/components/page-header/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
+import PageTile from '@/app/components/page-title/component';
 
 interface ProcessPageState {
   deleteModalShow?: boolean;
@@ -72,14 +73,6 @@ const ProcessesPage = () => {
     });
   };
 
-  const toolbars = () => {
-    return (
-      <>
-        <Button label="New" onClick={() => router.push(ROUTES.PROCESS.CREATE)} icon="pi pi-plus" style={{ marginRight: '.5em' }} />
-      </>
-    );
-  };
-
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.PROCESS.EDIT}/${id}`);
   };
@@ -88,7 +81,7 @@ const ProcessesPage = () => {
     setPageState({
       ...pageState,
       deleteModalShow: true,
-      deleteId: id,
+      deleteId: id
     });
   };
 
@@ -100,7 +93,7 @@ const ProcessesPage = () => {
       </>
     );
   };
-  
+
   const handleDelete = async () => {
     try {
       await ProcessService.deleteProcess(pageState.deleteId as string);
@@ -114,6 +107,7 @@ const ProcessesPage = () => {
 
   return (
     <>
+      <PageTile title="Processes" icon="pi pi-fw pi-cog" url={ROUTES.PROCESS.INDEX} />
       <PageHeader titles={['Management', 'Processes']}>
         <PageAction actionAdd={() => router.push(ROUTES.PROCESS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>

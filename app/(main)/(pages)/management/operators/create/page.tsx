@@ -61,7 +61,11 @@ const CreateOperatorPage = () => {
                 >
                   <div className="flex mt-2">
                     <div className="ml-auto">
-                      <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.SAVE]}
+                      />
                     </div>
                   </div>
                 </FormOperator>

@@ -22,6 +22,7 @@ import { InputIcon } from 'primereact/inputicon';
 import PageHeader from '@/app/components/page-header/component';
 import TableHeader from '@/app/components/table-header/component';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import PageTile from '@/app/components/page-title/component';
 
 interface StylePageState {
   deleteModalShow?: boolean;
@@ -51,7 +52,7 @@ const StylesPage = () => {
     setPageFilter({});
   };
 
- 
+
 
   const handlePageFilter = (e: any) => {
     setPageFilter({ ...pageFilter, buyers: e.value });
@@ -109,6 +110,7 @@ const StylesPage = () => {
 
   return (
     <>
+      <PageTile title='Styles' icon='pi pi-fw pi-clone' url={ROUTES.STYLES_INDEX} />
       <PageHeader titles={['Management', 'Styles']}>
         <PageAction
           actionAdd={() => router.push(ROUTES.STYLES_CREATE)}
@@ -127,7 +129,7 @@ const StylesPage = () => {
         rows={10}
         dataKey="id"
         filters={filters1}
-        scrollable 
+        scrollable
         loading={isFetchStyleLoading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         selectionMode={'checkbox'}
@@ -148,7 +150,7 @@ const StylesPage = () => {
         <Column field="ship_date_from_cebu" header="Cebu Date" />
         <Column header="Actions" body={actionBodyTemplate}></Column>
       </DataTable>
-   
+
       <Modal
         title='Delete Record'
         visible={pageState.deleteModalShow}

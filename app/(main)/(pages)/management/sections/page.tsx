@@ -16,6 +16,7 @@ import PageHeader from '@/app/components/page-header/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import TableHeader from '@/app/components/table-header/component';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import PageTile from '@/app/components/page-title/component';
 
 interface SectionPageState {
   deleteModalShow?: boolean;
@@ -71,7 +72,7 @@ const SectionsPage = () => {
     setPageState({
       ...pageState,
       deleteModalShow: true,
-      deleteId: id,
+      deleteId: id
     });
   };
 
@@ -97,6 +98,7 @@ const SectionsPage = () => {
 
   return (
     <>
+      <PageTile title="Sections" icon="pi pi-fw pi-sitemap" url={ROUTES.SECTION.INDEX} />
       <PageHeader titles={['Management', 'Sections']}>
         <PageAction actionAdd={() => router.push(ROUTES.SECTION.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>

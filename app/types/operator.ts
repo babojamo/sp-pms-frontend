@@ -10,7 +10,7 @@ export interface Operator {
   created_at?: string;
   updated_at?: string;
   operator_processes?: {
-    process: Process
+    process: Process;
   }[];
 }
 

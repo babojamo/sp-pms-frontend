@@ -45,6 +45,9 @@ export const ROUTES = {
     CREATE: '/operations/bundles/create',
     EDIT: '/operations/bundles/edit'
   },
+  PRODUCTION_OPERATION: {
+    INDEX: 'production-operations'
+  },
   ROUTE_PATH_LOGIN: '/login'
 };
 
