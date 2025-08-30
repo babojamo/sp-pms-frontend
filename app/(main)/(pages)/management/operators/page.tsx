@@ -15,6 +15,7 @@ import PageHeader from '@/app/components/page-header/component';
 import React, { useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import PageTile from '@/app/components/page-title/component';
+import OperatorPrintBarcode from '@/app/components/operators/OperatorPrintBarcode';
 
 interface OperatorPageState {
   deleteModalShow?: boolean;
@@ -27,8 +28,10 @@ interface SearchFilter {
 const OperatorsPage = () => {
   const [pageState, setPageState] = useState<OperatorPageState>({});
   const [operators, setOperators] = useState<Operator[]>([]);
+  const [selectedOperator, setSelectedOperator] = useState<Operator>();
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
+  const [showPrint, setShowPrint] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -69,7 +72,12 @@ const OperatorsPage = () => {
   };
 
   const dateBodyTemplate = (rowData: Operator) => {
-    return <span title={formatDate(new Date(rowData.created_at ?? ''))}>{rowData.created_by}</span>;
+    return <span title={formatDate(new Date(rowData.created_at ?? ''))}>{formatDate(new Date(rowData.created_at ?? ''))}</span>;
+  };
+
+
+  const processTemplate = (rowData: Operator) => {
+    return rowData.operator_processes?.flatMap(r => r.process.name)?.join(", ");
   };
 
   const onActionEditClick = (id: string | number) => {
@@ -86,21 +94,17 @@ const OperatorsPage = () => {
   const actionBodyTemplate = (rowData: Operator) => {
     return (
       <>
-        <Button icon="pi pi-print" title="Print Process Codes" size="small" severity="success" className="mr-2" />
+        <Button icon="pi pi-print" onClick={() => {
+          setSelectedOperator(rowData);
+          setShowPrint(true);
+        }} title="Print Process Codes" size="small" severity="success" className="mr-2" />
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
       </>
     );
   };
 
-  const nameTemplate = (row: Operator) => {
-    return (
-      <span>
-        <DataStatusIcon className="mr-2" status="active" />
-        {row.name}
-      </span>
-    );
-  };
+
 
   return (
     <>
@@ -120,10 +124,11 @@ const OperatorsPage = () => {
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
       >
-        <Column header="Name" style={{ minWidth: '10rem' }} body={nameTemplate} />
+        <Column header="ID" field='id' />
+        <Column header="Name" field='name' style={{ minWidth: '10rem' }} />
         <Column field="section.name" header="Section" style={{ minWidth: '12rem' }} />
         <Column field="section.department.name" header="Department" style={{ minWidth: '12rem' }} />
-        <Column field="line_id" header="Processes" style={{ minWidth: '12rem' }} />
+        <Column field="line_id" header="Processes" style={{ minWidth: '12rem' }} body={processTemplate} />
         <Column header="Create" field="created_at" dataType="created_at" body={dateBodyTemplate} />
         <Column body={actionBodyTemplate} header="Actions"></Column>
       </DataTable>
@@ -135,6 +140,7 @@ const OperatorsPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
+      <OperatorPrintBarcode visible={showPrint} operator={selectedOperator} onHide={() => setShowPrint(false)} />
     </>
   );
 };

@@ -15,10 +15,12 @@ import PageHeader from '@/app/components/page-header/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import PageTile from '@/app/components/page-title/component';
+import ProcessOffsetPrintBarcode from '@/app/components/process-offset/ProcessOffsetPrintBarcode';
 
 interface ProcessOffsetPageState {
   deleteModalShow?: boolean;
   deleteId?: string | number;
+  showPrint?: boolean;
 }
 
 interface SearchFilter {
@@ -28,6 +30,8 @@ interface SearchFilter {
 const ProcessOffsetsPage = () => {
   const [pageState, setPageState] = useState<ProcessOffsetPageState>({});
   const [processOffsets, setProcessOffsets] = useState<ProcessOffset[]>([]);
+  const [selectedOffset, setSelectedOffset] = useState<ProcessOffset>();
+
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
   const router = useRouter();
@@ -76,7 +80,10 @@ const ProcessOffsetsPage = () => {
   const actionBodyTemplate = (rowData: ProcessOffset) => {
     return (
       <>
-        <Button icon="pi pi-print" title="Print Barcode" size="small" severity="success" className="mr-2" />
+        <Button icon="pi pi-print" onClick={() => {
+          setSelectedOffset(rowData);
+          setPageState({ ...pageState, showPrint: true })
+        }} title="Print Barcode" size="small" severity="success" className="mr-2" />
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
       </>
@@ -128,6 +135,10 @@ const ProcessOffsetsPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
+      <ProcessOffsetPrintBarcode
+        visible={pageState.showPrint}
+        offset={selectedOffset}
+        onHide={() => setPageState({ ...pageState, showPrint: false })} />
     </>
   );
 };
