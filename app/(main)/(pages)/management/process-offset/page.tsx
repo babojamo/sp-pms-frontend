@@ -80,10 +80,17 @@ const ProcessOffsetsPage = () => {
   const actionBodyTemplate = (rowData: ProcessOffset) => {
     return (
       <>
-        <Button icon="pi pi-print" onClick={() => {
-          setSelectedOffset(rowData);
-          setPageState({ ...pageState, showPrint: true })
-        }} title="Print Barcode" size="small" severity="success" className="mr-2" />
+        <Button
+          icon="pi pi-print"
+          onClick={() => {
+            setSelectedOffset(rowData);
+            setPageState({ ...pageState, showPrint: true });
+          }}
+          title="Print Barcode"
+          size="small"
+          severity="success"
+          className="mr-2"
+        />
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
       </>
@@ -138,7 +145,8 @@ const ProcessOffsetsPage = () => {
       <ProcessOffsetPrintBarcode
         visible={pageState.showPrint}
         offset={selectedOffset}
-        onHide={() => setPageState({ ...pageState, showPrint: false })} />
+        onHide={() => setPageState({ ...pageState, showPrint: false })}
+      />
     </>
   );
 };

@@ -21,7 +21,7 @@ interface EditBundlePageState {
   loadings?: {
     fetching?: boolean;
     saving?: boolean;
-  }
+  };
 }
 
 const EditBundlePage = ({ params }: EditBundlePageProps) => {
@@ -37,15 +37,14 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
     remarks: ''
   });
 
-  const { showSuccess, showApiError, } = useContext(LayoutContext);
+  const { showSuccess, showApiError } = useContext(LayoutContext);
 
   const setLoading = (loadings: any = {}) => {
-    setState({ ...state, loadings: { ...state.loadings, ...loadings } })
-  }
+    setState({ ...state, loadings: { ...state.loadings, ...loadings } });
+  };
 
   const fetchPlannedFabics = async (id: string) => {
     try {
-
       setLoading({ fetching: true });
       const { data: res } = await StyleService.getPlannedFabrics(id);
       setColorOptions(
@@ -55,7 +54,6 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
         }))
       );
       setSizesOptions(res.sizes);
-
     } catch (e: any) {
       showApiError(e, 'Error loading the planned fabric options.');
     } finally {
@@ -70,10 +68,9 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
         style_planned_fabric_id: data.style_planned_fabric_id,
         style_planned_fabric_size_id: data.style_planned_fabric_size_id,
         quantity: data.quantity,
-        remarks: data.remarks,
+        remarks: data.remarks
       });
-      showSuccess("Bundle successfully saved.");
-
+      showSuccess('Bundle successfully saved.');
     } catch (e: any) {
       showApiError(e, 'Error update record.');
     } finally {
@@ -93,25 +90,23 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
     }
   }, [params?.id]);
 
-
   useEffect(() => {
     if (styleBundle) {
       setFormData({
         style_planned_fabric_id: styleBundle?.style_planned_fabric_id.toString() ?? '',
         style_planned_fabric_size_id: styleBundle?.style_planned_fabric_size_id.toString() ?? '',
         quantity: styleBundle.quantity,
-        remarks: styleBundle.remarks ?? '',
+        remarks: styleBundle.remarks ?? ''
       });
       fetchPlannedFabics(styleBundle.style_id.toString() ?? '');
     }
-  }, [styleBundle])
+  }, [styleBundle]);
 
   useEffect(() => {
     if (params?.id) {
       fetchStyleBundle();
     }
-
-  }, [params?.id])
+  }, [params?.id]);
 
   return (
     <div className="grid">

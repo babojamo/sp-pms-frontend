@@ -135,7 +135,14 @@ const ProductionOperationPage = () => {
           </div>
           <div className="flex align-items-center gap-2 ml-auto">
             <div className="mt-2">
-              <Button size="small" type='button' disabled={!trackFilter.section_id} severity="help" onClick={onPrevDateClick} icon="pi pi-arrow-left" />
+              <Button
+                size="small"
+                type="button"
+                disabled={!trackFilter.section_id}
+                severity="help"
+                onClick={onPrevDateClick}
+                icon="pi pi-arrow-left"
+              />
             </div>
             <FormCalendar
               disabled={!trackFilter.section_id}
@@ -144,7 +151,14 @@ const ProductionOperationPage = () => {
               label="Operation Date"
             />
             <div className="mt-2">
-              <Button size="small" type='button' disabled={!trackFilter.section_id} severity="help" onClick={onNextDateClick} icon="pi pi-arrow-right" />
+              <Button
+                size="small"
+                type="button"
+                disabled={!trackFilter.section_id}
+                severity="help"
+                onClick={onNextDateClick}
+                icon="pi pi-arrow-right"
+              />
             </div>
             <Button
               disabled={!trackFilter.section_id}

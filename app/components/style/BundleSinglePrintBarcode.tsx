@@ -52,7 +52,7 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
         { name: 'Size', value: bundle.style_planned_fabric_size?.size_number.toString() ?? '' },
         { name: 'Release Quantity', value: bundle.quantity.toString() ?? '' }
       ]);
-      setBarcode(`${bundle?.style?.style_number ?? ''}-${bundle?.style_planned_fabric_size?.size_number}-${bundle?.bundle_number}`)
+      setBarcode(`${bundle?.style?.style_number ?? ''}-${bundle?.style_planned_fabric_size?.size_number}-${bundle?.bundle_number}`);
     }
   }, [bundle]);
 
@@ -63,7 +63,7 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
   const hide = () => {
     setState({ ...state, show: false });
     if (onHide) onHide();
-  }
+  };
 
   const initData = async () => {
     setPrinterOptions(await fetchPrintersSelectOptions());
@@ -86,7 +86,7 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
   const print = async () => {
     setState({ ...state, saving: true });
     if (!selectedPrinter) {
-      showError("Please select a printer.")
+      showError('Please select a printer.');
       return;
     }
     await queuePrintStyleBundle(selectedPrinter?.toString() ?? '', [bundle?.id?.toString() ?? '']);

@@ -35,25 +35,24 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
   const { showError } = useContext(LayoutContext);
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
 
-
   useEffect(() => {
     setState({ ...state, show: visible });
     if (visible) initData();
   }, [visible]);
 
-
   useEffect(() => {
     if (operator) {
-      setDetails(operator.operator_processes?.map(r => ({
-        name: r.process.name,
-        value: r.process.id,
-        checked: false,
-      })) ?? []);
+      setDetails(
+        operator.operator_processes?.map((r) => ({
+          name: r.process.name,
+          value: r.process.id,
+          checked: false
+        })) ?? []
+      );
 
-      console.log(operator)
+      console.log(operator);
     }
   }, [operator]);
-
 
   const onHideModal = () => {
     setState({ ...state, show: false });
@@ -64,14 +63,11 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
     setPrinterOptions(await fetchPrintersSelectOptions());
   };
 
-
   const onProcessChange = (e: any) => {
     let _selectedProcesses = [...selectedProcesses];
 
-    if (e.checked)
-      _selectedProcesses.push(e.value);
-    else
-      _selectedProcesses = _selectedProcesses.filter(category => category.value !== e.value.value);
+    if (e.checked) _selectedProcesses.push(e.value);
+    else _selectedProcesses = _selectedProcesses.filter((category) => category.value !== e.value.value);
 
     setSelectedProcesses(_selectedProcesses);
   };
@@ -79,7 +75,7 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
   const print = async () => {
     setState({ ...state, saving: true });
     if (!selectedPrinter) {
-      showError("Please select a printer.")
+      showError('Please select a printer.');
       return;
     }
     // @NOTE: Change to operator printing
@@ -88,18 +84,26 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
   };
 
   return (
-    <Modal title="Print Operator Process Barcode" width='50vh' visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
+    <Modal title="Print Operator Process Barcode" width="50vh" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
       <div className="flex flex-column gap-2">
         {details.map((category, index) => {
           return (
             <div key={index} className="flex align-items-center">
-              <Checkbox inputId={`process-${index}`} name="category" value={category} onChange={onProcessChange} checked={selectedProcesses.some((item) => item.value === category.value)} />
-              <label htmlFor={`process-${index}`} className="ml-2">{category.name}</label>
+              <Checkbox
+                inputId={`process-${index}`}
+                name="category"
+                value={category}
+                onChange={onProcessChange}
+                checked={selectedProcesses.some((item) => item.value === category.value)}
+              />
+              <label htmlFor={`process-${index}`} className="ml-2">
+                {category.name}
+              </label>
             </div>
           );
         })}
       </div>
-      <p className='pb-2 pt-3 text-orange-500'>Please select processes to print.</p>
+      <p className="pb-2 pt-3 text-orange-500">Please select processes to print.</p>
       <FormDropdown
         label="Barcode Printer"
         value={selectedPrinter}

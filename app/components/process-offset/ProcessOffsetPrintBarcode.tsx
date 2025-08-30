@@ -25,12 +25,10 @@ const ProcessOffsetPrintBarcode = ({ offset, visible, onHide }: SinglePrintBarco
   const { showError } = useContext(LayoutContext);
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
 
-
   useEffect(() => {
     setState({ ...state, show: visible });
     if (visible) initData();
   }, [visible]);
-
 
   const onHideModal = () => {
     setState({ ...state, show: false });
@@ -41,11 +39,10 @@ const ProcessOffsetPrintBarcode = ({ offset, visible, onHide }: SinglePrintBarco
     setPrinterOptions(await fetchPrintersSelectOptions());
   };
 
-
   const print = async () => {
     setState({ ...state, saving: true });
     if (!selectedPrinter) {
-      showError("Please select a printer.")
+      showError('Please select a printer.');
       return;
     }
     // @NOTE: Change to offset printing
@@ -54,7 +51,7 @@ const ProcessOffsetPrintBarcode = ({ offset, visible, onHide }: SinglePrintBarco
   };
 
   return (
-    <Modal title="Print Process Offset Barcode" width='50vh' visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
+    <Modal title="Print Process Offset Barcode" width="50vh" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
       <FormDropdown
         label="Barcode Printer"
         value={selectedPrinter}

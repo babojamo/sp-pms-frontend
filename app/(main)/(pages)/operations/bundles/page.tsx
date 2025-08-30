@@ -137,7 +137,7 @@ const BundlesPage = () => {
         <PageAction>
           <Button
             onClick={() => setPageState({ ...pageState, showRelease: true })}
-            size='small'
+            size="small"
             label="Release Bundle"
             icon="pi pi-arrow-up-right"
             style={{ marginRight: '.5em' }}
@@ -145,7 +145,7 @@ const BundlesPage = () => {
           <Button
             onClick={() => setPageState({ ...pageState, showMultiPrintBarcode: true })}
             severity="help"
-            size='small'
+            size="small"
             label="Print Barcodes"
             icon="pi pi-print"
             style={{ marginRight: '.5em' }}

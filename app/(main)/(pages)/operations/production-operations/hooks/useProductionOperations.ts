@@ -167,9 +167,11 @@ export const useProductionOperations = () => {
       .then((data) => {
         setSewingLineOptions(data);
       })
-      .finally(() => setTimeout(() => {
-        setLoading({ fetchingSections: false })
-      }, 1000));
+      .finally(() =>
+        setTimeout(() => {
+          setLoading({ fetchingSections: false });
+        }, 1000)
+      );
   };
 
   const onProcessDeleteClick = (id: any) => {

@@ -26,12 +26,16 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
     }
   });
 
-  const sizes = React.useMemo(() => sizesOptions
-    ?.filter((s) => s.style_planned_fabric_id.toString() == value?.style_planned_fabric_id)
-    ?.map((r) => ({
-      label: `${r.size_number.toString()} - ${r.quantity.toString()}`,
-      value: r.id
-    })) ?? [], [colorOptions]);
+  const sizes = React.useMemo(
+    () =>
+      sizesOptions
+        ?.filter((s) => s.style_planned_fabric_id.toString() == value?.style_planned_fabric_id)
+        ?.map((r) => ({
+          label: `${r.size_number.toString()} - ${r.quantity.toString()}`,
+          value: r.id
+        })) ?? [],
+    [colorOptions]
+  );
 
   useEffect(() => {
     if (value) {
@@ -40,7 +44,7 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
         style_planned_fabric_id: value?.style_planned_fabric_id,
         style_planned_fabric_size_id: value?.style_planned_fabric_size_id,
         quantity: value?.quantity,
-        remarks: value?.remarks,
+        remarks: value?.remarks
       });
     }
   }, [value, reset]);
@@ -57,7 +61,7 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
             value={field.value}
             onChange={(e: any) => field.onChange(e.value)}
             placeholder="Select"
-            label='Color'
+            label="Color"
             filter
             errorMessage={fieldState.error?.message}
             isError={fieldState.error ? true : false}
@@ -72,7 +76,7 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
         render={({ field, fieldState }) => (
           <FormDropdown
             {...field}
-            label='Size'
+            label="Size"
             value={field.value}
             onChange={(e: any) => field.onChange(e.value)}
             placeholder="Select"
@@ -89,7 +93,7 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
         rules={{ required: 'Quantity is required', min: { value: 1, message: 'Minimum is 1' } }}
         render={({ field, fieldState }) => (
           <FormInputNumber
-            label='Quantity'
+            label="Quantity"
             value={field.value as number | null}
             onValueChange={(e) => field.onChange(e.value ?? null)}
             placeholder="Number"
@@ -102,7 +106,13 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
         control={control}
         name={`remarks` as const}
         render={({ field, fieldState }) => (
-          <FormInputText {...field} label='Remarks' placeholder="Text" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+          <FormInputText
+            {...field}
+            label="Remarks"
+            placeholder="Text"
+            errorMessage={fieldState.error?.message}
+            isError={fieldState.error ? true : false}
+          />
         )}
       />
       {children}

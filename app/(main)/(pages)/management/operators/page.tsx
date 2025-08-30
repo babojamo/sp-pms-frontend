@@ -75,9 +75,8 @@ const OperatorsPage = () => {
     return <span title={formatDate(new Date(rowData.created_at ?? ''))}>{formatDate(new Date(rowData.created_at ?? ''))}</span>;
   };
 
-
   const processTemplate = (rowData: Operator) => {
-    return rowData.operator_processes?.flatMap(r => r.process.name)?.join(", ");
+    return rowData.operator_processes?.flatMap((r) => r.process.name)?.join(', ');
   };
 
   const onActionEditClick = (id: string | number) => {
@@ -94,17 +93,22 @@ const OperatorsPage = () => {
   const actionBodyTemplate = (rowData: Operator) => {
     return (
       <>
-        <Button icon="pi pi-print" onClick={() => {
-          setSelectedOperator(rowData);
-          setShowPrint(true);
-        }} title="Print Process Codes" size="small" severity="success" className="mr-2" />
+        <Button
+          icon="pi pi-print"
+          onClick={() => {
+            setSelectedOperator(rowData);
+            setShowPrint(true);
+          }}
+          title="Print Process Codes"
+          size="small"
+          severity="success"
+          className="mr-2"
+        />
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
       </>
     );
   };
-
-
 
   return (
     <>
@@ -124,8 +128,8 @@ const OperatorsPage = () => {
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
       >
-        <Column header="ID" field='id' />
-        <Column header="Name" field='name' style={{ minWidth: '10rem' }} />
+        <Column header="ID" field="id" />
+        <Column header="Name" field="name" style={{ minWidth: '10rem' }} />
         <Column field="section.name" header="Section" style={{ minWidth: '12rem' }} />
         <Column field="section.department.name" header="Department" style={{ minWidth: '12rem' }} />
         <Column field="line_id" header="Processes" style={{ minWidth: '12rem' }} body={processTemplate} />

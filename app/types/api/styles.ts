@@ -50,7 +50,7 @@ export interface StylePlannedFabricsResponse {
 }
 
 export interface StyleReleaseFabricPayload {
-  bundles:SaveStyleFabricPayload[];
+  bundles: SaveStyleFabricPayload[];
 }
 
 export interface SaveStyleFabricPayload {

@@ -84,7 +84,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const releaseFabrics = async (e: FormData) => {
     if (shouldPrint && !selectedPrinter) {
-      showError("Please select a printer.")
+      showError('Please select a printer.');
       return;
     }
     try {
@@ -102,9 +102,11 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       );
       showSuccess('Bundles has been succesfully released.');
 
-
       if (shouldPrint) {
-        queuePrintStyleBundle(selectedPrinter?.toString() ?? '', fabrics.flatMap(r => r.id?.toString() ?? ''))
+        queuePrintStyleBundle(
+          selectedPrinter?.toString() ?? '',
+          fabrics.flatMap((r) => r.id?.toString() ?? '')
+        );
       }
 
       // Reset and close modal
@@ -155,7 +157,13 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       <form onSubmit={handleSubmit(submit)}>
         <RemoteStyleDropdown value={selectedStyleNumber} onSelect={handleSelectedStyle} onChange={(option) => setSelectedStyleNumber(option)} />
         <div className="m-3"></div>
-        <ReleaseBundleTable loading={state.loadingFetch} control={control} sizesOptions={sizesOptions} disabled={!isStyleSelected} colorOptions={colorOptions} />
+        <ReleaseBundleTable
+          loading={state.loadingFetch}
+          control={control}
+          sizesOptions={sizesOptions}
+          disabled={!isStyleSelected}
+          colorOptions={colorOptions}
+        />
         <div className="m-5"></div>
         <div className="flex align-items-end mt-b-2">
           <div className="ml-auto">

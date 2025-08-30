@@ -60,7 +60,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
   const tableHeader = () => {
     return (
       <div className="grid align-items-center p-0">
-        <p className='m-0'>Bundle List</p>
+        <p className="m-0">Bundle List</p>
         <div className="ml-auto flex align-items-center gap-2">
           <Button disabled={disabled} severity="help" type="button" onClick={onAddOperatorClick} className="mt-2" icon="pi pi-plus" label="Add" />
         </div>
