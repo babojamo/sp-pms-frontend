@@ -1,17 +1,17 @@
 'use client';
-import React, { useContext, useCallback, useEffect, useState } from 'react';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import PageCard from '@/app/components/page-card/component';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
 import { ROUTES } from '@/app/constants/routes';
-import { useRouter } from 'next/navigation';
-import FormAction, { FormActions } from '@/app/components/form-action/component';
-import { SelectItem } from 'primereact/selectitem';
 import { SectionForm } from '@/app/types/section';
 import { SectionService } from '@/app/services/SectionService';
-import FormSection from '@/app/components/sections/FormSection';
-import useUtilityData from '@/app/hooks/useUtilityData';
+import { SelectItem } from 'primereact/selectitem';
+import { useRouter } from 'next/navigation';
 import { useSectionPage } from '../../hooks/useSectionPage';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
+import FormSection from '@/app/components/sections/FormSection';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface EditSectionPageProps {
   params?: { id: any };
@@ -21,7 +21,7 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
   const router = useRouter();
   const [departmentOption, setDepartmentOption] = useState<SelectItem[]>([]);
   const { updateSection, isSaveLoading } = useSectionPage();
-  const [ Section, setSection ] = useState<SectionForm | undefined>();
+  const [ section, setSection ] = useState<SectionForm | undefined>();
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { fetchDepartmentOptions, isDepartmentLoading } = useUtilityData();
 
@@ -33,14 +33,10 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
   const handleSubmit = async (data: SectionForm) => {
     try {
       await updateSection(params?.id as string, data);
-      showSuccess('Section offset successfully created.');
-      setTimeout(() => {
-        router.push(ROUTES.SECTION.INDEX);
-      }, 2000);
+      showSuccess('Section successfully created.');
     } catch (error: any) {
-      showApiError(error, 'Failed to process offset.');
+      showApiError(error, 'Failed to process section.');
     }
-    console.log('handleSubmit', data);
   };
   
   const initData = async () => {
@@ -64,7 +60,7 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormSection value={Section} onSubmit={handleSubmit} loading={{ deparmentField: isDepartmentLoading }} departments={departmentOption}>
+                <FormSection value={section} onSubmit={handleSubmit} loading={{ deparmentField: isDepartmentLoading }} departments={departmentOption}>
                   <FormAction 
                         loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.SECTION.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
                 </FormSection>

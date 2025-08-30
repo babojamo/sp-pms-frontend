@@ -3,6 +3,7 @@ import { Operator } from './operator';
 export interface ProcessOffset {
   id: string;
   name: string;
+  description?: string;
   device_id?: string;
   created_by?: string;
   created_at: string;
@@ -19,6 +20,7 @@ export interface CachedProcessOffset {
 export interface ProcessOffsetForm {
   id: string;
   name: string;
+  description?: string;
   device_id?: string;
   operator_ids?: string[];
   created_by?: string;

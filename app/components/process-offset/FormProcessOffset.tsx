@@ -28,7 +28,8 @@ const FormProcessOffset = ({ value, onSubmit, children }: FormProcessOffsetProps
   useEffect(() => {
     if (value) {
       reset({
-        name: value?.name
+        name: value?.name,
+        description: value?.description
       });
     }
   }, [value, reset]);
