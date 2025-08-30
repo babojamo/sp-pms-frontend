@@ -22,7 +22,7 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     show('success', 'Success', detail);
   };
 
-  const showWarning = (detail: string, summary?: string = 'Warning'): void => {
+  const showWarning = (detail: string, summary: string = 'Warning'): void => {
     show('warn', summary, detail);
   };
 
